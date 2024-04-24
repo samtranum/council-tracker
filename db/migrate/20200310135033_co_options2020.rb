@@ -2,6 +2,7 @@ class CoOptions2020 < ActiveRecord::Migration[6.0]
   def change
     date = Date.new(2020, 2, 1)
     session = CouncilSession.current_on(date).take
+    
     CoOption.create(
       occurred_on: date,
       outgoing_seat: session.seats.find_by_councillor_name("Paul McAuliffe"),

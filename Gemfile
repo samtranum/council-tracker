@@ -33,7 +33,7 @@ gem "kaminari"
 gem "oj" # json
 gem "webpacker-svelte"
 gem "autoprefixer-rails"
-gem "appsignal"
+# gem "appsignal"
 
 group :development, :test do
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
@@ -60,6 +60,7 @@ group :development do
   gem "rack-mini-profiler"
   gem "bullet"
   gem "squasher", require: false
+  gem 'wdm', '>= 0.1.0' if Gem.win_platform?
 end
 
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
