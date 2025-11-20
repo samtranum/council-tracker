@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   root to: "landing#index"
 
   scope "/:council_id" do
-    root to: "home#show"
+    get "/", to: "home#show", as: :council_root
 
     get "faq" => "pages#faq", :as => :faq
 
