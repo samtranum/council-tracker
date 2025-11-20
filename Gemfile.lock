@@ -129,6 +129,7 @@ GEM
       faraday-net_http (>= 2.0, < 3.2)
     faraday-net_http (3.1.0)
       net-http
+    ffi (1.16.3)
     ffi (1.16.3-x64-mingw-ucrt)
     fog-aws (3.21.0)
       fog-core (~> 2.1)
@@ -240,6 +241,8 @@ GEM
     nio4r (2.7.0)
     nokogiri (1.16.2-x64-mingw-ucrt)
       racc (~> 1.4)
+    nokogiri (1.16.2-x86_64-linux)
+      racc (~> 1.4)
     notiffany (0.1.3)
       nenv (~> 0.1)
       shellany (~> 0.0)
@@ -262,6 +265,7 @@ GEM
     parser (3.3.0.5)
       ast (~> 2.4.1)
       racc
+    pg (1.5.5)
     pg (1.5.5-x64-mingw-ucrt)
     pry (0.14.2)
       coderay (~> 1.1)
@@ -459,6 +463,7 @@ GEM
 
 PLATFORMS
   x64-mingw-ucrt
+  x86_64-linux
 
 DEPENDENCIES
   autoprefixer-rails
