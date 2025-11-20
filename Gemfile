@@ -60,7 +60,7 @@ group :development do
   gem "rack-mini-profiler"
   gem "bullet"
   gem "squasher", require: false
-  gem 'wdm', '>= 0.1.0' if Gem.win_platform?
+  gem 'wdm', '>= 0.1.0', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 end
 
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
