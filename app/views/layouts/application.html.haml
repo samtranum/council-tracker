@@ -20,21 +20,4 @@
               - if current_council
                 = link_to "Motions", motions_path
                 = link_to "Councillors", councillors_path
-                = link_to "Meetings", meetings_path
-
-            .icons
-
-          %footer
-            .footer-block.p.-t4
-              %ul
-                %li= link_to 'FAQs', '/faq'
-                %li= link_to "Submit correction", [:new, :correction]
-                %li= link_to "Source code", 'https://www.github.com/civictech-ie/counciltracker-ie'
-                - if logged_in?
-                  %li= link_to "Admin panel", [:admin, :root]
-
-              :markdown
-                [Council Tracker](/) is a project by [Dublin Inquirer](https://www.dublininquirer.com) and [CivicTech·ie](https://www.civictech.ie).
-
-      %nav#menu= svelte_component('Menu')
       %main.primary-main= yield
