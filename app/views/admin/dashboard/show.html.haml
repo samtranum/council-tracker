@@ -17,3 +17,14 @@
               %li= pluralize Amendment.count, 'amendment'
               %li= pluralize MediaMention.count, 'media mention'
               %li #{ number_with_delimiter Vote.countable.count } #{ 'tracked vote'.pluralize(Vote.countable.count) }
+
+      .col-xs-4.box.-delineated-h
+        %section
+          %header.subheader
+            %h2 Manage
+          %main
+            %ul.list
+              %li= link_to "Councils", admin_councils_path
+              %li= link_to "Councillors", admin_councillors_path
+              %li= link_to "Meetings", admin_meetings_path
+              %li= link_to "Motions", admin_motions_path

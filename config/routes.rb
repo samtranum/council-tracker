@@ -1,41 +1,41 @@
 Rails.application.routes.draw do
-  root to: "home#show"
+  root to: "landing#index"
 
-  get "faq" => "pages#faq", :as => :faq
+  scope "/:council_id" do
+    root to: "home#show"
 
-  resources :corrections, only: [:new, :create] do
-    collection { get "thanks" }
+    get "faq" => "pages#faq", :as => :faq
+
+    resources :corrections, only: [:new, :create] do
+      collection { get "thanks" }
+    end
+
+    resources :councillors, only: [:index, :show]
+    get "councillors/:id/:view(/:context)" => "councillors#show"
+
+    resources :local_electoral_areas, path: "areas", only: [:index, :show]
+    get "areas/:id/:view(/:context)" => "local_electoral_areas#show"
+
+    resources :parties, only: [:index, :show]
+    get "parties/:id/:view(/:context)" => "parties#show"
+
+    resources :meetings, only: [:index]
+    get "meetings/:meeting_type/:occurred_on" => "meetings#show", :as => :meeting_path
+    get "meetings/:meeting_type/:occurred_on/:view(/:context)" => "meetings#show"
+
+    resources :motions, only: [:index, :show]
+    get "motions/:id/:view(/:context)" => "motions#show"
+
+    resources :amendments, only: [:show]
+    get "amendments/:id/:view(/:context)" => "amendments#show"
+
+    resources :topics, only: [:index, :show]
   end
-
-  resources :user_sessions, only: [:create]
-
-  get "signin" => "user_sessions#new", :as => :signin
-  get "logout" => "user_sessions#destroy", :as => :logout
-
-  resources :councillors, only: [:index, :show]
-  get "councillors/:id/:view(/:context)" => "councillors#show"
-
-  resources :local_electoral_areas, path: "areas", only: [:index, :show]
-  get "areas/:id/:view(/:context)" => "local_electoral_areas#show"
-
-  resources :parties, only: [:index, :show]
-  get "parties/:id/:view(/:context)" => "parties#show"
-
-  resources :meetings, only: [:index]
-  get "meetings/:meeting_type/:occurred_on" => "meetings#show", :as => :meeting_path
-  get "meetings/:meeting_type/:occurred_on/:view(/:context)" => "meetings#show"
-
-  resources :motions, only: [:index, :show]
-  get "motions/:id/:view(/:context)" => "motions#show"
-
-  resources :amendments, only: [:show]
-  get "amendments/:id/:view(/:context)" => "amendments#show"
-
-  resources :topics, only: [:index, :show]
 
   namespace :admin do
     root to: "dashboard#show"
-    resources :councillors, only: [:index, :show] do
+    resources :councils, only: [:index, :new, :create]
+    resources :councillors do
       resources :media_mentions, only: [:new, :create]
     end
 

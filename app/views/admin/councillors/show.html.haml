@@ -12,6 +12,8 @@
         .meta-data
           .meta-data_block.-label
             %h1= @councillor.full_name
+            = link_to "Edit", edit_admin_councillor_path(@councillor), class: "button"
+            = link_to "Delete", admin_councillor_path(@councillor), method: :delete, data: { confirm: "Are you sure?" }, class: "button"
 
           .meta-data_block
             %p

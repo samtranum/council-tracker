@@ -1,0 +1,16 @@
+%header.view-header
+  .wrapper{role: 'layout'}
+    %h1 Councils
+    = link_to "New Council", new_admin_council_path, class: "button"
+
+%main.view-content{role: 'layout'}
+  .wrapper{role: 'layout'}
+    %ul.list.-enumerable
+      - @councils.each do |council|
+        %li
+          %strong= council.name
+          %span (#{council.slug})
+          - if council.active?
+            %span.tag Active
+          - else
+            %span.tag Inactive
