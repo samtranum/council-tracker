@@ -11,6 +11,22 @@
   %body
     .standard{role: 'layout'}
       %header.primary-header
+        .content
+          %nav.primary-nav
+            .links
+              = link_to root_path, class: 'logo' do
+                CouncilTracker.ie
+
+              - if current_council
+                = link_to "Motions", motions_path
+                = link_to "Councillors", councillors_path
+                = link_to "Meetings", meetings_path
+
+            .icons
+
+          %footer
+            .footer-block.p.-t4
+              %ul
                 %li= link_to 'FAQs', '/faq'
                 %li= link_to "Submit correction", [:new, :correction]
                 %li= link_to "Source code", 'https://www.github.com/civictech-ie/counciltracker-ie'
