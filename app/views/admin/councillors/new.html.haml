@@ -1,0 +1,8 @@
+%header.view-header
+  .wrapper{role: 'layout'}
+    %h1 New Councillor
+
+%main.view-content{role: 'layout'}
+  .wrapper{role: 'layout'}
+    = render 'form'
+    = link_to 'Back', admin_councillors_path

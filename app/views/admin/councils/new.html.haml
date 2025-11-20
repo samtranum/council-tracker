@@ -1,0 +1,28 @@
+%header.view-header
+  .wrapper{role: 'layout'}
+    %h1 New Council
+
+%main.view-content{role: 'layout'}
+  .wrapper{role: 'layout'}
+    = form_with model: [:admin, @council], local: true do |f|
+      - if @council.errors.any?
+        #error_explanation
+          %h2= "#{pluralize(@council.errors.count, "error")} prohibited this council from being saved:"
+          %ul
+            - @council.errors.full_messages.each do |message|
+              %li= message
+
+      .field
+        = f.label :name
+        = f.text_field :name
+      .field
+        = f.label :slug
+        = f.text_field :slug
+      .field
+        = f.label :active
+        = f.check_box :active
+
+      .actions
+        = f.submit
+
+    = link_to 'Back', admin_councils_path

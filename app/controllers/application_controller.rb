@@ -7,8 +7,13 @@ class ApplicationController < ActionController::Base
     current_user.account
   end
 
+  def current_council
+    @current_council ||= Council.find_by(slug: params[:council_id])
+  end
+  helper_method :current_council
+
   def current_council_session
-    @council_session ||= CouncilSession.latest
+    @council_session ||= current_council&.council_sessions&.latest
   end
   helper_method :current_council_session
 

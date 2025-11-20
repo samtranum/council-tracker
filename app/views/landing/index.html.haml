@@ -1,0 +1,11 @@
+%header.view-header
+  .wrapper{role: 'layout'}
+    %h1 CouncilTracker
+
+%main.view-content{role: 'layout'}
+  .wrapper{role: 'layout'}
+    %p Select a council to view votes and motions:
+    %ul.list.-enumerable
+      - @councils.each do |council|
+        %li
+          = link_to council.name, "/#{council.slug}"

@@ -1,0 +1,40 @@
+= form_with model: [:admin, @councillor], local: true do |f|
+  - if @councillor.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@councillor.errors.count, "error")} prohibited this councillor from being saved:"
+      %ul
+        - @councillor.errors.full_messages.each do |message|
+          %li= message
+
+  .field
+    = f.label :council_id
+    = f.collection_select :council_id, Council.all, :id, :name
+    = f.label :given_name
+    = f.text_field :given_name
+  .field
+    = f.label :family_name
+    = f.text_field :family_name
+  .field
+    = f.label :full_name
+    = f.text_field :full_name
+  .field
+    = f.label :gender
+    = f.text_field :gender
+  .field
+    = f.label :born_on
+    = f.date_field :born_on
+  .field
+    = f.label :sort_name
+    = f.text_field :sort_name
+  .field
+    = f.label :slug
+    = f.text_field :slug
+  .field
+    = f.label :dcc_id
+    = f.text_field :dcc_id
+  .field
+    = f.label :portrait_file
+    = f.text_field :portrait_file
+
+  .actions
+    = f.submit
