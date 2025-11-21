@@ -1,18 +1,4 @@
 - title ['Motions', @motion.title]
-- description "Motion: #{ @motion.title } proposed by #{ @motion.proposers.map(&:full_name).to_sentence } on #{ @motion.occurred_on.strftime('%-d/%m/%y') }."
-- keywords "city council, motions, #{ @motion.tags.join(',') }"
-
-%header.view-header
-  .wrapper{role: 'layout'}
-    .breadcrumbs
-      .breadcrumb= link_to @motion.meeting.occurred_on_formatted, @motion.meeting.path
-      .breadcrumb= link_to 'Motion', @motion
-
-.view-content.-alpha
-  .wrapper{role: 'layout'}
-    .motion-card
-      .cols{role: 'layout'}
-        .col.-two
           .meta-data
             .meta-data_block
               - if @motion.body.present?
@@ -72,7 +58,7 @@
               - if @motion.local_electoral_areas.any?
                 %ul.list.-inline
                   - @motion.local_electoral_areas.each do |local_electoral_area|
-                    %li= link_to local_electoral_area.name, local_electoral_area
+                    %li= link_to local_electoral_area.name, [current_council, local_electoral_area]
               - else
                 .empty-value None recorded
             
@@ -81,7 +67,7 @@
               - if @motion.tags.any?
                 %ul.tag-list.-inline
                   - @motion.tags.each do |tag|
-                    %li= link_to tag, topic_path(tag.parameterize)
+                    %li= link_to tag, topic_path(current_council, tag.parameterize)
               - else
                 .empty-value None recorded
 
@@ -92,6 +78,6 @@
                   - @motion.media_mentions.each do |media_mention|
                     %li= render partial: 'media_mentions/media_mention', locals: {media_mention: media_mention}
 
-= svelte_component('Switcher', {basePath: motion_path(@motion), renderedView: @view.to_s, currentView: @view.to_s, links: [{view: 'votes', label: 'Votes'},{view: 'amendments', label: 'Amendments'}]}, class: 'view-subnav')
+= svelte_component('Switcher', {basePath: motion_path(current_council, @motion), renderedView: @view.to_s, currentView: @view.to_s, links: [{view: 'votes', label: 'Votes'},{view: 'amendments', label: 'Amendments'}]}, class: 'view-subnav')
 
 #switcherView= render partial: @view.to_s, locals: {motion: @motion}

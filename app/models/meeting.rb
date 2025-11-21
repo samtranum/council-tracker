@@ -20,11 +20,12 @@ class Meeting < ApplicationRecord
   paginates_per 20
 
   def to_param
-    hashed_id
+    hashed_id || id.to_s
   end
 
   def path
-    "/meetings/#{meeting_type}/#{occurred_on}"
+    return "/meetings/#{meeting_type}/#{occurred_on}" unless council_session&.council
+    "/#{council_session.council.slug}/meetings/#{meeting_type}/#{occurred_on}"
   end
 
   def title

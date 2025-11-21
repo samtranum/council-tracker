@@ -1,13 +1,13 @@
 %header.view-header
   .wrapper{role: 'layout'}
-    %h1= link_to "Electoral areas", :local_electoral_areas
+    %h1= link_to "Electoral areas", local_electoral_areas_path(current_council)
 
 %main.view-content{role: 'layout'}
   .wrapper{role: 'layout'}
     %ul.list.-enumerable
       - @local_electoral_areas.each do |local_electoral_area|
         %li
-          = link_to local_electoral_area do
+          = link_to [current_council, local_electoral_area] do
             = render partial: 'local_electoral_area', locals: {local_electoral_area: local_electoral_area}
 
 %footer.view-footer

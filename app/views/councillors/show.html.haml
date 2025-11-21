@@ -1,28 +1,14 @@
 - title ['Councillors', @councillor.full_name]
-- description "#{ @councillor.full_name } is #{ indefinitly_article(@councillor.party.name) } councillor for #{ @councillor.local_electoral_area.name }"
-- keywords "#{ @councillor.full_name }, #{ @councillor.local_electoral_area.name }, #{ @councillor.party.name }"
-
-%header.view-header
-  .wrapper{role: 'layout'}
-    .breadcrumbs
-      .breadcrumb= link_to 'Councillors', :councillors
-      .breadcrumb= link_to @councillor.full_name, @councillor
-
-.view-content.-alpha
-  .wrapper{role: 'layout'}
-    .councillor-card
-      %figure.-portrait{class: "-#{ @councillor.party.slug }"}= image_tag @councillor.portrait.url(:medium), loading: 'lazy', alt: "Portrait of #{ @councillor.full_name }"
-      .bio
         .meta-data
           .meta-data_block.-label
             %h1= @councillor.full_name
 
           .meta-data_block
             %p
-              = link_to @councillor.party do
+              = link_to [current_council, @councillor.party] do
                 = render partial: 'icons/party', locals: {party: @councillor.party}
                 = @councillor.party.name
-            %p= link_to @councillor.local_electoral_area_name, @councillor.local_electoral_area
+            %p= link_to @councillor.local_electoral_area_name, [current_council, @councillor.local_electoral_area]
 
           - if @councillor.events.any?
             .meta-data_block
@@ -41,6 +27,6 @@
                 - @councillor.media_mentions.each do |media_mention|
                   %li= render partial: 'media_mentions/media_mention', locals: {media_mention: media_mention}
 
-= svelte_component('Switcher', {basePath: councillor_path(@councillor), renderedView: @view.to_s, currentView: @view.to_s, links: [{view: 'votes', label: 'Votes'},{view: 'attendances', label: 'Attendance'},{view: 'motions', label: 'Proposed motions'},{view: 'amendments', label: 'Proposed amendments'}]}, class: 'view-subnav')
+= svelte_component('Switcher', {basePath: councillor_path(current_council, @councillor), renderedView: @view.to_s, currentView: @view.to_s, links: [{view: 'votes', label: 'Votes'},{view: 'attendances', label: 'Attendance'},{view: 'motions', label: 'Proposed motions'},{view: 'amendments', label: 'Proposed amendments'}]}, class: 'view-subnav')
 
 #switcherView= render partial: @view.to_s, locals: {councillor: @councillor}

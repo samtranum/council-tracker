@@ -4,14 +4,14 @@
 
 %header.view-header
   .wrapper{role: 'layout'}
-    %h1= link_to "Motions", :motions
+    %h1= link_to "Motions", motions_path(current_council)
 
 %main.view-content
   .wrapper{role: 'layout'}
     %ul.list.-enumerable
       - @motions.each do |motion|
         %li
-          = link_to motion do
+          = link_to [current_council, motion] do
             = render partial: 'motion', locals: {motion: motion}
 
 %footer.view-footer

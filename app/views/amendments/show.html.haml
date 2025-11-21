@@ -1,18 +1,4 @@
 - title "Amendment to #{@amendment.motion.title}"
-- description "Amendment to #{ @amendment.motion.title } proposed by #{ @amendment.proposers.map(&:full_name).to_sentence } on #{ @amendment.occurred_on.strftime('%d/%m/%y') }."
-- keywords "city council, motions, amendments, #{ @amendment.motion.tags.join(',') }"
-
-%header.view-header
-  .wrapper{role: 'layout'}
-    .breadcrumbs
-      .breadcrumb= link_to @amendment.motion.meeting.occurred_on_formatted, @amendment.motion.meeting.path
-      .breadcrumb= link_to 'Motion', @amendment.motion
-      .breadcrumb= link_to 'Amendment', @amendment
-
-.view-content.-alpha
-  .wrapper{role: 'layout'}
-    .motion-card
-      .meta-data
         .meta-data_block
           %label Amendment text
 
@@ -46,6 +32,6 @@
               - if @amendment.vote_method.present?
                 by #{ @amendment.vote_method } vote
 
-= svelte_component('Switcher', {basePath: amendment_path(@amendment), renderedView: @view.to_s, currentView: @view.to_s, links: [{view: 'votes', label: 'Votes'}]}, class: 'view-subnav')
+= svelte_component('Switcher', {basePath: amendment_path(current_council, @amendment), renderedView: @view.to_s, currentView: @view.to_s, links: [{view: 'votes', label: 'Votes'}]}, class: 'view-subnav')
 
 #switcherView= render partial: @view.to_s, locals: {amendment: @amendment}

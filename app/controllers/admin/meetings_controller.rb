@@ -1,6 +1,8 @@
 class Admin::MeetingsController < Admin::ApplicationController
   skip_before_action :verify_authenticity_token, only: [:save_attendance]
 
+  before_action :set_meeting, only: [:show, :edit, :update, :destroy, :save_attendance]
+
   def index
     @meetings = Meeting.by_occurred_on.page(params[:p])
   end
@@ -11,7 +13,6 @@ class Admin::MeetingsController < Admin::ApplicationController
   end
 
   def show
-    @meeting = Meeting.find_by!(hashed_id: params[:id])
     @view = params[:view].try(:to_sym) || :details
     @context = params[:context].try(:to_sym) || :full
 
@@ -39,11 +40,9 @@ class Admin::MeetingsController < Admin::ApplicationController
   end
 
   def edit
-    @meeting = Meeting.find_by(hashed_id: params[:id])
   end
 
   def update
-    @meeting = Meeting.find_by(hashed_id: params[:id])
     if @meeting.update(meeting_params)
       redirect_to [:admin, @meeting]
     else
@@ -54,13 +53,11 @@ class Admin::MeetingsController < Admin::ApplicationController
   end
 
   def destroy
-    @meeting = Meeting.find_by(hashed_id: params[:id])
     @meeting.destroy!
     redirect_to [:admin, :meetings]
   end
 
   def save_attendance
-    @meeting = Meeting.find_by(hashed_id: params[:id])
     @councillor = Councillor.find_by(id: params["councillorId"])
     @attendance = Attendance.find_or_initialize_by(attendable: @meeting, councillor: @councillor)
     @attendance.status = params["status"]
@@ -72,6 +69,10 @@ class Admin::MeetingsController < Admin::ApplicationController
   end
 
   private
+
+  def set_meeting
+    @meeting = Meeting.find_by(hashed_id: params[:id]) || Meeting.find_by!(id: params[:id])
+  end
 
   def meeting_params
     params.require(:meeting).permit(
