@@ -11,7 +11,7 @@
     %ul.list.-enumerable
       - @motions.each do |motion|
         %li
-          = link_to [current_council, motion] do
+          = link_to motion_path(current_council, motion) do
             = render partial: 'motion', locals: {motion: motion}
 
 %footer.view-footer

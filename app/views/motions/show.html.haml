@@ -58,7 +58,7 @@
               - if @motion.local_electoral_areas.any?
                 %ul.list.-inline
                   - @motion.local_electoral_areas.each do |local_electoral_area|
-                    %li= link_to local_electoral_area.name, [current_council, local_electoral_area]
+                    %li= link_to local_electoral_area.name, local_electoral_area_path(current_council, local_electoral_area)
               - else
                 .empty-value None recorded
             

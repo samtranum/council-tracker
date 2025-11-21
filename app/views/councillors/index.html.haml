@@ -11,7 +11,7 @@
     %ul.list.-enumerable
       - @councillors.each do |councillor|
         %li
-          = link_to [current_council, councillor] do
+          = link_to councillor_path(current_council, councillor) do
             = render partial: 'councillors/councillor', locals: {councillor: councillor}
 
 %footer.view-footer
