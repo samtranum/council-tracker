@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   root to: "landing#index"
 
+  resources :user_sessions, only: [:new, :create, :destroy]
+  get "signin" => "user_sessions#new", :as => :signin
+  get "logout" => "user_sessions#destroy", :as => :logout
+
   namespace :admin do
     root to: "dashboard#show"
     resources :councils, only: [:index, :new, :create]
