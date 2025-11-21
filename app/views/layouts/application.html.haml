@@ -11,6 +11,19 @@
   %body
     .standard{role: 'layout'}
       %header.primary-header
+!!!
+%html
+  %head
+    = csrf_meta_tags
+    = stylesheet_link_tag 'application', media: 'all'
+    = javascript_pack_tag 'application'
+    = display_meta_tags site: 'Council Tracker', reverse: true
+    <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no' />
+    = yield :snippets
+
+  %body
+    .standard{role: 'layout'}
+      %header.primary-header
         .content
           %nav.primary-nav
             .links
@@ -18,6 +31,6 @@
                 CouncilTracker.ie
 
               - if current_council
-                = link_to "Motions", motions_path
-                = link_to "Councillors", councillors_path
+                = link_to "Motions", motions_path(current_council)
+                = link_to "Councillors", councillors_path(current_council)
       %main.primary-main= yield
