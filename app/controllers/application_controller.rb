@@ -28,4 +28,8 @@ class ApplicationController < ActionController::Base
       redirect_to("#{request.protocol}#{ENV["APP_DOMAIN"]}#{request.fullpath}", status: 301)
     end
   end
+
+  def require_council
+    raise ActionController::RoutingError.new('Not Found') unless current_council
+  end
 end

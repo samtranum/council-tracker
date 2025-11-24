@@ -1,6 +1,8 @@
 class MotionsController < ApplicationController
+  before_action :require_council
+
   def index
-    @motions = Motion.published.by_occurred_on.page(params[:p])
+    @motions = current_council.motions.published.by_occurred_on.page(params[:p])
 
     respond_to do |format|
       format.html { render :index }
@@ -11,7 +13,7 @@ class MotionsController < ApplicationController
   end
 
   def show
-    @motion = Motion.published.find_by(hashed_id: params[:id])
+    @motion = current_council.motions.published.find_by(hashed_id: params[:id])
     @view = params[:view].try(:to_sym) || :votes
     @context = params[:context].try(:to_sym) || :full
 

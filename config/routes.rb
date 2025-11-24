@@ -46,6 +46,9 @@ Rails.application.routes.draw do
     resources :corrections
   end
 
+  get "/404" => "errors#not_found"
+  get "/500" => "errors#internal_server_error"
+
   scope "/:council_id" do
     get "/", to: "home#show", as: :council_root
 
@@ -77,6 +80,5 @@ Rails.application.routes.draw do
     resources :topics, only: [:index, :show]
   end
 
-  get "/404" => "errors#not_found"
-  get "/500" => "errors#internal_server_error"
+
 end
