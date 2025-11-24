@@ -1,6 +1,6 @@
 - title 'Councillors'
 - if current_council_session
-  - description "#{ pluralize @councillors.count, 'councillor' } currently serve on the Dublin City Council. #{ (@councillors.count - current_council_session.co_options.count) } elected in #{ current_council_session.election.occurred_on.strftime('%b \'%y') } and #{ pluralize current_council_session.co_options.count, 'councillor' } appointed via co-option."
+  - description "#{ pluralize @councillors.count, 'councillor' } currently serve on the Dublin City Council. #{ (@councillors.count - current_council_session.co_options.count) } elected#{ current_council_session.election ? " in #{ current_council_session.election.occurred_on.strftime('%b \'%y') }" : '' } and #{ pluralize current_council_session.co_options.count, 'councillor' } appointed via co-option."
 - else
   - description "#{ pluralize @councillors.count, 'councillor' } currently serve on the Dublin City Council."
 - keywords 'dublin city council, councillors'
