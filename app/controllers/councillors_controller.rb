@@ -2,7 +2,11 @@ class CouncillorsController < ApplicationController
   before_action :require_council
 
   def index
-    @councillors = current_council_session.active_councillors.by_name.page(params[:p])
+    @councillors = if current_council_session
+      current_council_session.active_councillors.by_name.page(params[:p])
+    else
+      Councillor.none.page(params[:p])
+    end
 
     respond_to do |f|
       f.html { render action: "index" }

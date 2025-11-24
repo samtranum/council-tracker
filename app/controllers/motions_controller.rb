@@ -13,7 +13,7 @@ class MotionsController < ApplicationController
   end
 
   def show
-    @motion = current_council.motions.published.find_by(hashed_id: params[:id])
+    @motion = current_council.motions.published.find_by!(hashed_id: params[:id])
     @view = params[:view].try(:to_sym) || :votes
     @context = params[:context].try(:to_sym) || :full
 
