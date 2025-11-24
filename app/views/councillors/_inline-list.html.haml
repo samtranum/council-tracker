@@ -2,5 +2,6 @@
   - councillors.each do |councillor|
     %li
       = link_to councillor_path(current_council, councillor), class: "councillor" do
-        = render partial: 'icons/party', locals: {party: councillor.party}
+        - if councillor.party
+          = render partial: 'icons/party', locals: {party: councillor.party}
         = councillor.full_name
