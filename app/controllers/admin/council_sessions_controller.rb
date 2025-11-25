@@ -17,11 +17,11 @@ class Admin::CouncilSessionsController < Admin::ApplicationController
   end
 
   def edit
-    @council_session = CouncilSession.find(params[:id])
+    @council_session = CouncilSession.find_by(commenced_on: params[:id])
   end
 
   def update
-    @council_session = CouncilSession.find(params[:id])
+    @council_session = CouncilSession.find_by(commenced_on: params[:id])
     if @council_session.update(council_session_params)
       redirect_to admin_council_sessions_path, notice: "Council session updated successfully."
     else
@@ -30,7 +30,7 @@ class Admin::CouncilSessionsController < Admin::ApplicationController
   end
 
   def destroy
-    @council_session = CouncilSession.find(params[:id])
+    @council_session = CouncilSession.find_by(commenced_on: params[:id])
     @council_session.destroy
     redirect_to admin_council_sessions_path, notice: "Council session deleted successfully."
   end
