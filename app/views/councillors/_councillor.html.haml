@@ -9,4 +9,5 @@
     .party= councillor.party&.name
     .area= councillor.local_electoral_area&.name
 
-  %figure.figure.-portrait= image_tag councillor.portrait.url(:small), loading: 'lazy', alt: "Portrait of #{ councillor.full_name }"
+  - if councillor.portrait.present?
+    %figure.figure.-portrait= image_tag councillor.portrait.url(:small), loading: 'lazy', alt: "Portrait of #{ councillor.full_name }"
