@@ -12,6 +12,21 @@
     .standard{role: 'layout'}
       - if logged_in?
         %header.primary-header
+          .content
+            %nav.primary-nav
+              .links
+                = link_to [:admin, :root], class: 'logo' do
+                  Admin
+
+                = link_to "Meetings", [:admin, :meetings]
+                = link_to "Councillors", [:admin, :councillors]
+                = link_to "Councils", [:admin, :councils]
+                = link_to "Events", [:admin, :events]
+
+            %footer
+              .footer-block.p.-t4
+                %ul
+                  %li= link_to 'Corrections', [:admin, :corrections]
                   %li= link_to 'Back to public site', :root
                   %li= link_to 'Log out', '/logout'
 
