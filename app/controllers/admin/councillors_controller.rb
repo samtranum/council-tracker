@@ -42,6 +42,6 @@ class Admin::CouncillorsController < Admin::ApplicationController
   private
 
   def councillor_params
-    params.require(:councillor).permit(:full_name, :portrait_file, :council_id, :party_id, :local_electoral_area_id, :commenced_on)
+    params.require(:councillor).permit(:full_name, :portrait, :council_id, :party_id, :local_electoral_area_id, :commenced_on)
   end
 end

@@ -7,7 +7,8 @@
 .view-content.-alpha
   .wrapper{role: 'layout'}
     .councillor-card
-      %figure.-portrait{class: "-#{ @councillor.party.slug }"}= image_tag @councillor.portrait.url(:medium), loading: 'lazy', alt: "Portrait of #{ @councillor.full_name }"
+      - if @councillor.portrait.present?
+        %figure.-portrait{class: "-#{ @councillor.party.slug }"}= image_tag @councillor.portrait.url(:medium), loading: 'lazy', alt: "Portrait of #{ @councillor.full_name }"
       .bio
         .meta-data
           .meta-data_block.-label

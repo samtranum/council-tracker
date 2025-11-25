@@ -24,8 +24,8 @@
     = f.label :commenced_on, "Date Elected/Co-opted"
     = f.date_field :commenced_on, value: Date.today, class: 'form-control'
   .field
-    = f.label :portrait_file
-    = f.text_field :portrait_file, class: 'form-control'
+    = f.label :portrait
+    = f.file_field :portrait, class: 'form-control'
 
   .actions
     = f.submit 'Save', class: 'button'
