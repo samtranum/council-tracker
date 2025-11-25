@@ -1,9 +1,9 @@
 class Councillor < ApplicationRecord
   belongs_to :council
-  has_many :seats
-  has_many :attendances
-  has_many :votes
-  has_many :media_mentions, as: :mentionable
+  has_many :seats, dependent: :destroy
+  has_many :attendances, dependent: :destroy
+  has_many :votes, dependent: :destroy
+  has_many :media_mentions, as: :mentionable, dependent: :destroy
   has_many :council_sessions, through: :seats
 
   has_many :meetings, through: :attendances, source: :attendable, source_type: "Meeting"
