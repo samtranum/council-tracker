@@ -56,9 +56,9 @@ class Meeting < ApplicationRecord
     council_session.councillors.active_on(occurred_on)
   end
 
-  private
-
   attr_accessor :council_id
+
+  private
 
   def set_council_session
     scope = CouncilSession.current_on(occurred_on)
