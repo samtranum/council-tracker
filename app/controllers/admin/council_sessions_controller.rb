@@ -16,6 +16,19 @@ class Admin::CouncilSessionsController < Admin::ApplicationController
     end
   end
 
+  def edit
+    @council_session = CouncilSession.find(params[:id])
+  end
+
+  def update
+    @council_session = CouncilSession.find(params[:id])
+    if @council_session.update(council_session_params)
+      redirect_to admin_council_sessions_path, notice: "Council session updated successfully."
+    else
+      render :edit
+    end
+  end
+
   def destroy
     @council_session = CouncilSession.find(params[:id])
     @council_session.destroy

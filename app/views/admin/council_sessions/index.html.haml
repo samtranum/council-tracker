@@ -14,4 +14,5 @@
             %span= "- #{session.concluded_on.strftime('%Y')}"
           - else
             %span (Current)
+          = link_to "Edit", edit_admin_council_session_path(session), class: "button -small"
           = link_to "Delete", admin_council_session_path(session), method: :delete, data: { confirm: "Are you sure you want to delete this session?" }, class: "button -small"

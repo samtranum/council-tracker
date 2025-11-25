@@ -13,6 +13,19 @@ class Voteable < ApplicationRecord
   validates :mayors_vote, inclusion: %w[for against], allow_blank: true
 
   after_validation :set_vote_result, if: ->(m) { m.rollcall? }
+  after_create :initialize_votes
+
+  private
+
+  def initialize_votes
+    return unless respond_to?(:meeting) && meeting.present?
+    
+    meeting.councillors.each do |councillor|
+      votes.find_or_create_by(councillor: councillor) do |vote|
+        vote.status = 'not_voted'
+      end
+    end
+  end
   after_save :clean_votes, if: ->(m) { m.rollcall? }
   after_save :destroy_votes, if: ->(m) { !m.rollcall? }
 
