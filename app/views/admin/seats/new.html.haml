@@ -1,0 +1,26 @@
+%header.page-header
+  .wrapper{role: 'layout'}
+    .breadcrumbs
+      .breadcrumbs_crumb= link_to "Admin", [:admin, :root]
+      .breadcrumbs_crumb= link_to "Councillors", [:admin, :councillors]
+      .breadcrumbs_crumb= link_to @councillor.full_name, [:admin, @councillor]
+      .breadcrumbs_crumb= link_to "Terms", [:admin, @councillor, :seats]
+      .breadcrumbs_crumb
+        %h1 Add Term
+
+.primary-main_content
+  .wrapper{role: 'layout'}
+    .row
+      .col-xs-2
+        %nav.secondary-nav
+          %ul.list.-enumerable
+            %li= link_to "Profile", [:admin, @councillor]
+            %li= link_to "Terms", [:admin, @councillor, :seats], class: '-active'
+            %li= link_to "Media", [:admin, @councillor, :media_mentions]
+
+      .col-xs-10
+        %section
+          %header.subheader
+            %h2 New Term of Office
+          %main
+            = render 'form'

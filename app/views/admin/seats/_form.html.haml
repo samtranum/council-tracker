@@ -1,0 +1,35 @@
+= form_with model: [:admin, @councillor, @seat], class: 'admin-form' do |f|
+  = render partial: 'admin/shared/errors', locals: {errors: f.object.errors}
+
+  .admin-form_field
+    = f.label :council_session_id, "Council Session"
+    .input
+      = f.collection_select :council_session_id, CouncilSession.order(commenced_on: :desc), :id, :name, {prompt: "Select Session"}, {class: 'select'}
+
+  .admin-form_field
+    = f.label :party_id
+    .input
+      = f.collection_select :party_id, Party.order(:name), :id, :name, {prompt: "Select Party"}, {class: 'select'}
+
+  .admin-form_field
+    = f.label :local_electoral_area_id, "Local Electoral Area"
+    .input
+      = f.collection_select :local_electoral_area_id, LocalElectoralArea.order(:name), :id, :name, {prompt: "Select Area"}, {class: 'select'}
+
+  .row
+    .col-xs-6
+      .admin-form_field
+        = f.label :commenced_on, "Start Date (Election/Co-option)"
+        .input
+          = f.date_field :commenced_on
+
+    .col-xs-6
+      .admin-form_field
+        = f.label :concluded_on, "End Date (Resignation/Session End)"
+        .input
+          = f.date_field :concluded_on
+          %p.help-text Leave blank if currently serving
+
+  .admin-form_actions
+    = f.submit 'Save Term', class: 'button'
+    = link_to 'Cancel', [:admin, @councillor, :seats], class: 'button -secondary'
