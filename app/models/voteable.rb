@@ -94,8 +94,9 @@ class Voteable < ApplicationRecord
 
   def initialize_votes
     return unless respond_to?(:meeting) && meeting.present?
+    return unless meeting.expected_attendance.present?
     
-    meeting.councillors.each do |councillor|
+    meeting.expected_attendance.each do |councillor|
       votes.find_or_create_by(councillor: councillor) do |vote|
         vote.status = 'not_voted'
       end
