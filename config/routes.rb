@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       member do
         post :save_vote
         patch :publish
+        post :refresh_votes
       end
       resources :media_mentions, only: [:new, :create]
       resources :amendments, only: [:new, :create]

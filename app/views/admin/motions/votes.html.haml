@@ -22,9 +22,11 @@
         %section
           %header.subheader
             .row
-              .col-xs-8
+              .col-xs-6
                 %h2 Edit vote
-              .col-xs-4
+              .col-xs-3
+                = button_to "Refresh Votes", refresh_votes_admin_motion_path(@motion), method: :post, class: "button -small", data: { confirm: "This will add vote records for any missing councillors. Continue?" }
+              .col-xs-3
                 .text.-fixed.-right.-info
                   %span{'data-bind': 'autosaveTimestamp'} &nbsp;
           %main
