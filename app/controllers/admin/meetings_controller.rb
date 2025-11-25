@@ -77,7 +77,9 @@ class Admin::MeetingsController < Admin::ApplicationController
   def meeting_params
     params.require(:meeting).permit(
       :meeting_type,
-      :occurred_on
+      :meeting_type,
+      :occurred_on,
+      :council_id
     )
   end
 end

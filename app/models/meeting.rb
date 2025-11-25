@@ -58,8 +58,12 @@ class Meeting < ApplicationRecord
 
   private
 
+  attr_accessor :council_id
+
   def set_council_session
-    self.council_session = CouncilSession.current_on(occurred_on).take
+    scope = CouncilSession.current_on(occurred_on)
+    scope = scope.where(council_id: council_id) if council_id.present?
+    self.council_session = scope.take
   end
 
   def set_hashed_id
