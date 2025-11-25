@@ -14,6 +14,9 @@ class Councillor < ApplicationRecord
   before_validation :set_given_and_family_names, if: ->(c) { c.full_name_changed? }
   before_validation :generate_sort_name
   after_validation :generate_slug
+  after_create :create_initial_seat
+
+  attr_accessor :party_id, :local_electoral_area_id, :commenced_on
 
   scope :by_name, -> { order("sort_name asc") }
   scope :inactive_on, ->(date) { joins(:seats).merge(Seat.active_on(date)).distinct }
@@ -113,5 +116,28 @@ class Councillor < ApplicationRecord
     else
       full_name.parameterize
     end
+  end
+
+  def create_initial_seat
+    return unless party_id.present? && local_electoral_area_id.present? && commenced_on.present? && council_id.present?
+
+    # Find or create a session covering this date
+    session = CouncilSession.where(council_id: council_id).current_on(commenced_on).take
+    unless session
+      # If no session exists for this date, we might need to create one or error out.
+      # For now, let's assume one should exist or we create a "term" based on standard logic if needed.
+      # But to be safe and simple, let's just try to find the latest one or create a new one if completely empty.
+      # Actually, let's just create one if it doesn't exist, assuming a 5 year term? Or just open ended.
+      session = CouncilSession.create!(council_id: council_id, commenced_on: commenced_on)
+    end
+
+    seat = seats.create!(
+      council_session: session,
+      local_electoral_area_id: local_electoral_area_id,
+      commenced_on: commenced_on
+    )
+    
+    seat.party = Party.find(party_id)
+    seat.save!
   end
 end
