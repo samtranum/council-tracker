@@ -1,0 +1,16 @@
+%header.view-header
+  .wrapper{role: 'layout'}
+    %h1 Council Sessions
+    = link_to "New Council Session", new_admin_council_session_path, class: "button"
+
+%main.view-content{role: 'layout'}
+  .wrapper{role: 'layout'}
+    %ul.list.-enumerable
+      - @council_sessions.each do |session|
+        %li
+          %strong= session.council.name
+          %span= "#{session.commenced_on.strftime('%Y')}"
+          - if session.concluded_on
+            %span= "- #{session.concluded_on.strftime('%Y')}"
+          - else
+            %span (Current)

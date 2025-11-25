@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   namespace :admin do
     root to: "dashboard#show"
     resources :councils, only: [:index, :new, :create]
+    resources :council_sessions, only: [:index, :new, :create]
     resources :councillors do
       resources :media_mentions, only: [:new, :create]
     end
