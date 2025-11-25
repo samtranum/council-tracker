@@ -16,6 +16,12 @@ class Admin::CouncilSessionsController < Admin::ApplicationController
     end
   end
 
+  def destroy
+    @council_session = CouncilSession.find(params[:id])
+    @council_session.destroy
+    redirect_to admin_council_sessions_path, notice: "Council session deleted successfully."
+  end
+
   private
 
   def council_session_params
