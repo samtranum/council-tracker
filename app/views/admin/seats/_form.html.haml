@@ -16,6 +16,43 @@
     .input
       = f.collection_select :local_electoral_area_id, LocalElectoralArea.order(:name), :id, :name, {prompt: "Select Area"}, {class: 'select'}
 
+  .admin-form_field
+    = f.label :term_type, "Term Type"
+    .input
+      = f.radio_button :term_type, "election", checked: f.object.term_type.nil? || f.object.election?
+      = f.label :term_type_election, "Election"
+      = f.radio_button :term_type, "co_option"
+      = f.label :term_type_co_option, "Co-option"
+
+  .admin-form_field#co-option-details{style: "display: none;"}
+    = f.label :replaced_seat_id, "Replaced Councillor"
+    .input
+      - if defined?(@ended_seats)
+        = f.collection_select :replaced_seat_id, @ended_seats, :id, :councillor_name, {include_blank: "Select councillor being replaced"}, {class: 'select'}
+      - else
+        = f.select :replaced_seat_id, [], {include_blank: "No ended seats available"}, {class: 'select', disabled: true}
+      %p.help-text Select the councillor whose seat is being filled by this co-option
+
+  :javascript
+    document.addEventListener('DOMContentLoaded', function() {
+      const electionRadio = document.querySelector('input[value="election"]');
+      const coOptionRadio = document.querySelector('input[value="co_option"]');
+      const coOptionDetails = document.getElementById('co-option-details');
+      
+      function updateCoOptionVisibility() {
+        if (coOptionRadio && coOptionRadio.checked) {
+          coOptionDetails.style.display = 'block';
+        } else {
+          coOptionDetails.style.display = 'none';
+        }
+      }
+      
+      if (electionRadio) electionRadio.addEventListener('change', updateCoOptionVisibility);
+      if (coOptionRadio) coOptionRadio.addEventListener('change', updateCoOptionVisibility);
+      
+      updateCoOptionVisibility();
+    });
+
   .row
     .col-xs-6
       .admin-form_field

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_11_20_102429) do
+ActiveRecord::Schema.define(version: 2025_11_26_153844) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -239,11 +239,14 @@ ActiveRecord::Schema.define(version: 2025_11_20_102429) do
     t.date "concluded_on"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "term_type"
+    t.integer "replaced_seat_id"
     t.index ["commenced_on"], name: "index_seats_on_commenced_on"
     t.index ["concluded_on"], name: "index_seats_on_concluded_on"
     t.index ["council_session_id"], name: "index_seats_on_council_session_id"
     t.index ["councillor_id"], name: "index_seats_on_councillor_id"
     t.index ["local_electoral_area_id"], name: "index_seats_on_local_electoral_area_id"
+    t.index ["replaced_seat_id"], name: "index_seats_on_replaced_seat_id"
   end
 
   create_table "users", force: :cascade do |t|

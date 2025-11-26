@@ -8,6 +8,10 @@ class Admin::SeatsController < Admin::ApplicationController
 
   def new
     @seat = @councillor.seats.new
+    @ended_seats = Seat.joins(:councillor)
+                       .where.not(concluded_on: nil)
+                       .select('seats.*, councillors.full_name as councillor_name')
+                       .order('concluded_on DESC')
   end
 
   def create
@@ -46,6 +50,6 @@ class Admin::SeatsController < Admin::ApplicationController
   end
 
   def seat_params
-    params.require(:seat).permit(:council_session_id, :party_id, :local_electoral_area_id, :commenced_on, :concluded_on)
+    params.require(:seat).permit(:council_session_id, :party_id, :local_electoral_area_id, :commenced_on, :concluded_on, :term_type, :replaced_seat_id)
   end
 end

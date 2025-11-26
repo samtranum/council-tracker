@@ -34,6 +34,7 @@
                     %th Council Session
                     %th Party
                     %th Area
+                    %th Type
                     %th Start Date
                     %th End Date
                     %th Actions
@@ -46,6 +47,13 @@
                           = render partial: 'icons/party', locals: {party: seat.party}
                           = seat.party.name
                       %td= seat.local_electoral_area&.name
+                      %td
+                        - if seat.election?
+                          %span.badge.-success Election
+                        - elsif seat.co_option?
+                          %span.badge.-info Co-option
+                        - else
+                          %span.badge -
                       %td= seat.commenced_on.strftime('%d %b %Y')
                       %td= seat.concluded_on ? seat.concluded_on.strftime('%d %b %Y') : 'Current'
                       %td
