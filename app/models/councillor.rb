@@ -122,13 +122,14 @@ class Councillor < ApplicationRecord
     return unless party_id.present? && local_electoral_area_id.present? && commenced_on.present? && council_id.present?
 
     # Find or create a session covering this date
+    # Find a session covering this date
     session = CouncilSession.where(council_id: council_id).current_on(commenced_on).take
+    
+    # Fallback to the latest session if none found for exact date (e.g. if commenced_on is slightly off)
+    session ||= CouncilSession.where(council_id: council_id).latest
+
     unless session
-      # If no session exists for this date, we might need to create one or error out.
-      # For now, let's assume one should exist or we create a "term" based on standard logic if needed.
-      # But to be safe and simple, let's just try to find the latest one or create a new one if completely empty.
-      # Actually, let's just create one if it doesn't exist, assuming a 5 year term? Or just open ended.
-      session = CouncilSession.create!(council_id: council_id, commenced_on: commenced_on)
+      raise "No active council session found for this council. Please create a Council Session first."
     end
 
     seat = seats.create!(

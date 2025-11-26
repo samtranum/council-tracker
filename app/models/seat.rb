@@ -25,9 +25,18 @@ class Seat < ApplicationRecord
     @party ||= party_affiliations.order("commenced_on DESC NULLS LAST").take.try(:party)
   end
 
+  def party_id=(id)
+    self.party = Party.find(id) if id.present?
+  end
+
   def party=(party)
-    raise "Can only be used to set initial party" if party_affiliations.any?
-    party_affiliations.build(party: party, commenced_on: nil)
+    if party_affiliations.any?
+      # Update the most recent affiliation if it exists
+      pa = party_affiliations.order("commenced_on DESC NULLS LAST").first
+      pa.party = party
+    else
+      party_affiliations.build(party: party, commenced_on: nil)
+    end
   end
 
   def set_party_affiliation_starting_on(party, date)
