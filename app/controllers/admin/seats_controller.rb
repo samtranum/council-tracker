@@ -3,7 +3,7 @@ class Admin::SeatsController < Admin::ApplicationController
   before_action :set_seat, only: [:edit, :update, :destroy]
 
   def index
-    @seats = @councillor.seats.includes(:council_session, :party, :local_electoral_area).order(commenced_on: :desc)
+    @seats = @councillor.seats.includes(:council_session, { party_affiliations: :party }, :local_electoral_area).order(commenced_on: :desc)
   end
 
   def new
