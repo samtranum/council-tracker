@@ -2,6 +2,6 @@
           %h1= @local_electoral_area.name
           %p #{ pluralize @local_electoral_area.active_councillors.count, 'member' } currently on the council
 
-= svelte_component('Switcher', {basePath: local_electoral_area_path(current_council, @local_electoral_area), renderedView: @view.to_s, currentView: @view.to_s, links: [{view: 'councillors', label: 'Councillors'}]}, class: 'view-subnav')
+= svelte_component('Switcher', {basePath: local_electoral_area_path(current_council.slug, @local_electoral_area), renderedView: @view.to_s, currentView: @view.to_s, links: [{view: 'councillors', label: 'Councillors'}]}, class: 'view-subnav')
 
 #switcherView= render partial: @view.to_s, locals: {local_electoral_area: @local_electoral_area}
