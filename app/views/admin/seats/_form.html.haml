@@ -34,12 +34,14 @@
       %p.help-text Select the councillor whose seat is being filled by this co-option
 
   :javascript
-    document.addEventListener('DOMContentLoaded', function() {
-      const electionRadio = document.querySelector('input[value="election"]');
-      const coOptionRadio = document.querySelector('input[value="co_option"]');
+    (function() {
+      const electionRadio = document.getElementById('seat_term_type_election');
+      const coOptionRadio = document.getElementById('seat_term_type_co_option');
       const coOptionDetails = document.getElementById('co-option-details');
       
       function updateCoOptionVisibility() {
+        if (!coOptionDetails) return;
+
         if (coOptionRadio && coOptionRadio.checked) {
           coOptionDetails.style.display = 'block';
         } else {
@@ -51,7 +53,7 @@
       if (coOptionRadio) coOptionRadio.addEventListener('change', updateCoOptionVisibility);
       
       updateCoOptionVisibility();
-    });
+    })();
 
   .row
     .col-xs-6
