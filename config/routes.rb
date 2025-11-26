@@ -4,6 +4,19 @@ Rails.application.routes.draw do
   resources :user_sessions, only: [:new, :create, :destroy]
   get "signin" => "user_sessions#new", :as => :signin
   get "logout" => "user_sessions#destroy", :as => :logout
+  namespace :admin do
+    root to: "dashboard#show"
+    resources :councils, only: [:index, :new, :create]
+    resources :council_sessions, only: [:index, :new, :create, :edit, :update, :destroy]
+    resources :councillors do
+      resources :media_mentions, only: [:new, :create]
+      resources :seats, as: 'terms', path: 'terms'
+    end
+
+    resources :events, only: [:index, :show]
+    resources :co_options, only: [:new, :create, :edit, :update, :destroy]
+    resources :change_of_affiliations, only: [:new, :create, :edit, :update, :destroy]
+    resources :elections
     resources :parties
     resources :local_electoral_areas
 
