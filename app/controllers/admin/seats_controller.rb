@@ -8,10 +8,7 @@ class Admin::SeatsController < Admin::ApplicationController
 
   def new
     @seat = @councillor.seats.new
-    @ended_seats = Seat.joins(:councillor)
-                       .where.not(concluded_on: nil)
-                       .select('seats.*, councillors.full_name as councillor_name')
-                       .order('concluded_on DESC')
+    load_ended_seats
   end
 
   def create
@@ -19,17 +16,20 @@ class Admin::SeatsController < Admin::ApplicationController
     if @seat.save
       redirect_to [:admin, @councillor, :terms], notice: 'Term was successfully created.'
     else
+      load_ended_seats
       render :new
     end
   end
 
   def edit
+    load_ended_seats
   end
 
   def update
     if @seat.update(seat_params)
       redirect_to [:admin, @councillor, :terms], notice: 'Term was successfully updated.'
     else
+      load_ended_seats
       render :edit
     end
   end
@@ -51,5 +51,16 @@ class Admin::SeatsController < Admin::ApplicationController
 
   def seat_params
     params.require(:seat).permit(:council_session_id, :party_id, :local_electoral_area_id, :commenced_on, :concluded_on, :term_type, :replaced_seat_id)
+  end
+
+  def load_ended_seats
+    # Get all seats that have ended, grouped by councillor
+    # This allows selecting any councillor who has resigned
+    @ended_seats = Seat.joins(:councillor)
+                       .where.not(concluded_on: nil)
+                       .where('seats.council_session_id = ?', (@seat.council_session_id || CouncilSession.current_on(Date.current).where(council_id: @councillor.council_id).first&.id))
+                       .select('seats.id, seats.councillor_id, councillors.full_name as councillor_name, seats.concluded_on')
+                       .order('concluded_on DESC')
+                       .map { |s| ["#{s.councillor_name} (resigned #{s.concluded_on.strftime('%d %b %Y')})", s.id] }
   end
 end

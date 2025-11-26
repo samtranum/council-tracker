@@ -27,10 +27,10 @@
   .admin-form_field#co-option-details{style: "display: none;"}
     = f.label :replaced_seat_id, "Replaced Councillor"
     .input
-      - if defined?(@ended_seats)
-        = f.collection_select :replaced_seat_id, @ended_seats, :id, :councillor_name, {include_blank: "Select councillor being replaced"}, {class: 'select'}
+      - if defined?(@ended_seats) && @ended_seats.any?
+        = f.select :replaced_seat_id, options_for_select(@ended_seats, f.object.replaced_seat_id), {include_blank: "Select councillor being replaced"}, {class: 'select'}
       - else
-        = f.select :replaced_seat_id, [], {include_blank: "No ended seats available"}, {class: 'select', disabled: true}
+        = f.select :replaced_seat_id, [], {include_blank: "No ended seats available in this session"}, {class: 'select', disabled: true}
       %p.help-text Select the councillor whose seat is being filled by this co-option
 
   :javascript
