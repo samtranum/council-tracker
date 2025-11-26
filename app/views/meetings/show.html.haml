@@ -3,6 +3,6 @@
           %h1= @meeting.meeting_type_in_english
           %p= @meeting.occurred_on.strftime('%-d %B \'%y')
 
-= svelte_component('Switcher', {basePath: @meeting.path, renderedView: @view.to_s, currentView: @view.to_s, links: [{view: 'motions', label: 'Motions'},{view: 'attendances', label: 'Attendance'}]}, class: 'view-subnav')
+= svelte_component('Switcher', {basePath: @meeting.path, renderedView: @view.to_s, currentView: @view.to_s, links: [{view: 'motions', label: 'Motions'}]}, class: 'view-subnav')
 
 #switcherView= render partial: @view.to_s, locals: {meeting: @meeting}
