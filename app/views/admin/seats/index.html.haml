@@ -49,8 +49,8 @@
                       %td= seat.commenced_on.strftime('%d %b %Y')
                       %td= seat.concluded_on ? seat.concluded_on.strftime('%d %b %Y') : 'Current'
                       %td
-                        = link_to "Edit", [:edit, :admin, @councillor, seat], class: 'button -small'
-                        = link_to "Delete", [:admin, @councillor, seat], method: :delete, data: { confirm: "Are you sure? This will remove this term from their history." }, class: 'button -small -danger'
+                        = link_to "Edit", edit_admin_councillor_term_path(@councillor, seat), class: 'button -small'
+                        = link_to "Delete", admin_councillor_term_path(@councillor, seat), method: :delete, data: { confirm: "Are you sure? This will remove this term from their history." }, class: 'button -small -danger'
             - else
               .empty-state
                 %p No terms recorded for this councillor.

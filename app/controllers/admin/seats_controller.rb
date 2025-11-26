@@ -13,7 +13,7 @@ class Admin::SeatsController < Admin::ApplicationController
   def create
     @seat = @councillor.seats.new(seat_params)
     if @seat.save
-      redirect_to [:admin, @councillor, :seats], notice: 'Term was successfully created.'
+      redirect_to [:admin, @councillor, :terms], notice: 'Term was successfully created.'
     else
       render :new
     end
@@ -24,7 +24,7 @@ class Admin::SeatsController < Admin::ApplicationController
 
   def update
     if @seat.update(seat_params)
-      redirect_to [:admin, @councillor, :seats], notice: 'Term was successfully updated.'
+      redirect_to [:admin, @councillor, :terms], notice: 'Term was successfully updated.'
     else
       render :edit
     end
@@ -32,7 +32,7 @@ class Admin::SeatsController < Admin::ApplicationController
 
   def destroy
     @seat.destroy
-    redirect_to [:admin, @councillor, :seats], notice: 'Term was successfully deleted.'
+    redirect_to [:admin, @councillor, :terms], notice: 'Term was successfully deleted.'
   end
 
   private
