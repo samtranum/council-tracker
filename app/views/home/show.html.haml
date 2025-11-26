@@ -1,39 +1,38 @@
-- description "Tracking and publishing Dublin City Council's votes, motions, and amendments. See how your councillors are representing you on the council."
-- keywords "city council, vote tracking, open government"
-
-.slide
-- description "Tracking and publishing Dublin City Council's votes, motions, and amendments. See how your councillors are representing you on the council."
-- keywords "city council, vote tracking, open government"
-
-.slide
-- description "Tracking and publishing Dublin City Council's votes, motions, and amendments. See how your councillors are representing you on the council."
-- keywords "city council, vote tracking, open government"
-
-.slide
-- description "Tracking and publishing Dublin City Council's votes, motions, and amendments. See how your councillors are representing you on the council."
-- keywords "city council, vote tracking, open government"
+- description "Tracking and publishing Fingal County Council's roll-call votes at monthly meetings. See how your councillors voted on issues you care about."
+- keywords "fingal county council, vote tracking, open government, councillors"
 
 .slide
   .wrapper{role: 'layout'}
     .text-block.p.-t2
-      %h1 <a href="/">CouncilTracker.ie</a> tracks and publishes Dublin City Council's votes, motions, and amendments.
-    
-      %h3 Select your electoral area to see what your local representatives are doing on the council:
+      %h1 Votes at Fingal County Council
+      %p.subtitle
+        %em Maintained by Dublin Inquirer
 
-      %ul.list.-sentence
-        - @local_electoral_areas.each do |area|
-          - count = area.active_councillors.count
-          %li= link_to raw("#{ render partial: 'icons/count', locals: {count: count} } #{ area.name }"), local_electoral_area_path(current_council, area)
-    
-      %h3 Select a political party to see how its councillors vote on council motions:
+      %p CouncilTracker.ie tracks and publishes roll-call votes at monthly council meetings, so you can see how your councillors voted on issues you care about.
 
-      %ul.list.-sentence
-        - @parties.each do |party|
-          %li= link_to raw("#{ render partial: 'icons/party', locals: {party: party} } #{ party.name }"), party_path(current_council, party)
+      %p Keep in mind that the majority of council votes – at committee, and at the monthly meetings – are taken by voice, and so we're not able to track how each councillor voted and record that here.
 
-      %h3 You can also view votes on motions that relate to particular topics:
+      %h3 Recent roll-call votes:
 
-      %ul.list.-sentence
-        - @topics.each do |topic|
-          - count = Motion.published.in_category(topic).count
-          %li= link_to raw("#{ render partial: 'icons/count', locals: {count: count} } #{ topic }"), topic_path(current_council, topic.parameterize)
+      - if @recent_motions.any?
+        %ul.list
+          - @recent_motions.each do |motion|
+            %li
+              = link_to motion.title, motion_path(current_council, motion)
+              %br
+              %small= motion.meeting.occurred_on.strftime('%B %d, %Y')
+        
+        .p.-t1
+          = link_to "More", motions_path(current_council), class: 'button'
+      - else
+        %p No recent votes recorded.
+
+      %h3 Select your electoral area to see how your local councillors have been voting:
+
+      - if @local_electoral_areas.any?
+        %ul.list.-sentence
+          - @local_electoral_areas.each do |area|
+            - count = area.active_councillors.count
+            %li= link_to raw("#{ render partial: 'icons/count', locals: {count: count} } #{ area.name }"), local_electoral_area_path(current_council, area)
+      - else
+        %p No electoral areas found.
