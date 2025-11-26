@@ -14,7 +14,7 @@
         %nav.secondary-nav
           %ul.list.-enumerable
             %li= link_to "Profile", [:admin, @councillor]
-            %li= link_to "Terms", [:admin, @councillor, :seats], class: '-active'
+            %li= link_to "Terms", [:admin, @councillor, :terms], class: '-active'
             %li= link_to "Media", [:admin, @councillor, :media_mentions]
 
       .col-xs-10
@@ -24,7 +24,7 @@
               .col-xs-8
                 %h2 Terms of Office
               .col-xs-4.text-right
-                = link_to "Add Term", [:new, :admin, @councillor, :seat], class: 'button'
+                = link_to "Add Term", [:new, :admin, @councillor, :term], class: 'button'
 
           %main
             - if @seats.any?
