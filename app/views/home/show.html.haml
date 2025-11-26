@@ -8,10 +8,6 @@
       %p.subtitle
         %em Maintained by Dublin Inquirer
 
-      %p CouncilTracker.ie tracks and publishes roll-call votes at monthly council meetings, so you can see how your councillors voted on issues you care about.
-
-      %p Keep in mind that the majority of council votes – at committee, and at the monthly meetings – are taken by voice, and so we're not able to track how each councillor voted and record that here.
-
       %h3 Recent roll-call votes:
 
       - if @recent_motions.any?
@@ -33,6 +29,6 @@
         %ul.list.-sentence
           - @local_electoral_areas.each do |area|
             - count = area.active_councillors.count
-            %li= link_to raw("#{ render partial: 'icons/count', locals: {count: count} } #{ area.name }"), local_electoral_area_path(current_council, area)
+            %li= link_to raw("#{ render partial: 'icons/count', locals: {count: count} } #{ area.name }"), local_electoral_area_path(current_council.slug, area)
       - else
         %p No electoral areas found.
