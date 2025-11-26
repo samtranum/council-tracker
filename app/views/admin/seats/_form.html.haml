@@ -1,4 +1,4 @@
-= form_with model: [:admin, @councillor, @seat], class: 'admin-form' do |f|
+= form_with model: @seat, url: (@seat.new_record? ? admin_councillor_terms_path(@councillor) : admin_councillor_term_path(@councillor, @seat)), class: 'admin-form' do |f|
   = render partial: 'admin/shared/errors', locals: {errors: f.object.errors}
 
   .admin-form_field
