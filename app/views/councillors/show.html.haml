@@ -19,6 +19,32 @@
             %h1= @councillor.full_name
 
           .meta-data_block
+            %p
+              = link_to party_path(current_council, @councillor.party) do
+                = render partial: 'icons/party', locals: {party: @councillor.party}
+                = @councillor.party.name
+            %p= link_to @councillor.local_electoral_area_name, local_electoral_area_path(current_council.slug, @councillor.local_electoral_area)
+
+          - if @councillor.seats.any?
+            .meta-data_block
+              %label Terms of Office
+              %ol.list
+                - @councillor.seats.order(commenced_on: :desc).each do |seat|
+                  %li
+                    %span.text.-fixed.-info
+                      = seat.commenced_on.strftime("%b '%y")
+                      &mdash;
+                    - if seat.co_option? && seat.replaced_seat.present?
+                      %span= "Co-opted on #{seat.commenced_on.strftime('%d %B %Y')} to replace #{seat.replaced_seat.councillor.full_name}"
+                    - elsif seat.election?
+                      %span= "Elected on #{seat.commenced_on.strftime('%d %B %Y')}"
+                    - else
+                      %span= "Commenced #{seat.commenced_on.strftime('%d %B %Y')}"
+
+          - if @councillor.media_mentions.any?
+            .meta-data_block
+              %label Media
+              %ul.list.-emmed
                 - @councillor.media_mentions.each do |media_mention|
                   %li= render partial: 'media_mentions/media_mention', locals: {media_mention: media_mention}
 
