@@ -40,33 +40,6 @@ class Councillor < ApplicationRecord
 
   def seat_for_session(council_session)
     council_session.seats.where(councillor_id: id).take
-  end
-
-  def active_on?(date)
-    seats.active_on(date).any?
-  end
-
-  def party
-    @party ||= seats.order("commenced_on desc").take.party
-  end
-
-  # lol
-  def party_on(date)
-    seat_on(date).party
-  end
-
-  def party_name
-    party.present? ? party.name : ""
-  end
-
-  def local_electoral_area
-    @local_electoral_area ||= seats.order("commenced_on desc").take.local_electoral_area
-  end
-
-  def local_electoral_area_name
-    local_electoral_area.present? ? local_electoral_area.name : ""
-  end
-
   def vote_on(motion)
     votes.where(voteable: motion).take
   end
