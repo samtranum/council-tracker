@@ -2,7 +2,7 @@ class CouncillorsController < ApplicationController
   before_action :require_council
 
   def index
-    @councillors = current_council.councillors.by_name.page(params[:p])
+    @councillors = current_council_session.active_councillors.by_name.page(params[:p])
 
     respond_to do |f|
       f.html { render action: "index" }
