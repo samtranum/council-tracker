@@ -1,11 +1,9 @@
 %header.page-header
   .wrapper{role: 'layout'}
     .breadcrumbs
-      .breadcrumbs_crumb= link_to "Admin", [:admin, :root]
-      .breadcrumbs_crumb= link_to "Councillors", [:admin, :councillors]
       .breadcrumbs_crumb= link_to @councillor.full_name, [:admin, @councillor]
       .breadcrumbs_crumb
-        %h1 Electoral History (Terms)
+        %h1 Terms of Office
 
 .primary-main_content
   .wrapper{role: 'layout'}

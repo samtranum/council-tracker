@@ -1,13 +1,3 @@
-%header.view-header
-  .wrapper{role: 'layout'}
-    .breadcrumbs
-      .breadcrumb= link_to 'Councillors', [:admin, :councillors]
-      .breadcrumb= link_to @councillor.full_name, [:admin, @councillor]
-
-.view-content.-alpha
-  .wrapper{role: 'layout'}
-    .row
-      .col-xs-2
         %nav.secondary-nav
           %ul.list.-enumerable
             %li= link_to "Profile", [:admin, @councillor], class: '-active'
