@@ -97,8 +97,7 @@ class VoteImageGenerator
     safe_text = text.to_s.gsub("'", "\\\\'").gsub('"', '\\\\"')
     
     image.combine_options do |c|
-      c.font 'Helvetica' if weight == 'normal'
-      c.font 'Helvetica-Bold' if weight == 'bold'
+      # Use default font to avoid issues on Heroku
       c.pointsize size
       c.fill color
       c.draw "text #{x},#{y} '#{safe_text}'"

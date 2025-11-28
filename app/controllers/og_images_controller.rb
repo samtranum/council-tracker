@@ -23,6 +23,10 @@ class OgImagesController < ApplicationController
       type: 'image/png', 
       disposition: 'inline',
       filename: "vote-#{@voteable.hashed_id}.png"
+  rescue => e
+    Rails.logger.error "OG Image Generation Failed: #{e.message}"
+    Rails.logger.error e.backtrace.join("\n")
+    head :internal_server_error
   end
 
   def set_cache_headers
