@@ -76,9 +76,11 @@ Rails.application.routes.draw do
     get "meetings/:meeting_type/:occurred_on/:view(/:context)" => "meetings#show"
 
     resources :motions, only: [:index, :show]
+    get "motions/:id/og-image" => "og_images#motion", as: :motion_og_image
     get "motions/:id/:view(/:context)" => "motions#show"
 
     resources :amendments, only: [:show]
+    get "amendments/:id/og-image" => "og_images#amendment", as: :amendment_og_image
     get "amendments/:id/:view(/:context)" => "amendments#show"
 
     resources :topics, only: [:index, :show]
