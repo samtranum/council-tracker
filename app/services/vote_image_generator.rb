@@ -17,9 +17,11 @@ class VoteImageGenerator
   end
 
   def generate
-    # Create a white canvas
-    image = MiniMagick::Image.open('canvas:white')
-    image.resize "#{WIDTH}x#{HEIGHT}!"
+    # Create a white canvas using a method compatible with Heroku
+    image = MiniMagick::Image.create do |f|
+      f.size "#{WIDTH}x#{HEIGHT}"
+      f.xc "white"
+    end
 
     # Draw title (with wrapping)
     current_y = 80
