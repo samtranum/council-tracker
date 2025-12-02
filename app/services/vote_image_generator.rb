@@ -99,13 +99,14 @@ class VoteImageGenerator
 
   def draw_text(image, text, x, y, max_width, size, color, weight = 'normal')
     # Escape text for ImageMagick
-    safe_text = text.to_s.gsub("'", "\\\\'").gsub('"', '\\\\"')
+    safe_text = text.to_s
     
-    image.combine_options do |c|
-      # Use default font to avoid issues on Heroku
-      c.pointsize size
-      c.fill color
-      c.draw "text #{x},#{y} '#{safe_text}'"
+    # Use annotate directly to avoid type.xml dependency
+    image.mogrify do |c|
+      c.gravity("NorthWest")
+      c.pointsize(size)
+      c.fill(color)
+      c.annotate("0", "+#{x}+#{y}", safe_text)
     end
   end
 
