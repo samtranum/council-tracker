@@ -17,15 +17,52 @@ class VoteImageGenerator
   end
 
   def generate
-    # Create a simple red canvas to test if image generation works at all
+    # Create a white canvas using ImageMagick convert command
     tempfile = Tempfile.new(['canvas', '.png'])
     MiniMagick::Tool::Convert.new do |convert|
-      convert << "xc:red"
+      convert << "xc:white"
       convert.merge! ["-size", "#{WIDTH}x#{HEIGHT}"]
       convert << tempfile.path
     end
-    
     image = MiniMagick::Image.open(tempfile.path)
+
+    # Draw title (with wrapping)
+    current_y = 80
+    title_lines = wrap_text(@title, 40) # Wrap at ~40 chars
+    
+    title_lines.each do |line|
+      draw_text(image, line, 60, current_y, 900, 48, '#1a1a1a', 'bold')
+      current_y += 60 # Line height
+    end
+
+    # Draw vote counts summary
+    current_y += 30 # Spacing after title
+    summary = "For: #{@votes_for.count}  •  Against: #{@votes_against.count}  •  Abstain: #{@votes_abstain.count}"
+    draw_text(image, summary, 60, current_y, 900, 28, '#666666')
+
+    # Draw result
+    result_text = @voteable.vote_result == 'pass' ? 'PASSED' : 'FAILED'
+    result_color = @voteable.vote_result == 'pass' ? '#22c55e' : '#ef4444'
+    draw_text(image, result_text, 60, HEIGHT - 80, 900, 48, result_color, 'bold')
+
+    # Draw vote visualization
+    if @voteable.rollcall? && (@votes_for.count + @votes_against.count) > 0
+      y_offset = current_y + 70 # Start visualization below summary
+      
+      # Draw "For" section
+      if @votes_for.any?
+        draw_text(image, 'For', 60, y_offset, 100, 20, '#666666')
+        draw_votes(image, @votes_for, 60, y_offset + 30)
+        y_offset += calculate_section_height(@votes_for.count) + 40
+      end
+
+      # Draw "Against" section
+      if @votes_against.any?
+        draw_text(image, 'Against', 60, y_offset, 100, 20, '#666666')
+        draw_votes(image, @votes_against, 60, y_offset + 30)
+      end
+    end
+
     image.format 'png'
     image.to_blob
   end
@@ -65,7 +102,11 @@ class VoteImageGenerator
     safe_text = text.to_s
     
     # Use annotate directly to avoid type.xml dependency
+    # Explicitly use the bundled font
+    font_path = Rails.root.join('public', 'fonts', 'Roboto-Regular.ttf').to_s
+    
     image.mogrify do |c|
+      c.font(font_path)
       c.gravity("NorthWest")
       c.pointsize(size)
       c.fill(color)
@@ -98,7 +139,8 @@ class VoteImageGenerator
   end
 
   def draw_circle(image, x, y, radius, color)
-    image.combine_options do |c|
+    # Use mogrify for drawing circles too, to be consistent
+    image.mogrify do |c|
       c.fill color
       c.stroke color
       c.draw "circle #{x},#{y} #{x + radius},#{y}"
