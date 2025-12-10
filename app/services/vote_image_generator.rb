@@ -17,12 +17,14 @@ class VoteImageGenerator
   end
 
   def generate
-    # Create a white canvas using ImageMagick convert command
+    # Create a white canvas using ImageMagick
     tempfile = Tempfile.new(['canvas', '.png'])
-    MiniMagick::Tool::Convert.new do |convert|
-      convert << "xc:white"
-      convert.merge! ["-size", "#{WIDTH}x#{HEIGHT}"]
-      convert << tempfile.path
+    tempfile.close # Close the file so that ImageMagick can write to it (Windows file locking)
+    
+    self.class.tool_class.new do |cmd|
+      cmd << "xc:white"
+      cmd.merge! ["-size", "#{WIDTH}x#{HEIGHT}"]
+      cmd << tempfile.path
     end
     image = MiniMagick::Image.open(tempfile.path)
 
@@ -105,13 +107,26 @@ class VoteImageGenerator
     # Explicitly use the bundled font
     font_path = Rails.root.join('public', 'fonts', 'Roboto-Regular.ttf').to_s
     
-    image.mogrify do |c|
-      c.font(font_path)
-      c.gravity("NorthWest")
-      c.pointsize(size)
-      c.fill(color)
-      c.annotate("0", "+#{x}+#{y}", safe_text)
+    self.class.tool_class.new do |m|
+      m << image.path
+      m.font(font_path)
+      m.gravity("NorthWest")
+      m.pointsize(size)
+      m.fill(color)
+      m.annotate("+#{x}+#{y}", safe_text)
+      m << image.path
     end
+  end
+
+  def self.tool_class
+    @tool_class ||= system_has_magick? ? MiniMagick::Tool::Magick : MiniMagick::Tool::Convert
+  end
+
+  def self.system_has_magick?
+    # Check if 'magick' command exists (IM7)
+    system('magick -version', out: File::NULL, err: File::NULL)
+  rescue
+    false
   end
 
   def draw_votes(image, votes, start_x, start_y)
@@ -140,10 +155,12 @@ class VoteImageGenerator
 
   def draw_circle(image, x, y, radius, color)
     # Use mogrify for drawing circles too, to be consistent
-    image.mogrify do |c|
-      c.fill color
-      c.stroke color
-      c.draw "circle #{x},#{y} #{x + radius},#{y}"
+    self.class.tool_class.new do |m|
+      m << image.path
+      m.fill color
+      m.stroke color
+      m.draw "circle #{x},#{y} #{x + radius},#{y}"
+      m << image.path
     end
   end
 
