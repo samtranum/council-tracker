@@ -38,7 +38,7 @@ class Admin::LocalElectoralAreasController < Admin::ApplicationController
   private
 
   def set_local_electoral_area
-    @local_electoral_area = LocalElectoralArea.find(params[:id])
+    @local_electoral_area = LocalElectoralArea.find_by!(slug: params[:id])
   end
 
   def local_electoral_area_params
