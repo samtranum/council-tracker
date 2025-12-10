@@ -19,7 +19,7 @@ class Admin::PartiesController < Admin::ApplicationController
   private
 
   def set_party
-    @party = Party.find(params[:id])
+    @party = Party.find_by!(slug: params[:id])
   end
 
   def party_params
