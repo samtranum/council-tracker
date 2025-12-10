@@ -107,9 +107,12 @@ class VoteImageGenerator
     # Explicitly use the bundled font
     font_path = Rails.root.join('public', 'fonts', 'Roboto-Regular.ttf').to_s
     
+    # Fallback to standard font if custom font not found
+    font_arg = File.exist?(font_path) ? font_path : 'Helvetica'
+    
     self.class.tool_class.new do |m|
       m << image.path
-      m.font(font_path)
+      m.font(font_arg)
       m.gravity("NorthWest")
       m.pointsize(size)
       m.fill(color)
