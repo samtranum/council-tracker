@@ -6,7 +6,7 @@ class LocalElectoralAreasController < ApplicationController
   end
 
   def show
-    @local_electoral_area = current_council.local_electoral_areas.find_by(slug: params[:id])
+    @local_electoral_area = current_council.local_electoral_areas.find_by!(slug: params[:id])
     @view = params[:view].try(:to_sym) || :councillors
     @context = params[:context].try(:to_sym) || :full
 
