@@ -26,9 +26,8 @@
       %h3 Select your electoral area to see how your local councillors have been voting:
 
       - if @local_electoral_areas.any?
-        %ul.list.-sentence
+        %ul.list.-enumerable
           - @local_electoral_areas.each do |area|
-            - count = area.active_councillors.count
-            %li= link_to raw("#{ render partial: 'icons/count', locals: {count: count} } #{ area.name }"), local_electoral_area_path(current_council.slug, area)
+            %li= link_to area.name, local_electoral_area_path(current_council.slug, area)
       - else
         %p No electoral areas found.

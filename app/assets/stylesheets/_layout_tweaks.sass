@@ -46,3 +46,43 @@
     
   td
     border-bottom: 1px solid var(--faint)
+
+// ====================
+// Landing & Council Page Improvements
+// ====================
+
+// Landing page: Constrain text width for better readability
+.view-content[role='layout']
+  .wrapper[role='layout']
+    max-width: 700px
+    
+// Council home page: Improve motion list hierarchy
+.text-block
+  .list
+    li
+      margin-bottom: 1.5rem
+      
+      a
+        font-size: 1.125rem
+        font-weight: 500
+        line-height: 1.4
+        
+      small
+        display: block
+        margin-top: 0.25rem
+        font-size: 0.875rem
+        color: var(--grey, #666)
+        font-weight: 400
+  
+  h3
+    font-size: 1.25rem
+    font-weight: 500
+    margin-top: 3rem
+    margin-bottom: 1.5rem
+    
+    &:first-of-type
+      margin-top: 2rem
+      
+  .list.-enumerable
+    li
+      margin-bottom: 0.75rem
