@@ -103,11 +103,10 @@ class VoteImageGenerator
     # Escape text for ImageMagick
     safe_text = text.to_s
     
-    # Use annotate directly to avoid type.xml dependency
-    # Use Helvetica system font (Roboto-Regular.ttf causes issues on Heroku)
+    # Don't specify font - Heroku's ImageMagick buildpack lacks type.xml font config
+    # ImageMagick will use its built-in default font
     self.class.tool_class.new do |m|
       m << image.path
-      m.font('Helvetica')
       m.gravity("NorthWest")
       m.pointsize(size)
       m.fill(color)
