@@ -1,5 +1,4 @@
-class Admin::PartiesController < ApplicationController
-  before_action :require_admin
+class Admin::PartiesController < Admin::ApplicationController
   before_action :set_party, only: [:edit, :update]
 
   def index
