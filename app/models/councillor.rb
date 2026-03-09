@@ -84,7 +84,20 @@ class Councillor < ApplicationRecord
   end
 
   def events
-    Event.related_to_seats(seats.map(&:id).compact).order("occurred_on desc")
+    seat_ids = seats.map(&:id).compact
+    direct = Event.related_to_seats(seat_ids)
+
+    # Also find election events for sessions this councillor was elected into,
+    # in case their seat was added after the election was committed
+    elected_session_ids = seats.where.not(term_type: :co_option)
+                               .map(&:council_session_id).compact.uniq
+    if elected_session_ids.any?
+      commenced_ons = CouncilSession.where(id: elected_session_ids).pluck(:commenced_on)
+      election_ids = Event.election.where(occurred_on: commenced_ons).ids
+      return Event.where(id: direct.ids | election_ids).order("occurred_on desc")
+    end
+
+    direct
   end
 
   private

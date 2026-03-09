@@ -31,6 +31,6 @@ class CoOption < Eventable
 
   def incoming_seat
     return unless event
-    @incoming_seat ||= council_session.seats.find_by(councillor: incoming_councillor, commenced_on: event.occurred_on)
+    @incoming_seat ||= Seat.find_by(councillor: incoming_councillor, commenced_on: event.occurred_on)
   end
 end

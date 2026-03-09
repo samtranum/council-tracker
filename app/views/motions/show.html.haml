@@ -25,6 +25,9 @@
             %span.count-against= "#{@motion.votes.in_opposition.count} against"
             - if @motion.votes.in_abstention.any?
               %span.count-abstain= "#{@motion.votes.in_abstention.count} abstain"
+        .motion-date= @motion.meeting.occurred_on_formatted
+    - else
+      .motion-date= @motion.meeting.occurred_on_formatted
     %hr
 
   .motion-show-meta
