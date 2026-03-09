@@ -124,9 +124,13 @@
     background-color: var(--faint)
 
 .motion-date
+  display: none
   font-size: var(--t6)
   color: var(--grey)
   white-space: nowrap
+
+  @media screen and (min-width: '800px')
+    display: block
 
 .home-view-more
   margin-top: 1.5rem
