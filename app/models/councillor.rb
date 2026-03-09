@@ -83,6 +83,15 @@ class Councillor < ApplicationRecord
     Amendment.proposed_by(self)
   end
 
+  def co_option_seats_without_events
+    co_option_seats = seats.where(term_type: :co_option)
+    return Seat.none if co_option_seats.empty?
+
+    covered_seat_ids = Event.where("related_seat_ids && ARRAY[?]::bigint[]", co_option_seats.ids)
+                            .flat_map(&:related_seat_ids)
+    co_option_seats.where.not(id: covered_seat_ids).order(commenced_on: :desc)
+  end
+
   def events
     seat_ids = seats.map(&:id).compact
     direct = Event.related_to_seats(seat_ids)

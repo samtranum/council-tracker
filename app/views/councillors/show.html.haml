@@ -15,15 +15,24 @@
           %span.councillor-area-link= link_to @councillor.local_electoral_area_name, local_electoral_area_path(current_council.slug, @councillor.local_electoral_area)
     %hr
 
-  - if @councillor.events.any?
+  - direct_events = @councillor.events.includes(:eventable)
+  - uncovered_co_option_seats = @councillor.co_option_seats_without_events.includes(replaced_seat: :councillor)
+  - if direct_events.any? || uncovered_co_option_seats.any?
     .councillor-show-history
       %h2 Electoral history
       %hr
       %ol.electoral-history-list
-        - @councillor.events.includes(:eventable).each do |event|
+        - direct_events.each do |event|
           %li.electoral-history-item
             %span.event-date= event.occurred_on.strftime('%b %Y')
             %span.event-description= raw summarize_event_for_councillor(event, @councillor)
+        - uncovered_co_option_seats.each do |seat|
+          %li.electoral-history-item
+            %span.event-date= seat.commenced_on.strftime('%b %Y')
+            - if seat.replaced_seat&.councillor
+              %span.event-description= raw "Co-opted to replace #{link_to seat.replaced_seat.councillor.full_name, councillor_path(current_council, seat.replaced_seat.councillor)}"
+            - else
+              %span.event-description Co-opted to the council
 
   .councillor-show-votes
     %h2 Votes
