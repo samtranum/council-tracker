@@ -22,8 +22,8 @@ class VoteImageGenerator
     tempfile.close # Close the file so that ImageMagick can write to it (Windows file locking)
     
     self.class.tool_class.new do |cmd|
-      cmd << "xc:white"
       cmd.merge! ["-size", "#{WIDTH}x#{HEIGHT}"]
+      cmd << "xc:white"
       cmd << tempfile.path
     end
     image = MiniMagick::Image.open(tempfile.path)

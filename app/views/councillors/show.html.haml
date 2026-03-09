@@ -15,6 +15,16 @@
           %span.councillor-area-link= link_to @councillor.local_electoral_area_name, local_electoral_area_path(current_council.slug, @councillor.local_electoral_area)
     %hr
 
+  - if @councillor.events.any?
+    .councillor-show-history
+      %h2 Electoral history
+      %hr
+      %ol.electoral-history-list
+        - @councillor.events.includes(:eventable).each do |event|
+          %li.electoral-history-item
+            %span.event-date= event.occurred_on.strftime('%b %Y')
+            %span.event-description= raw summarize_event_for_councillor(event, @councillor)
+
   .councillor-show-votes
     %h2 Votes
     %hr

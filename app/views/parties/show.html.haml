@@ -1,10 +1,11 @@
 - title ['Parties', @party.name]
-        .meta-data
-          .meta-data_block
-            %h1= @party.name
-            %p
-              #{ pluralize @party.active_councillors.count, 'member' } currently on the council
 
-= svelte_component('Switcher', {basePath: party_path(current_council, @party), renderedView: @view.to_s, currentView: @view.to_s, links: [{view: 'councillors', label: 'Councillors'}]}, class: 'view-subnav')
+.list-page
+  .list-page-header
+    .party-page-heading
+      = render partial: 'icons/party', locals: {party: @party}
+      %h1= @party.name
+    %p.page-subtitle= pluralize @party.active_councillors.count, 'member'
+    %hr
 
-#switcherView= render partial: @view.to_s, locals: {party: @party}
+  = render partial: @view.to_s, locals: {party: @party}

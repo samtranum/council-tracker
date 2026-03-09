@@ -1,7 +1,10 @@
-.view-content.-omega
-  .wrapper{role: 'layout'}
-    %ul.list.-enumerable
-      - local_electoral_area.active_councillors.each do |councillor|
-        %li
-          = link_to councillor_path(current_council, councillor) do
-            = render partial: 'councillors/councillor', locals: {councillor: councillor}
+.councillors-list
+  - local_electoral_area.active_councillors.by_name.each do |councillor|
+    = link_to councillor_path(current_council, councillor), class: 'councillor-row' do
+      .councillor-row-left
+        - if councillor.party
+          = render partial: 'icons/party', locals: {party: councillor.party}
+        %span.councillor-name= councillor.full_name
+      .councillor-row-right
+        - if councillor.party
+          %span.councillor-party= councillor.party.name
