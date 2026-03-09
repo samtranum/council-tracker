@@ -1,6 +1,9 @@
 .home-page
-  padding: var(--gutter) 2rem
+  padding: var(--gutter) 1rem
   max-width: 120rem
+
+  @media screen and (min-width: '800px')
+    padding: var(--gutter) 2rem
 
 .home-intro
   margin-bottom: var(--gutter)
@@ -99,13 +102,16 @@
     color: var(--black)
 
 .motion-bar
-  display: flex
+  display: none
   flex-direction: row
   height: 1.4rem
   width: 10rem
   border-radius: 0.25rem
   overflow: hidden
   background-color: var(--faint)
+
+  @media screen and (min-width: '800px')
+    display: flex
 
   .bar-for
     background-color: #7b7cf7
