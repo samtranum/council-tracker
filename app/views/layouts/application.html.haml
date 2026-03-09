@@ -14,7 +14,8 @@
         .header-inner
           = link_to root_path, class: 'logo' do
             CouncilVoteTracker.ie
-          %span.partner Dublin InQuirer
+          = link_to "https://dublininquirer.com", target: '_blank', rel: 'noopener', class: 'partner-logo' do
+            = image_tag 'https://www.dublininquirer.com/content/images/2026/03/Fox.jpeg', alt: 'Dublin Inquirer', class: 'fox-logo'
 
       .body-wrap
         %aside.primary-sidebar
@@ -29,3 +30,15 @@
               = link_to "Councillors", councillors_path(current_council)
 
         %main.primary-main= yield
+
+      %footer.primary-footer
+        .footer-inner
+          This site is maintained by
+          = link_to "Dublin Inquirer", "https://dublininquirer.com", target: '_blank', rel: 'noopener'
+          \.
+          Questions or corrections? Email us at
+          = mail_to "sam@dublininquirer.com"
+          \.
+          To help us maintain this public record, please consider
+          = link_to "leaving us a tip", "https://www.dublininquirer.com/tip-jar/", target: '_blank', rel: 'noopener'
+          \.
