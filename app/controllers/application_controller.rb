@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   before_action :redirect_to_www, if: -> { Rails.env.production? && ENV["APP_DOMAIN"] }
+  before_action :load_all_councils
   protect_from_forgery with: :exception
 
   def current_account
@@ -31,5 +32,9 @@ class ApplicationController < ActionController::Base
 
   def require_council
     raise ActionController::RoutingError.new('Not Found') unless current_council
+  end
+
+  def load_all_councils
+    @all_councils = Council.order(:name)
   end
 end

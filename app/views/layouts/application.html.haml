@@ -11,13 +11,21 @@
   %body
     .standard{role: 'layout'}
       %header.primary-header
-        .content
-          %nav.primary-nav
-            .links
-              = link_to root_path, class: 'logo' do
-                CouncilTracker.ie
+        .header-inner
+          = link_to root_path, class: 'logo' do
+            CouncilTracker.ie
+          %span.partner Dublin InQuirer
 
-              - if current_council
-                = link_to "Motions", motions_path(current_council)
-                = link_to "Councillors", councillors_path(current_council)
-      %main.primary-main= yield
+      .body-wrap
+        %aside.primary-sidebar
+          - if current_council
+            %nav.primary-nav
+              .council-switcher
+                = select_tag :council_id,
+                  options_for_select(@all_councils.map { |c| [c.name, council_root_path(c.slug)] }, council_root_path(current_council.slug)),
+                  onchange: 'window.location=this.value',
+                  class: 'council-select'
+              = link_to "Motions", motions_path(current_council)
+              = link_to "Councillors", councillors_path(current_council)
+
+        %main.primary-main= yield

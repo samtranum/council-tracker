@@ -1,33 +1,55 @@
-- description "Tracking and publishing Fingal County Council's roll-call votes at monthly meetings. See how your councillors voted on issues you care about."
-- keywords "fingal county council, vote tracking, open government, councillors"
+- description "Tracking and publishing #{current_council.name}'s roll-call votes at monthly meetings. See how your councillors voted on issues you care about."
+- keywords "#{current_council.name.downcase}, vote tracking, open government, councillors"
 
-.slide
-  .wrapper{role: 'layout'}
-    .text-block.p.-t2
-      %h1= "Votes at #{current_council.name}"
-      %p.subtitle
-        %em Maintained by Dublin Inquirer
+.home-page
+  .home-intro
+    %h1= current_council.name
+    %hr
+    %p
+      We track and publish roll-call votes at monthly #{current_council.name} meetings,
+      so you can see how your councillors voted on issues you care about.
+    %p
+      Keep in mind that the majority of council votes – at committee, and at the monthly
+      meetings – are taken by voice, and we're not able to track those votes here.
+    %hr
 
-      %h3 Recent roll-call votes:
+  .home-columns
+    .home-motions
+      %h2 Motions
+      %hr
 
       - if @recent_motions.any?
-        %ul.list
+        .motions-list
           - @recent_motions.each do |motion|
-            %li
-              = link_to motion.title, motion_path(current_council, motion)
-              %br
-              %small= motion.meeting.occurred_on.strftime('%B %d, %Y')
-        
-        .p.-t1
-          = link_to "More", motions_path(current_council), class: 'button'
+            = link_to motion_path(current_council, motion), class: 'motion-row' do
+              %span.motion-title= motion.title
+              .motion-meta
+                - if motion.result.present?
+                  .motion-result{class: "-#{motion.result}"}
+                    = motion.result.to_s == 'pass' ? 'Passed' : 'Failed'
+                - if motion.rollcall? && motion.votes.countable.any?
+                  - total = motion.votes.countable.count.to_f
+                  - pct_for = ((motion.votes.in_favour.count * 100) / total).round
+                  - pct_against = ((motion.votes.in_opposition.count * 100) / total).round
+                  .motion-bar
+                    .bar-for{style: "flex-basis: #{pct_for}%"}
+                    .bar-against{style: "flex-basis: #{pct_against}%"}
+                    .bar-rest
+                %span.motion-date= motion.occurred_on.strftime('%-d %b %Y')
+
+        .home-view-more
+          = link_to motions_path(current_council), class: 'view-more-btn' do
+            View more →
       - else
         %p No recent votes recorded.
 
-      %h3 Select your electoral area to see how your local councillors have been voting:
+    .home-areas
+      %h2 Electoral Areas
+      %hr
 
       - if @local_electoral_areas.any?
-        %ul.list.-enumerable
+        .areas-grid
           - @local_electoral_areas.each do |area|
-            %li= link_to area.name, local_electoral_area_path(current_council.slug, area)
+            = link_to area.name, local_electoral_area_path(current_council.slug, area), class: 'area-tag'
       - else
         %p No electoral areas found.
