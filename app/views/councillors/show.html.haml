@@ -16,8 +16,8 @@
     %hr
 
   - direct_events = @councillor.events.includes(:eventable)
-  - uncovered_co_option_seats = @councillor.co_option_seats_without_events.includes(replaced_seat: :councillor)
-  - if direct_events.any? || uncovered_co_option_seats.any?
+  - uncovered_seats = @councillor.seats_without_events.includes(:council_session, replaced_seat: :councillor)
+  - if direct_events.any? || uncovered_seats.any?
     .councillor-show-history
       %h2 Electoral history
       %hr
@@ -26,13 +26,16 @@
           %li.electoral-history-item
             %span.event-date= event.occurred_on.strftime('%b %Y')
             %span.event-description= raw summarize_event_for_councillor(event, @councillor)
-        - uncovered_co_option_seats.each do |seat|
+        - uncovered_seats.each do |seat|
           %li.electoral-history-item
             %span.event-date= seat.commenced_on.strftime('%b %Y')
-            - if seat.replaced_seat&.councillor
-              %span.event-description= raw "Co-opted to replace #{link_to seat.replaced_seat.councillor.full_name, councillor_path(current_council, seat.replaced_seat.councillor)}"
+            - if seat.co_option?
+              - if seat.replaced_seat&.councillor
+                %span.event-description= raw "Co-opted to replace #{link_to seat.replaced_seat.councillor.full_name, councillor_path(current_council, seat.replaced_seat.councillor)}"
+              - else
+                %span.event-description Co-opted to the council
             - else
-              %span.event-description Co-opted to the council
+              %span.event-description Elected to the council
 
   .councillor-show-votes
     %h2 Votes

@@ -83,13 +83,32 @@ class Councillor < ApplicationRecord
     Amendment.proposed_by(self)
   end
 
-  def co_option_seats_without_events
-    co_option_seats = seats.where(term_type: :co_option)
-    return Seat.none if co_option_seats.empty?
+  def seats_without_events
+    all_seats = seats.includes(:council_session)
+    return Seat.none if all_seats.empty?
 
-    covered_seat_ids = Event.where("related_seat_ids && ARRAY[?]::bigint[]", co_option_seats.ids)
-                            .flat_map(&:related_seat_ids)
-    co_option_seats.where.not(id: covered_seat_ids).order(commenced_on: :desc)
+    seat_ids = all_seats.map(&:id)
+
+    # Seats directly referenced in any event's related_seat_ids
+    directly_covered_ids = Event.where("related_seat_ids && ARRAY[?]::bigint[]", seat_ids)
+                                .flat_map(&:related_seat_ids).uniq
+
+    # Election seats also covered if a session-level election event exists
+    # (matches the fallback logic in #events, to avoid duplicates)
+    election_seat_session_dates = all_seats.reject(&:co_option?)
+                                           .map { |s| s.council_session&.commenced_on }
+                                           .compact.uniq
+    session_covered_ids = if election_seat_session_dates.any?
+      matched_dates = Event.election.where(occurred_on: election_seat_session_dates).pluck(:occurred_on)
+      all_seats.reject(&:co_option?)
+               .select { |s| matched_dates.include?(s.council_session&.commenced_on) }
+               .map(&:id)
+    else
+      []
+    end
+
+    covered_ids = (directly_covered_ids + session_covered_ids).uniq
+    seats.where.not(id: covered_ids).order(commenced_on: :desc)
   end
 
   def events
