@@ -3,6 +3,9 @@
 .motion-show
   .motion-show-intro
     %h1= @motion.title
+
+    - if @motion.body.present? && @motion.body != @motion.title
+      .motion-body= @motion.body
     %hr
 
     - if @motion.result.present?

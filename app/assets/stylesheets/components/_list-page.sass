@@ -1,0 +1,170 @@
+// Shared list page layout (motions index, councillors index)
+.list-page
+  padding: var(--gutter) 2rem
+  max-width: 120rem
+
+.list-page-header
+  margin-bottom: var(--gutter)
+
+  h1
+    font-size: var(--t1)
+    font-weight: 700
+    margin-bottom: 1.5rem
+
+  hr
+    border: none
+    border-top: var(--stroke) solid var(--black)
+
+.list-page-pagination
+  margin-top: var(--gutter)
+  padding-top: 1.5rem
+  border-top: var(--stroke) solid var(--faint)
+
+// Councillors list
+.councillors-list
+  display: flex
+  flex-direction: column
+
+.councillor-row
+  display: flex
+  flex-direction: row
+  justify-content: space-between
+  align-items: center
+  padding: 0.75rem 0
+  border-bottom: var(--stroke) solid var(--faint)
+  text-decoration: none
+  color: var(--black)
+  gap: 1rem
+
+  &:hover
+    .councillor-name
+      color: var(--blue)
+
+.councillor-row-left
+  display: flex
+  flex-direction: row
+  align-items: center
+  gap: 0.5rem
+
+  svg.icon.-party
+    flex-shrink: 0
+
+.councillor-name
+  font-size: var(--t5)
+  font-weight: 500
+
+.councillor-row-right
+  display: flex
+  flex-direction: row
+  gap: 1.5rem
+  font-size: var(--t6)
+  color: var(--grey)
+  flex-shrink: 0
+
+// Councillor show page
+.councillor-show
+  padding: var(--gutter) 2rem
+  max-width: 120rem
+
+.councillor-show-intro
+  margin-bottom: var(--gutter)
+
+  h1
+    font-size: var(--t1)
+    font-weight: 700
+    margin-bottom: 0.75rem
+
+  hr
+    border: none
+    border-top: var(--stroke) solid var(--black)
+    margin-top: 1.5rem
+
+.councillor-portrait
+  float: right
+  margin: 0 0 1.5rem 2rem
+  width: 10rem
+  height: 10rem
+  overflow: hidden
+  border-radius: 0.25rem
+  background-color: var(--blue)
+  flex-shrink: 0
+
+  &.-sinn-fein
+    background-color: #008800
+  &.-fianna-fail
+    background-color: #66BB66
+  &.-fine-gael
+    background-color: #6699FF
+  &.-labour-party
+    background-color: #CC0000
+  &.-people-before-profit
+    background-color: #E91D50
+  &.-green-party
+    background-color: #99CC33
+  &.-solidarity
+    background-color: #BF2D2E
+  &.-united-left
+    background-color: #FF5555
+  &.-independent
+    background-color: #CCC
+  &.-independents-4-change
+    background-color: #FFC0CB
+  &.-social-democrats
+    background-color: #752F8B
+  &.-workers-party
+    background-color: #D73D3D
+
+  img
+    width: 100%
+    height: 100%
+    object-fit: cover
+    object-position: center top
+    display: block
+
+.councillor-meta
+  display: flex
+  flex-direction: row
+  align-items: center
+  gap: 1.5rem
+  flex-wrap: wrap
+  margin-bottom: 0.5rem
+
+.councillor-party-link
+  display: inline-flex
+  align-items: center
+  gap: 0.4rem
+  color: var(--black)
+  text-decoration: none
+  font-size: var(--t5)
+
+  &:hover
+    color: var(--blue)
+
+  svg.icon.-party
+    flex-shrink: 0
+
+.councillor-area-link
+  font-size: var(--t5)
+  color: var(--grey)
+
+  a
+    color: var(--grey)
+    text-decoration: none
+
+    &:hover
+      color: var(--blue)
+
+.councillor-show-votes
+  h2
+    font-size: var(--t2)
+    font-weight: 700
+    margin-bottom: 1rem
+
+  hr
+    border: none
+    border-top: var(--stroke) solid var(--black)
+    margin-bottom: 1.5rem
+
+.empty-value
+  color: var(--grey)
+  font-size: var(--t5)

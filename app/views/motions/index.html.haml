@@ -2,29 +2,28 @@
 - description "Motions tabled and voted upon by #{current_council.name}"
 - keywords "city council, motions, votes"
 
-%header.view-header
-  .wrapper{role: 'layout'}
-    %h1= link_to "Motions", motions_path(current_council)
+.list-page
+  .list-page-header
+    %h1 Motions
+    %hr
 
-%main.view-content
-  .wrapper{role: 'layout'}
-    .motions-list
-      - @motions.each do |motion|
-        = link_to motion_path(current_council, motion), class: 'motion-row' do
-          %span.motion-title= motion.title
-          .motion-meta
-            - if motion.result.present?
-              .motion-result{class: "-#{motion.result}"}
-                = motion.result.to_s == 'pass' ? 'Passed' : 'Failed'
-            - if motion.rollcall? && motion.votes.countable.any?
-              - total = motion.votes.countable.count.to_f
-              - pct_for = ((motion.votes.in_favour.count * 100) / total).round
-              - pct_against = ((motion.votes.in_opposition.count * 100) / total).round
-              .motion-bar
-                .bar-for{style: "flex-basis: #{pct_for}%"}
-                .bar-against{style: "flex-basis: #{pct_against}%"}
-                .bar-rest
-            %span.motion-date= motion.occurred_on.strftime('%-d %b %Y')
+  .motions-list
+    - @motions.each do |motion|
+      = link_to motion_path(current_council, motion), class: 'motion-row' do
+        %span.motion-title= motion.title
+        .motion-meta
+          - if motion.result.present?
+            .motion-result{class: "-#{motion.result}"}
+              = motion.result.to_s == 'pass' ? 'Passed' : 'Failed'
+          - if motion.rollcall? && motion.votes.countable.any?
+            - total = motion.votes.countable.count.to_f
+            - pct_for = ((motion.votes.in_favour.count * 100) / total).round
+            - pct_against = ((motion.votes.in_opposition.count * 100) / total).round
+            .motion-bar
+              .bar-for{style: "flex-basis: #{pct_for}%"}
+              .bar-against{style: "flex-basis: #{pct_against}%"}
+              .bar-rest
+          %span.motion-date= motion.occurred_on.strftime('%-d %b %Y')
 
-%footer.view-footer
-  .wrapper{role: 'layout'}= render partial: 'shared/pagination', locals: {records: @motions}
+  .list-page-pagination
+    = render partial: 'shared/pagination', locals: {records: @motions}
