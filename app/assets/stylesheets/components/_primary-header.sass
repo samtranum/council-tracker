@@ -1,9 +1,23 @@
 .primary-header
-  & > .content
-    position: sticky
-    top: 0rem
-    padding: 2rem
-    height: 100vh
+  border-bottom: var(--stroke) solid var(--black)
+
+  .header-inner
     display: flex
-    flex-direction: column
+    flex-direction: row
     justify-content: space-between
+    align-items: center
+    padding: 1.5rem 2rem
+
+  .logo
+    font-weight: 700
+    font-size: var(--t4)
+    text-decoration: none
+    color: var(--black)
+
+    &:hover
+      color: var(--blue)
+
+  .partner
+    font-weight: 700
+    font-size: var(--t4)
+    color: var(--black)

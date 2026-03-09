@@ -1,24 +1,10 @@
 - title ['Topics', @tag]
-- description "#{ pluralize @motions.count, 'motion' } related to #{ @tag } in Dublin City Council"
-- keywords "city council, motions, #{ @tag }"
-
-%header.view-header
-  .wrapper{role: 'layout'}
-    .breadcrumbs
-      .breadcrumb= link_to 'Topics', :topics
-      .breadcrumb= link_to @tag, topic_path(@tag.parameterize)
-
-.view-content.-alpha
-  .wrapper{role: 'layout'}
-    .topic-card
-      .data
-        .meta-data
           .meta-data_block
             %h1= @tag
             %p
               #{ pluralize Motion.published.in_category(@tag).count, 'motion' }
 
-= svelte_component('Switcher', {basePath: topic_path(@tag.parameterize), renderedView: @view.to_s, currentView: @view.to_s, links: [{view: 'motions', label: 'Motions'}]}, class: 'view-subnav')
+= svelte_component('Switcher', {basePath: topic_path(current_council, @tag.parameterize), renderedView: @view.to_s, currentView: @view.to_s, links: [{view: 'motions', label: 'Motions'}]}, class: 'view-subnav')
 
 #switcherView= render partial: @view.to_s, locals: {motions: @motions}
 

@@ -1,27 +1,55 @@
-- description "Tracking and publishing Dublin City Council's votes, motions, and amendments. See how your councillors are representing you on the council."
-- keywords "city council, vote tracking, open government"
+- description "Tracking and publishing #{current_council.name}'s roll-call votes at monthly meetings. See how your councillors voted on issues you care about."
+- keywords "#{current_council.name.downcase}, vote tracking, open government, councillors"
 
-.slide
-  .wrapper{role: 'layout'}
-    .text-block.p.-t2
-      %h1 <a href="/">CouncilTracker.ie</a> tracks and publishes Dublin City Council's votes, motions, and amendments.
-    
-      %h3 Select your electoral area to see what your local representatives are doing on the council:
+.home-page
+  .home-intro
+    %h1= current_council.name
+    %hr
+    %p
+      We track and publish roll-call votes at monthly #{current_council.name} meetings,
+      so you can see how your councillors voted on issues you care about.
+    %p
+      Keep in mind that the majority of council votes – at committee, and at the monthly
+      meetings – are taken by voice, and we're not able to track those votes here.
+    %hr
 
-      %ul.list.-sentence
-        - @local_electoral_areas.each do |area|
-          - count = area.active_councillors.count
-          %li= link_to raw("#{ render partial: 'icons/count', locals: {count: count} } #{ area.name }"), area
-    
-      %h3 Select a political party to see how its councillors vote on council motions:
+  .home-columns
+    .home-motions
+      %h2 Motions
+      %hr
 
-      %ul.list.-sentence
-        - @parties.each do |party|
-          %li= link_to raw("#{ render partial: 'icons/party', locals: {party: party} } #{ party.name }"), party
+      - if @recent_motions.any?
+        .motions-list
+          - @recent_motions.each do |motion|
+            = link_to motion_path(current_council, motion), class: 'motion-row' do
+              %span.motion-title= motion.title
+              .motion-meta
+                - if motion.result.present?
+                  .motion-result{class: "-#{motion.result}"}
+                    = motion.result.to_s == 'pass' ? 'Passed' : 'Failed'
+                - if motion.rollcall? && motion.votes.countable.any?
+                  - total = motion.votes.countable.count.to_f
+                  - pct_for = ((motion.votes.in_favour.count * 100) / total).round
+                  - pct_against = ((motion.votes.in_opposition.count * 100) / total).round
+                  .motion-bar
+                    .bar-for{style: "flex-basis: #{pct_for}%"}
+                    .bar-against{style: "flex-basis: #{pct_against}%"}
+                    .bar-rest
+                %span.motion-date= motion.occurred_on.strftime('%-d %b %Y')
 
-      %h3 You can also view votes on motions that relate to particular topics:
+        .home-view-more
+          = link_to motions_path(current_council), class: 'view-more-btn' do
+            View more →
+      - else
+        %p No recent votes recorded.
 
-      %ul.list.-sentence
-        - @topics.each do |topic|
-          - count = Motion.published.in_category(topic).count
-          %li= link_to raw("#{ render partial: 'icons/count', locals: {count: count} } #{ topic }"), topic_path(topic.parameterize)
+    .home-areas
+      %h2 Electoral Areas
+      %hr
+
+      - if @local_electoral_areas.any?
+        .areas-grid
+          - @local_electoral_areas.each do |area|
+            = link_to area.name, local_electoral_area_path(current_council.slug, area), class: 'area-tag'
+      - else
+        %p No electoral areas found.

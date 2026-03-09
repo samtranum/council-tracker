@@ -20,11 +20,12 @@ class Meeting < ApplicationRecord
   paginates_per 20
 
   def to_param
-    hashed_id
+    hashed_id || id.to_s
   end
 
   def path
-    "/meetings/#{meeting_type}/#{occurred_on}"
+    return "/meetings/#{meeting_type}/#{occurred_on}" unless council_session&.council
+    "/#{council_session.council.slug}/meetings/#{meeting_type}/#{occurred_on}"
   end
 
   def title
@@ -55,10 +56,14 @@ class Meeting < ApplicationRecord
     council_session.councillors.active_on(occurred_on)
   end
 
+  attr_accessor :council_id
+
   private
 
   def set_council_session
-    self.council_session = CouncilSession.current_on(occurred_on).take
+    scope = CouncilSession.current_on(occurred_on)
+    scope = scope.where(council_id: council_id) if council_id.present?
+    self.council_session = scope.take
   end
 
   def set_hashed_id

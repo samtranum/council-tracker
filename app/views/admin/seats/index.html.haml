@@ -1,0 +1,62 @@
+%header.page-header
+  .wrapper{role: 'layout'}
+    .breadcrumbs
+      .breadcrumbs_crumb= link_to @councillor.full_name, [:admin, @councillor]
+      .breadcrumbs_crumb
+        %h1 Terms of Office
+
+.primary-main_content
+  .wrapper{role: 'layout', style: 'margin-top: 2rem;'}
+    .row
+      .col-xs-2
+        %nav.secondary-nav
+          %ul.list.-enumerable
+            %li= link_to "Profile", [:admin, @councillor]
+            %li= link_to "Terms", [:admin, @councillor, :terms], class: '-active'
+            %li= link_to "Media", [:admin, @councillor, :media_mentions]
+
+      .col-xs-10
+        %section
+          %header.subheader
+            .row
+              .col-xs-8
+                %h2 Terms of Office
+              .col-xs-4.text-right
+                = link_to "Add Term", [:new, :admin, @councillor, :term], class: 'button'
+
+          %main
+            - if @seats.any?
+              %table.table.m-t-2{style: "margin-top: 3rem;"}
+                %thead
+                  %tr
+                    %th Council Session
+                    %th Party
+                    %th Area
+                    %th Type
+                    %th Start Date
+                    %th End Date
+                    %th Actions
+                %tbody
+                  - @seats.each do |seat|
+                    %tr
+                      %td= seat.council_session.name
+                      %td
+                        - if seat.party
+                          = render partial: 'icons/party', locals: {party: seat.party}
+                          = seat.party.name
+                      %td= seat.local_electoral_area&.name
+                      %td
+                        - if seat.election?
+                          %span.badge.-success Election
+                        - elsif seat.co_option?
+                          %span.badge.-info Co-option
+                        - else
+                          %span.badge -
+                      %td= seat.commenced_on.strftime('%d %b %Y')
+                      %td= seat.concluded_on ? seat.concluded_on.strftime('%d %b %Y') : 'Current'
+                      %td
+                        = link_to "Edit", edit_admin_councillor_term_path(@councillor, seat), class: 'button -small'
+                        = link_to "Delete", admin_councillor_term_path(@councillor, seat), method: :delete, data: { confirm: "Are you sure? This will remove this term from their history." }, class: 'button -small -danger'
+            - else
+              .empty-state
+                %p No terms recorded for this councillor.

@@ -5,7 +5,7 @@
       %ul.list.-enumerable
         - motions.each do |motion|
           %li
-            = link_to motion do
+            = link_to motion_path(current_council, motion) do
               = render partial: 'councillors/vote', locals: {motion: motion, vote: motion.votes.find_by(councillor: councillor)}
   - else
     .wrapper{role: 'layout'}

@@ -1,0 +1,35 @@
+.admin-leas
+  .header-actions
+    %h1 Local Electoral Areas
+    = link_to 'New Local Electoral Area', new_admin_local_electoral_area_path, class: 'button -primary'
+
+  - @councils.each do |council|
+    .council-section
+      %h2= council.name
+      
+      %table.data-table
+        %thead
+          %tr
+            %th Name
+            %th Slug
+            %th Actions
+        %tbody
+          - council.local_electoral_areas.by_name.each do |lea|
+            %tr
+              %td= lea.name
+              %td= lea.slug
+              %td
+                = link_to 'Edit', edit_admin_local_electoral_area_path(lea), class: 'button -small'
+                = link_to 'Delete', admin_local_electoral_area_path(lea), method: :delete, data: { confirm: 'Are you sure?' }, class: 'button -small -danger'
+
+%style
+  .header-actions
+    display: flex
+    justify_content: space-between
+    align_items: center
+    margin-bottom: 2rem
+    
+  .council-section
+    margin-bottom: 3rem
+    padding-bottom: 2rem
+    border-bottom: 1px solid #eee

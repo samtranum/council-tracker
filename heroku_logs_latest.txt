@@ -1,0 +1,100 @@
+2025-12-10T14:17:58.662671+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/puma-6.4.2/lib/puma/server.rb:464:in `process_client'
+2025-12-10T14:17:58.662671+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/puma-6.4.2/lib/puma/server.rb:245:in `block in run'
+2025-12-10T14:17:58.662671+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/puma-6.4.2/lib/puma/thread_pool.rb:155:in `block in spawn_thread'
+2025-12-10T14:17:58.662867+00:00 app[web.1]: [733345ad-1336-e2c6-3851-3c84335badfe] Completed 500 Internal Server Error in 35ms (ActiveRecord: 1.0ms | Allocations: 2040)
+2025-12-10T14:17:58.663665+00:00 heroku[router]: at=info method=GET path="/dcc/motions/5643d173/og-image" host=councilvotetracker.ie request_id=733345ad-1336-e2c6-3851-3c84335badfe fwd="185.7.186.26" dyno=web.1 connect=0ms service=37ms status=500 bytes=0 protocol=http2.0 tls=true tls_version=tls1.3
+2025-12-10T14:18:11.130904+00:00 app[web.1]: [f0e51c30-26dd-4222-5db5-74798baa1923] Started HEAD "/dcc/motions/5643d173/og-image" for 185.7.186.26 at 2025-12-10 14:18:11 +0000
+2025-12-10T14:18:11.131556+00:00 app[web.1]: [f0e51c30-26dd-4222-5db5-74798baa1923] Processing by OgImagesController#motion as */*
+2025-12-10T14:18:11.131557+00:00 app[web.1]: [f0e51c30-26dd-4222-5db5-74798baa1923]   Parameters: {"council_id"=>"dcc", "id"=>"5643d173"}
+2025-12-10T14:18:11.132937+00:00 app[web.1]: [f0e51c30-26dd-4222-5db5-74798baa1923]   [1m[36mCouncil Load (0.4ms)[0m  [1m[34mSELECT "councils".* FROM "councils" WHERE "councils"."slug" = $1 LIMIT $2[0m  [["slug", "dcc"], ["LIMIT", 1]]
+2025-12-10T14:18:11.134881+00:00 app[web.1]: [f0e51c30-26dd-4222-5db5-74798baa1923]   [1m[36mMotion Load (0.6ms)[0m  [1m[34mSELECT "motions".* FROM "motions" INNER JOIN "meetings" ON "motions"."meeting_id" = "meetings"."id" INNER JOIN "council_sessions" ON "meetings"."council_session_id" = "council_sessions"."id" WHERE "council_sessions"."council_id" = $1 AND "motions"."published_at" IS NOT NULL AND "motions"."hashed_id" = $2 LIMIT $3[0m  [["council_id", 1], ["hashed_id", "5643d173"], ["LIMIT", 1]]
+2025-12-10T14:18:11.144088+00:00 app[web.1]: convert: UnableToOpenConfigureFile `colors.xml' @ warning/configure.c/GetConfigureOptions/677.
+2025-12-10T14:18:11.164277+00:00 app[web.1]: [f0e51c30-26dd-4222-5db5-74798baa1923] OG Image Generation Failed: `convert /tmp/mini_magick20251210-2-hkcb6q.png -font Helvetica -gravity NorthWest -pointsize 48 -fill #1a1a1a -annotate +60+80 To approve the budget for 2026 /tmp/mini_magick20251210-2-hkcb6q.png` failed with status: 1 and error:
+2025-12-10T14:18:11.164279+00:00 app[web.1]: convert: UnableToOpenConfigureFile `type.xml' @ warning/configure.c/GetConfigureOptions/677.
+2025-12-10T14:18:11.164279+00:00 app[web.1]: convert: UnableToReadFont `Helvetica' @ error/annotate.c/RenderFreetype/1336.
+2025-12-10T14:18:11.164279+00:00 app[web.1]: convert: UnableToOpenConfigureFile `colors.xml' @ warning/configure.c/GetConfigureOptions/677.
+2025-12-10T14:18:11.164280+00:00 app[web.1]: convert: UnableToReadFont `Helvetica' @ error/annotate.c/RenderFreetype/1336.
+2025-12-10T14:18:11.164280+00:00 app[web.1]: convert: UnableToOpenConfigureFile `type.xml' @ warning/configure.c/GetConfigureOptions/677.
+2025-12-10T14:18:11.164280+00:00 app[web.1]: convert: UnableToReadFont `Helvetica' @ error/annotate.c/RenderFreetype/1336.
+2025-12-10T14:18:11.164280+00:00 app[web.1]: convert: UnableToOpenConfigureFile `colors.xml' @ warning/configure.c/GetConfigureOptions/677.
+2025-12-10T14:18:11.164280+00:00 app[web.1]: convert: UnableToReadFont `Helvetica' @ error/annotate.c/RenderFreetype/1336.
+2025-12-10T14:18:11.164281+00:00 app[web.1]: 
+2025-12-10T14:18:11.164388+00:00 app[web.1]: [f0e51c30-26dd-4222-5db5-74798baa1923] /app/vendor/bundle/ruby/3.2.0/gems/mini_magick-4.12.0/lib/mini_magick/shell.rb:17:in `run'
+2025-12-10T14:18:11.164389+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/mini_magick-4.12.0/lib/mini_magick/tool.rb:92:in `call'
+2025-12-10T14:18:11.164389+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/mini_magick-4.12.0/lib/mini_magick/tool.rb:38:in `new'
+2025-12-10T14:18:11.164390+00:00 app[web.1]: /app/app/services/vote_image_generator.rb:108:in `draw_text'
+2025-12-10T14:18:11.164390+00:00 app[web.1]: /app/app/services/vote_image_generator.rb:36:in `block in generate'
+2025-12-10T14:18:11.164390+00:00 app[web.1]: /app/app/services/vote_image_generator.rb:35:in `each'
+2025-12-10T14:18:11.164391+00:00 app[web.1]: /app/app/services/vote_image_generator.rb:35:in `generate'
+2025-12-10T14:18:11.164391+00:00 app[web.1]: /app/app/controllers/og_images_controller.rb:20:in `generate_and_send_image'
+2025-12-10T14:18:11.164391+00:00 app[web.1]: /app/app/controllers/og_images_controller.rb:8:in `motion'
+2025-12-10T14:18:11.164392+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_controller/metal/basic_implicit_render.rb:6:in `send_action'
+2025-12-10T14:18:11.164392+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/abstract_controller/base.rb:228:in `process_action'
+2025-12-10T14:18:11.164393+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_controller/metal/rendering.rb:30:in `process_action'
+2025-12-10T14:18:11.164393+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/abstract_controller/callbacks.rb:42:in `block in process_action'
+2025-12-10T14:18:11.164393+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/activesupport-6.1.7.7/lib/active_support/callbacks.rb:117:in `block in run_callbacks'
+2025-12-10T14:18:11.164400+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actiontext-6.1.7.7/lib/action_text/rendering.rb:20:in `with_renderer'
+2025-12-10T14:18:11.164400+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actiontext-6.1.7.7/lib/action_text/engine.rb:59:in `block (4 levels) in <class:Engine>'
+2025-12-10T14:18:11.164400+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/activesupport-6.1.7.7/lib/active_support/callbacks.rb:126:in `instance_exec'
+2025-12-10T14:18:11.164400+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/activesupport-6.1.7.7/lib/active_support/callbacks.rb:126:in `block in run_callbacks'
+2025-12-10T14:18:11.164401+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/activesupport-6.1.7.7/lib/active_support/callbacks.rb:137:in `run_callbacks'
+2025-12-10T14:18:11.164401+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/abstract_controller/callbacks.rb:41:in `process_action'
+2025-12-10T14:18:11.164401+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_controller/metal/rescue.rb:22:in `process_action'
+2025-12-10T14:18:11.164401+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_controller/metal/instrumentation.rb:34:in `block in process_action'
+2025-12-10T14:18:11.164401+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/activesupport-6.1.7.7/lib/active_support/notifications.rb:203:in `block in instrument'
+2025-12-10T14:18:11.164402+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/activesupport-6.1.7.7/lib/active_support/notifications/instrumenter.rb:24:in `instrument'
+2025-12-10T14:18:11.164402+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/activesupport-6.1.7.7/lib/active_support/notifications.rb:203:in `instrument'
+2025-12-10T14:18:11.164402+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_controller/metal/instrumentation.rb:33:in `process_action'
+2025-12-10T14:18:11.164402+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_controller/metal/params_wrapper.rb:249:in `process_action'
+2025-12-10T14:18:11.164402+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/activerecord-6.1.7.7/lib/active_record/railties/controller_runtime.rb:27:in `process_action'
+2025-12-10T14:18:11.164402+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/abstract_controller/base.rb:165:in `process'
+2025-12-10T14:18:11.164402+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionview-6.1.7.7/lib/action_view/rendering.rb:39:in `process'
+2025-12-10T14:18:11.164403+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_controller/metal.rb:190:in `dispatch'
+2025-12-10T14:18:11.164403+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_controller/metal.rb:254:in `dispatch'
+2025-12-10T14:18:11.164403+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_dispatch/routing/route_set.rb:50:in `dispatch'
+2025-12-10T14:18:11.164403+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_dispatch/routing/route_set.rb:33:in `serve'
+2025-12-10T14:18:11.164404+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_dispatch/journey/router.rb:50:in `block in serve'
+2025-12-10T14:18:11.164404+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_dispatch/journey/router.rb:32:in `each'
+2025-12-10T14:18:11.164404+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_dispatch/journey/router.rb:32:in `serve'
+2025-12-10T14:18:11.164404+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_dispatch/routing/route_set.rb:842:in `call'
+2025-12-10T14:18:11.164408+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/rack-2.2.8.1/lib/rack/tempfile_reaper.rb:15:in `call'
+2025-12-10T14:18:11.164408+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/rack-2.2.8.1/lib/rack/etag.rb:27:in `call'
+2025-12-10T14:18:11.164408+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/rack-2.2.8.1/lib/rack/conditional_get.rb:27:in `call'
+2025-12-10T14:18:11.164408+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/rack-2.2.8.1/lib/rack/head.rb:12:in `call'
+2025-12-10T14:18:11.164408+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_dispatch/http/permissions_policy.rb:22:in `call'
+2025-12-10T14:18:11.164408+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_dispatch/http/content_security_policy.rb:19:in `call'
+2025-12-10T14:18:11.164409+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/rack-2.2.8.1/lib/rack/session/abstract/id.rb:266:in `context'
+2025-12-10T14:18:11.164409+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/rack-2.2.8.1/lib/rack/session/abstract/id.rb:260:in `call'
+2025-12-10T14:18:11.164409+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_dispatch/middleware/cookies.rb:697:in `call'
+2025-12-10T14:18:11.164409+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_dispatch/middleware/callbacks.rb:27:in `block in call'
+2025-12-10T14:18:11.164409+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/activesupport-6.1.7.7/lib/active_support/callbacks.rb:98:in `run_callbacks'
+2025-12-10T14:18:11.164409+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_dispatch/middleware/callbacks.rb:26:in `call'
+2025-12-10T14:18:11.164409+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_dispatch/middleware/actionable_exceptions.rb:18:in `call'
+2025-12-10T14:18:11.164409+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_dispatch/middleware/debug_exceptions.rb:29:in `call'
+2025-12-10T14:18:11.164410+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+2025-12-10T14:18:11.164410+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/railties-6.1.7.7/lib/rails/rack/logger.rb:37:in `call_app'
+2025-12-10T14:18:11.164410+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/railties-6.1.7.7/lib/rails/rack/logger.rb:26:in `block in call'
+2025-12-10T14:18:11.164410+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/activesupport-6.1.7.7/lib/active_support/tagged_logging.rb:99:in `block in tagged'
+2025-12-10T14:18:11.164410+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/activesupport-6.1.7.7/lib/active_support/tagged_logging.rb:37:in `tagged'
+2025-12-10T14:18:11.164410+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/activesupport-6.1.7.7/lib/active_support/tagged_logging.rb:99:in `tagged'
+2025-12-10T14:18:11.164410+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/railties-6.1.7.7/lib/rails/rack/logger.rb:26:in `call'
+2025-12-10T14:18:11.164410+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+2025-12-10T14:18:11.164411+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_dispatch/middleware/request_id.rb:26:in `call'
+2025-12-10T14:18:11.164411+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/rack-2.2.8.1/lib/rack/method_override.rb:24:in `call'
+2025-12-10T14:18:11.164411+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/rack-2.2.8.1/lib/rack/runtime.rb:22:in `call'
+2025-12-10T14:18:11.164418+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/activesupport-6.1.7.7/lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+2025-12-10T14:18:11.164418+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_dispatch/middleware/executor.rb:14:in `call'
+2025-12-10T14:18:11.164419+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_dispatch/middleware/static.rb:24:in `call'
+2025-12-10T14:18:11.164419+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/rack-2.2.8.1/lib/rack/sendfile.rb:110:in `call'
+2025-12-10T14:18:11.164419+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_dispatch/middleware/ssl.rb:77:in `call'
+2025-12-10T14:18:11.164419+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/actionpack-6.1.7.7/lib/action_dispatch/middleware/host_authorization.rb:142:in `call'
+2025-12-10T14:18:11.164419+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/railties-6.1.7.7/lib/rails/engine.rb:539:in `call'
+2025-12-10T14:18:11.164419+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/puma-6.4.2/lib/puma/configuration.rb:272:in `call'
+2025-12-10T14:18:11.164419+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/puma-6.4.2/lib/puma/request.rb:100:in `block in handle_request'
+2025-12-10T14:18:11.164420+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/puma-6.4.2/lib/puma/thread_pool.rb:378:in `with_force_shutdown'
+2025-12-10T14:18:11.164420+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/puma-6.4.2/lib/puma/request.rb:99:in `handle_request'
+2025-12-10T14:18:11.164420+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/puma-6.4.2/lib/puma/server.rb:464:in `process_client'
+2025-12-10T14:18:11.164420+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/puma-6.4.2/lib/puma/server.rb:245:in `block in run'
+2025-12-10T14:18:11.164420+00:00 app[web.1]: /app/vendor/bundle/ruby/3.2.0/gems/puma-6.4.2/lib/puma/thread_pool.rb:155:in `block in spawn_thread'
+2025-12-10T14:18:11.164632+00:00 app[web.1]: [f0e51c30-26dd-4222-5db5-74798baa1923] Completed 500 Internal Server Error in 33ms (ActiveRecord: 1.0ms | Allocations: 1915)
+2025-12-10T14:18:11.165188+00:00 heroku[router]: at=info method=HEAD path="/dcc/motions/5643d173/og-image" host=councilvotetracker.ie request_id=f0e51c30-26dd-4222-5db5-74798baa1923 fwd="185.7.186.26" dyno=web.1 connect=0ms service=35ms status=500 bytes=0 protocol=http1.1 tls=true tls_version=tls1.3

@@ -17,7 +17,7 @@
             %ul.list.-enumerable
               - votes.each do |vote|
                 %li
-                  = link_to vote.councillor do
+                  = link_to councillor_path(current_council, vote.councillor) do
                     .enumerable.-councillor
                       .indicator.party-indicator{title: vote.councillor.party.name}
                         = render partial: 'icons/party', locals: {party: vote.councillor.party}

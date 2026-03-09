@@ -3,5 +3,5 @@
     %ul.list.-enumerable
       - local_electoral_area.active_councillors.each do |councillor|
         %li
-          = link_to councillor do
+          = link_to councillor_path(current_council, councillor) do
             = render partial: 'councillors/councillor', locals: {councillor: councillor}

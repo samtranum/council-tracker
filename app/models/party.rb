@@ -7,6 +7,7 @@ class Party < ApplicationRecord
 
   validates :name, presence: true, uniqueness: true
   validates :slug, presence: true, uniqueness: true
+  validates :color, presence: true, format: { with: /\A#[0-9A-F]{6}\z/i, message: "must be a valid hex color (e.g., #FF0000)" }
 
   before_validation :generate_slug
 

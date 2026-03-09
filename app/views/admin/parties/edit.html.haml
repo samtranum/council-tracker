@@ -1,0 +1,71 @@
+.admin-party-edit
+  %h1= "Edit #{@party.name}"
+
+  = form_for [:admin, @party] do |f|
+    - if @party.errors.any?
+      .errors
+        %h3= "#{pluralize(@party.errors.count, 'error')} prohibited this party from being saved:"
+        %ul
+          - @party.errors.full_messages.each do |message|
+            %li= message
+
+    .form-group
+      = f.label :name
+      = f.text_field :name, class: 'form-control'
+
+    .form-group
+      = f.label :color, "Party Color"
+      .color-picker-wrapper
+        = f.color_field :color, class: 'form-control color-input'
+        .color-preview{style: "background: #{@party.color};"}
+        %span.color-value= @party.color
+        %p.help-text Enter a hex color code or use the color picker
+
+    .form-actions
+      = f.submit 'Save Changes', class: 'button -primary'
+      = link_to 'Cancel', admin_parties_path, class: 'button'
+
+%style
+  .color-picker-wrapper
+    display: flex
+    align-items: center
+    gap: 1rem
+    
+  .color-input
+    width: 80px
+    height: 40px
+    padding: 2px
+    border: 1px solid #ccc
+    border-radius: 4px
+    cursor: pointer
+    
+  .color-preview
+    width: 40px
+    height: 40px
+    border: 1px solid #ccc
+    border-radius: 4px
+    
+  .color-value
+    font-family: monospace
+    font-size: 14px
+    
+  .help-text
+    margin-top: 0.5rem
+    font-size: 12px
+    color: #666
+
+%script
+  :javascript
+    document.addEventListener('DOMContentLoaded', function() {
+      const colorInput = document.querySelector('.color-input');
+      const colorPreview = document.querySelector('.color-preview');
+      const colorValue = document.querySelector('.color-value');
+      
+      if (colorInput) {
+        colorInput.addEventListener('input', function() {
+          const color = this.value;
+          if (colorPreview) colorPreview.style.background = color;
+          if (colorValue) colorValue.textContent = color;
+        });
+      }
+    });

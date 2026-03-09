@@ -4,7 +4,7 @@
       %ul.list.-enumerable
         - councillor.proposed_motions.published.by_occurred_on.each do |motion|
           %li
-            = link_to motion do
+            = link_to motion_path(current_council, motion) do
               = render partial: 'motions/motion', locals: {motion: motion}
   - else
     .wrapper{role: 'layout'}

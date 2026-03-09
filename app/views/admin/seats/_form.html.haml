@@ -1,0 +1,74 @@
+= form_with model: @seat, url: (@seat.new_record? ? admin_councillor_terms_path(@councillor) : admin_councillor_term_path(@councillor, @seat)), class: 'admin-form' do |f|
+  = render partial: 'admin/shared/errors', locals: {errors: f.object.errors}
+
+  .admin-form_field
+    = f.label :council_session_id, "Council Session"
+    .input
+      = f.collection_select :council_session_id, CouncilSession.order(commenced_on: :desc), :id, :name, {prompt: "Select Session"}, {class: 'select'}
+
+  .admin-form_field
+    = f.label :party_id
+    .input
+      = f.collection_select :party_id, Party.order(:name), :id, :name, {prompt: "Select Party"}, {class: 'select'}
+
+  .admin-form_field
+    = f.label :local_electoral_area_id, "Local Electoral Area"
+    .input
+      = f.collection_select :local_electoral_area_id, LocalElectoralArea.order(:name), :id, :name, {prompt: "Select Area"}, {class: 'select'}
+
+  .admin-form_field
+    = f.label :term_type, "Term Type"
+    .input
+      = f.radio_button :term_type, "election", checked: f.object.term_type.nil? || f.object.election?
+      = f.label :term_type_election, "Election"
+      = f.radio_button :term_type, "co_option"
+      = f.label :term_type_co_option, "Co-option"
+
+  .admin-form_field#co-option-details{style: "display: none;"}
+    = f.label :replaced_seat_id, "Replaced Councillor"
+    .input
+      - if defined?(@ended_seats) && @ended_seats.any?
+        = f.select :replaced_seat_id, options_for_select(@ended_seats, f.object.replaced_seat_id), {include_blank: "Select councillor being replaced"}, {class: 'select'}
+      - else
+        = f.select :replaced_seat_id, [], {include_blank: "No ended seats available in this session"}, {class: 'select', disabled: true}
+      %p.help-text Select the councillor whose seat is being filled by this co-option
+
+  :javascript
+    (function() {
+      const electionRadio = document.getElementById('seat_term_type_election');
+      const coOptionRadio = document.getElementById('seat_term_type_co_option');
+      const coOptionDetails = document.getElementById('co-option-details');
+      
+      function updateCoOptionVisibility() {
+        if (!coOptionDetails) return;
+
+        if (coOptionRadio && coOptionRadio.checked) {
+          coOptionDetails.style.display = 'block';
+        } else {
+          coOptionDetails.style.display = 'none';
+        }
+      }
+      
+      if (electionRadio) electionRadio.addEventListener('change', updateCoOptionVisibility);
+      if (coOptionRadio) coOptionRadio.addEventListener('change', updateCoOptionVisibility);
+      
+      updateCoOptionVisibility();
+    })();
+
+  .row
+    .col-xs-6
+      .admin-form_field
+        = f.label :commenced_on, "Start Date (Election/Co-option)"
+        .input
+          = f.date_field :commenced_on
+
+    .col-xs-6
+      .admin-form_field
+        = f.label :concluded_on, "End Date (Resignation/Session End)"
+        .input
+          = f.date_field :concluded_on
+          %p.help-text Leave blank if currently serving
+
+  .admin-form_actions
+    = f.submit 'Save Term', class: 'button'
+    = link_to 'Cancel', [:admin, @councillor, :terms], class: 'button -secondary'

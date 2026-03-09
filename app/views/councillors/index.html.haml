@@ -1,17 +1,20 @@
 - title 'Councillors'
-- description "#{ pluralize @councillors.count, 'councillor' } currently serve on the Dublin City Council. #{ (@councillors.count - current_council_session.co_options.count) } elected in #{ current_council_session.election.occurred_on.strftime('%b \'%y') } and #{ pluralize current_council_session.co_options.count, 'councillor' } appointed via co-option."
+- if @councillors.any?
+  - description "#{ pluralize @councillors.count, 'councillor' } currently serve on the Dublin City Council."
+- else
+  - description "Councillors currently serve on the Dublin City Council."
 - keywords 'dublin city council, councillors'
 
 %header.view-header
   .wrapper{role: 'layout'}
-    %h1= link_to "Councillors", :councillors
+    %h1= link_to "Councillors", councillors_path(current_council)
 
 %main.view-content{role: 'layout'}
   .wrapper{role: 'layout'}
     %ul.list.-enumerable
       - @councillors.each do |councillor|
         %li
-          = link_to councillor do
+          = link_to councillor_path(current_council, councillor) do
             = render partial: 'councillors/councillor', locals: {councillor: councillor}
 
 %footer.view-footer

@@ -1,0 +1,35 @@
+%header.view-header
+  .wrapper{role: 'layout'}
+    %h1 New Council Session
+
+%main.view-content{role: 'layout'}
+  .wrapper{role: 'layout'}
+    = form_with model: [:admin, @council_session], local: true, class: 'admin-form' do |f|
+      - if @council_session.errors.any?
+        #error_explanation
+          %h2= "#{pluralize(@council_session.errors.count, "error")} prohibited this session from being saved:"
+          %ul
+            - @council_session.errors.full_messages.each do |message|
+              %li= message
+
+      .admin-form_field
+        = f.label :council_id
+        .input
+          = f.collection_select :council_id, Council.all, :id, :name, {}, {class: 'form-control'}
+
+      .admin-form_field
+        = f.label :commenced_on, "Start Date"
+        .input
+          = f.date_field :commenced_on, class: 'form-control'
+          .hint Usually the date of the election or when the council term started
+
+      .admin-form_field
+        = f.label :concluded_on, "End Date (optional)"
+        .input
+          = f.date_field :concluded_on, class: 'form-control'
+          .hint Leave blank if this is the current session
+
+      .admin-form_actions
+        = f.submit 'Save', class: 'button'
+
+    = link_to 'Back', admin_council_sessions_path

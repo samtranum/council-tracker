@@ -1,9 +1,9 @@
 class Councillor < ApplicationRecord
   belongs_to :council
-  has_many :seats
-  has_many :attendances
-  has_many :votes
-  has_many :media_mentions, as: :mentionable
+  has_many :seats, dependent: :destroy
+  has_many :attendances, dependent: :destroy
+  has_many :votes, dependent: :destroy
+  has_many :media_mentions, as: :mentionable, dependent: :destroy
   has_many :council_sessions, through: :seats
 
   has_many :meetings, through: :attendances, source: :attendable, source_type: "Meeting"
@@ -14,6 +14,9 @@ class Councillor < ApplicationRecord
   before_validation :set_given_and_family_names, if: ->(c) { c.full_name_changed? }
   before_validation :generate_sort_name
   after_validation :generate_slug
+  after_create :create_initial_seat
+
+  attr_accessor :party_id, :local_electoral_area_id, :commenced_on
 
   scope :by_name, -> { order("sort_name asc") }
   scope :inactive_on, ->(date) { joins(:seats).merge(Seat.active_on(date)).distinct }
@@ -44,12 +47,12 @@ class Councillor < ApplicationRecord
   end
 
   def party
-    @party ||= seats.order("commenced_on desc").take.party
+    @party ||= seats.order("commenced_on desc").take&.party
   end
 
   # lol
   def party_on(date)
-    seat_on(date).party
+    seat_on(date)&.party
   end
 
   def party_name
@@ -57,7 +60,7 @@ class Councillor < ApplicationRecord
   end
 
   def local_electoral_area
-    @local_electoral_area ||= seats.order("commenced_on desc").take.local_electoral_area
+    @local_electoral_area ||= seats.order("commenced_on desc").take&.local_electoral_area
   end
 
   def local_electoral_area_name
@@ -90,9 +93,16 @@ class Councillor < ApplicationRecord
     self.full_name = "#{given_name} #{family_name}".strip
   end
 
+  PREFIXES = %w(De Du Di Le La Van Von O Mc Mac Ni Ua Ui Ó Ní).freeze
+
   def set_given_and_family_names
     pcs = full_name.strip.split(" ")
     self.family_name = pcs.pop
+    
+    while pcs.any? && PREFIXES.include?(pcs.last)
+      self.family_name = "#{pcs.pop} #{self.family_name}"
+    end
+
     self.given_name = pcs.join(" ")
   end
 
@@ -113,5 +123,28 @@ class Councillor < ApplicationRecord
     else
       full_name.parameterize
     end
+  end
+
+  def create_initial_seat
+    return unless party_id.present? && local_electoral_area_id.present? && commenced_on.present? && council_id.present?
+
+    # Find or create a session covering this date
+    session = CouncilSession.where(council_id: council_id).current_on(commenced_on).take
+    
+    # Fallback to the latest session if none found for exact date (e.g. if commenced_on is slightly off)
+    session ||= CouncilSession.where(council_id: council_id).latest
+
+    unless session
+      raise "No active council session found for this council. Please create a Council Session first."
+    end
+
+    seat = seats.create!(
+      council_session: session,
+      local_electoral_area_id: local_electoral_area_id,
+      commenced_on: commenced_on
+    )
+    
+    seat.party = Party.find(party_id)
+    seat.save!
   end
 end
