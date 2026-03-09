@@ -4,7 +4,7 @@
     = csrf_meta_tags
     = stylesheet_link_tag 'application', media: 'all'
     = javascript_pack_tag 'application'
-    = display_meta_tags site: 'Council Tracker', reverse: true
+    = display_meta_tags site: 'CouncilVoteTracker.ie', reverse: true
     <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no' />
     = yield :snippets
 
@@ -13,7 +13,7 @@
       %header.primary-header
         .header-inner
           = link_to root_path, class: 'logo' do
-            CouncilTracker.ie
+            CouncilVoteTracker.ie
           %span.partner Dublin InQuirer
 
       .body-wrap
