@@ -68,7 +68,7 @@ class Voteable < ApplicationRecord
   end
 
   def clean_votes
-    expected_councillor_ids = meeting.councillors.pluck(:id).sort
+    expected_councillor_ids = meeting.expected_attendance.pluck(:id).sort
     voted_councillor_ids = votes.pluck(:councillor_id).sort
 
     # delete votes that shouldn't exist
