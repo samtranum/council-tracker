@@ -43,7 +43,7 @@ class Admin::MotionsController < Admin::ApplicationController
   def refresh_votes
     @motion = Motion.find_by(hashed_id: params[:id])
     @motion.send(:initialize_votes) # Call the initialize_votes method
-    redirect_to [:votes, :admin, @motion], notice: "Votes refreshed successfully."
+    redirect_to admin_motion_path(@motion, view: 'votes'), notice: "Votes refreshed successfully."
   end
 
   def update
