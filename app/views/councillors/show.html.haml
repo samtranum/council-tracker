@@ -18,20 +18,21 @@
   - direct_events = @councillor.events.includes(:eventable)
   - uncovered_seats = @councillor.seats_without_events.includes(:council_session, replaced_seat: :councillor)
   - if direct_events.any? || uncovered_seats.any?
+    - tagged_events = direct_events.map { |e| [:event, e.occurred_on, e] }
+    - tagged_seats = uncovered_seats.map { |s| [:seat, s.commenced_on, s] }
+    - history_items = (tagged_events + tagged_seats).sort_by { |_, date, _| date }
     .councillor-show-history
       %h2 Electoral history
       %hr
       %ol.electoral-history-list
-        - direct_events.each do |event|
+        - history_items.each do |type, date, item|
           %li.electoral-history-item
-            %span.event-date= event.occurred_on.strftime('%b %Y')
-            %span.event-description= raw summarize_event_for_councillor(event, @councillor)
-        - uncovered_seats.each do |seat|
-          %li.electoral-history-item
-            %span.event-date= seat.commenced_on.strftime('%b %Y')
-            - if seat.co_option?
-              - if seat.replaced_seat&.councillor
-                %span.event-description= raw "Co-opted to replace #{link_to seat.replaced_seat.councillor.full_name, councillor_path(current_council, seat.replaced_seat.councillor)}"
+            %span.event-date= date.strftime('%b %Y')
+            - if type == :event
+              %span.event-description= raw summarize_event_for_councillor(item, @councillor)
+            - elsif item.co_option?
+              - if item.replaced_seat&.councillor
+                %span.event-description= raw "Co-opted to replace #{link_to item.replaced_seat.councillor.full_name, councillor_path(current_council, item.replaced_seat.councillor)}"
               - else
                 %span.event-description Co-opted to the council
             - else
