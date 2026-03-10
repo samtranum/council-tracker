@@ -107,12 +107,9 @@ class VoteImageGenerator
     lines[0...3] # Limit to 3 lines max
   end
 
-  # Heroku apt buildpack installs to /app/.apt/; fall back to system path for local dev
-  FONT_BASE = File.exist?('/app/.apt/usr/share/fonts/truetype/dejavu') \
-    ? '/app/.apt/usr/share/fonts/truetype/dejavu' \
-    : '/usr/share/fonts/truetype/dejavu'
-  FONT_PATH = "#{FONT_BASE}/DejaVuSans.ttf"
-  FONT_PATH_BOLD = "#{FONT_BASE}/DejaVuSans-Bold.ttf"
+  FONT_DIR = Rails.root.join('lib', 'fonts')
+  FONT_PATH = "#{FONT_DIR}/DejaVuSans.ttf"
+  FONT_PATH_BOLD = "#{FONT_DIR}/DejaVuSans-Bold.ttf"
 
   def draw_text(image, text, x, y, max_width, size, color, weight = 'normal')
     safe_text = text.to_s
