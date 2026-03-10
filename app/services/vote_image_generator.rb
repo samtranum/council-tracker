@@ -107,15 +107,17 @@ class VoteImageGenerator
     lines[0...3] # Limit to 3 lines max
   end
 
+  FONT_PATH = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
+  FONT_PATH_BOLD = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
+
   def draw_text(image, text, x, y, max_width, size, color, weight = 'normal')
-    # Escape text for ImageMagick
     safe_text = text.to_s
-    
-    # Don't specify font - Heroku's ImageMagick buildpack lacks type.xml font config
-    # ImageMagick will use its built-in default font
+    font = weight == 'bold' ? FONT_PATH_BOLD : FONT_PATH
+
     self.class.tool_class.new do |m|
       m << image.path
       m.gravity("NorthWest")
+      m.font(font)
       m.pointsize(size)
       m.fill(color)
       m.annotate("+#{x}+#{y}", safe_text)
