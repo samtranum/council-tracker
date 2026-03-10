@@ -30,6 +30,7 @@
         - else
           = button_to 'Publish', [:publish, :admin, @motion], method: 'patch', class: 'button'
         = link_to "Add a media mention", [:new, :admin, @motion, :media_mention], class: 'button'
+        = button_to 'Refresh votes', refresh_votes_admin_motion_path(@motion), method: 'post', class: 'button'
 
         .danger-zone
           = button_to 'Delete motion', [:admin, @motion], method: 'delete', class: 'button -danger', data: {confirm: 'You sure? This can\'t be undone.'}
