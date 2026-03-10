@@ -162,7 +162,7 @@ class VoteImageGenerator
   end
 
   def draw_votes(image, votes, start_x, start_y)
-    votes_by_party = votes.includes(councillor: :party).group_by { |v| v.councillor.party }
+    votes_by_party = votes.includes(:councillor).group_by { |v| v.councillor.party }
     
     x = start_x
     y = start_y
