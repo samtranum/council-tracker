@@ -16,7 +16,7 @@ if Rails.env.production?
   end
 
   CarrierWave.configure do |config|
-    config.storage        = :cloudinary
+    config.storage        = Cloudinary::CarrierWave::Storage
     config.cache_storage  = :file
   end
 end
