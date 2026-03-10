@@ -6,7 +6,7 @@ end
 
 if Rails.env.production?
   require "cloudinary"
-  require "cloudinary/carrierwave"
+  require "cloudinary/carrier_wave"
 
   Cloudinary.config do |config|
     config.cloud_name = ENV["CLOUDINARY_CLOUD_NAME"]
