@@ -134,13 +134,13 @@ class Councillor < ApplicationRecord
     self.full_name = "#{given_name} #{family_name}".strip
   end
 
-  PREFIXES = %w(De Du Di Le La Van Von O Mc Mac Ni Ua Ui Ó Ní).freeze
+  PREFIXES = %w(de du di le la van von o mc mac ni ua ui ó ní).freeze
 
   def set_given_and_family_names
     pcs = full_name.strip.split(" ")
     self.family_name = pcs.pop
-    
-    while pcs.any? && PREFIXES.include?(pcs.last)
+
+    while pcs.any? && PREFIXES.include?(pcs.last.downcase)
       self.family_name = "#{pcs.pop} #{self.family_name}"
     end
 
