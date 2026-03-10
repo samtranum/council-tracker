@@ -17,7 +17,7 @@ Rails.application.routes.draw do
     resources :co_options, only: [:new, :create, :edit, :update, :destroy]
     resources :change_of_affiliations, only: [:new, :create, :edit, :update, :destroy]
     resources :elections
-    resources :parties, only: [:index, :edit, :update]
+    resources :parties, only: [:index, :new, :create, :edit, :update]
     resources :local_electoral_areas
 
     resources :meetings do

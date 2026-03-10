@@ -1,0 +1,22 @@
+.admin-party-new
+  %h1 Add New Party
+
+  = form_for [:admin, @party] do |f|
+    - if @party.errors.any?
+      .errors
+        %h3= "#{pluralize(@party.errors.count, 'error')} prohibited this party from being saved:"
+        %ul
+          - @party.errors.full_messages.each do |message|
+            %li= message
+
+    .form-group
+      = f.label :name
+      = f.text_field :name, class: 'form-control'
+
+    .form-group
+      = f.label :color, "Party Color"
+      = f.color_field :color, value: '#000000', class: 'form-control'
+
+    .form-actions
+      = f.submit 'Create Party', class: 'button -primary'
+      = link_to 'Cancel', admin_parties_path, class: 'button'

@@ -5,6 +5,19 @@ class Admin::PartiesController < Admin::ApplicationController
     @parties = Party.by_name
   end
 
+  def new
+    @party = Party.new
+  end
+
+  def create
+    @party = Party.new(party_params)
+    if @party.save
+      redirect_to admin_parties_path, notice: "Party #{@party.name} created successfully."
+    else
+      render :new
+    end
+  end
+
   def edit
   end
 
