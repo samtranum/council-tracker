@@ -1,4 +1,4 @@
-class RegenerateCouncillorSortNames < ActiveRecord::Migration[7.0]
+class RegenerateCouncillorSortNames < ActiveRecord::Migration[6.1]
   def up
     Councillor.find_each do |councillor|
       councillor.send(:set_given_and_family_names)
