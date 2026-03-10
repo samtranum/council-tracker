@@ -7,6 +7,10 @@ class VoteImageGenerator
   DOT_SIZE = 16
   DOT_SPACING = 20
   DOTS_PER_ROW = 35
+  BAR_HEIGHT = 30
+  BAR_COLOR_FOR = '#7b7cf7'
+  BAR_COLOR_AGAINST = '#f8a090'
+  BAR_COLOR_REST = '#e0e0e0'
 
   def initialize(voteable)
     @voteable = voteable
@@ -42,6 +46,10 @@ class VoteImageGenerator
     summary = "For: #{@votes_for.count}  •  Against: #{@votes_against.count}  •  Abstain: #{@votes_abstain.count}"
     draw_text(image, summary, 60, current_y, 900, 28, '#666666')
 
+    # Draw vote bar
+    bar_y = current_y + 50
+    draw_vote_bar(image, bar_y)
+
     # Draw result
     result_text = @voteable.vote_result == 'pass' ? 'PASSED' : 'FAILED'
     result_color = @voteable.vote_result == 'pass' ? '#22c55e' : '#ef4444'
@@ -49,7 +57,7 @@ class VoteImageGenerator
 
     # Draw vote visualization
     if @voteable.rollcall? && (@votes_for.count + @votes_against.count) > 0
-      y_offset = current_y + 70 # Start visualization below summary
+      y_offset = bar_y + BAR_HEIGHT + 40 # Start visualization below bar
       
       # Draw "For" section
       if @votes_for.any?
@@ -124,6 +132,30 @@ class VoteImageGenerator
     system('magick -version', out: File::NULL, err: File::NULL)
   rescue
     false
+  end
+
+  def draw_vote_bar(image, y)
+    total = @votes_for.count + @votes_against.count + @votes_abstain.count
+    return if total == 0
+
+    bar_width = WIDTH - (PADDING * 2)
+    for_width = (bar_width * @votes_for.count.to_f / total).round
+    against_width = (bar_width * @votes_against.count.to_f / total).round
+    rest_width = bar_width - for_width - against_width
+
+    draw_rectangle(image, PADDING, y, PADDING + for_width, y + BAR_HEIGHT, BAR_COLOR_FOR) if for_width > 0
+    draw_rectangle(image, PADDING + for_width, y, PADDING + for_width + against_width, y + BAR_HEIGHT, BAR_COLOR_AGAINST) if against_width > 0
+    draw_rectangle(image, PADDING + for_width + against_width, y, PADDING + bar_width, y + BAR_HEIGHT, BAR_COLOR_REST) if rest_width > 0
+  end
+
+  def draw_rectangle(image, x0, y0, x1, y1, color)
+    self.class.tool_class.new do |m|
+      m << image.path
+      m.fill color
+      m.stroke 'none'
+      m.draw "rectangle #{x0},#{y0} #{x1},#{y1}"
+      m << image.path
+    end
   end
 
   def draw_votes(image, votes, start_x, start_y)
