@@ -169,7 +169,8 @@ class VoteImageGenerator
     dot_count = 0
 
     votes_by_party.each do |party, party_votes|
-      color = party&.colour_hex || '#999999'
+      raw = party&.colour_hex || '999999'
+      color = raw.start_with?('#') ? raw : "##{raw}"
       
       party_votes.each do |vote|
         draw_circle(image, x, y, DOT_SIZE / 2, color)
