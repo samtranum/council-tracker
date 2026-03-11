@@ -3,10 +3,10 @@ require 'mini_magick'
 class VoteImageGenerator
   WIDTH = 1200
   HEIGHT = 630
-  PADDING = 60
+  PADDING = 120
   DOT_RADIUS = 15
   DOT_SPACING = 38  # center-to-center
-  DOTS_PER_ROW = ((WIDTH - PADDING * 2) / DOT_SPACING).floor  # ~28
+  DOTS_PER_ROW = ((WIDTH - PADDING * 2) / DOT_SPACING).floor  # ~25
 
   def initialize(voteable)
     @voteable = voteable
@@ -28,7 +28,7 @@ class VoteImageGenerator
     # Calculate layout — two sections (FOR and AGAINST) vertically centred
     label_h    = 36
     label_gap  = 12
-    section_gap = 60
+    section_gap = 40
 
     for_rows     = (@votes_for.count.to_f / DOTS_PER_ROW).ceil.clamp(1, 5)
     against_rows = (@votes_against.count.to_f / DOTS_PER_ROW).ceil.clamp(1, 5)
@@ -40,12 +40,12 @@ class VoteImageGenerator
     start_y = (HEIGHT - total_h) / 2
 
     # FOR section
-    draw_text(image, 'FOR', PADDING, start_y, 200, 28, '#7b7cf7', 'bold')
+    draw_text(image, 'FOR', PADDING, start_y, 200, 28, '#222222', 'bold')
     draw_votes(image, @votes_for, PADDING, start_y + label_h + label_gap)
 
     # AGAINST section
     against_y = start_y + for_section_h + section_gap
-    draw_text(image, 'AGAINST', PADDING, against_y, 250, 28, '#f8a090', 'bold')
+    draw_text(image, 'AGAINST', PADDING, against_y, 250, 28, '#222222', 'bold')
     draw_votes(image, @votes_against, PADDING, against_y + label_h + label_gap)
 
     image.format 'png'
