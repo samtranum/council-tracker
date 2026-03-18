@@ -1,0 +1,184 @@
+.home-page
+  padding: var(--gutter) 1rem
+  max-width: 120rem
+
+  @media screen and (min-width: '800px')
+    padding: var(--gutter) 2rem
+
+.home-intro
+  margin-bottom: var(--gutter)
+
+  h1
+    font-size: var(--t1)
+    font-weight: 700
+    margin-bottom: 1.5rem
+
+  hr
+    border: none
+    border-top: var(--stroke) solid var(--black)
+    margin: 1.5rem 0
+
+  p
+    max-width: 80rem
+    margin-bottom: 1rem
+    line-height: 1.5
+
+    & + p
+      margin-top: 0
+
+.home-columns
+  display: flex
+  flex-direction: column
+  gap: var(--gutter)
+
+  @media screen and (min-width: '800px')
+    flex-direction: row
+    align-items: flex-start
+
+.home-motions
+  flex: 2
+  min-width: 0
+
+  h2
+    font-size: var(--t2)
+    font-weight: 700
+    margin-bottom: 1rem
+
+  hr
+    border: none
+    border-top: var(--stroke) solid var(--black)
+    margin-bottom: 0
+
+.motions-list
+  display: flex
+  flex-direction: column
+
+.motion-row
+  display: flex
+  flex-direction: row
+  align-items: center
+  padding: 0.75rem 0
+  border-bottom: var(--stroke) solid var(--faint)
+  text-decoration: none
+  color: var(--black)
+  gap: 1rem
+
+  &:hover
+    .motion-title
+      color: var(--blue)
+
+.motion-title
+  flex: 1
+  font-size: var(--t5)
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+  min-width: 0
+
+.motion-meta
+  display: flex
+  flex-direction: row
+  align-items: center
+  gap: 0.75rem
+  flex-shrink: 0
+
+.motion-result
+  font-size: var(--t6)
+  font-weight: 600
+  padding: 0.2rem 0.75rem
+  border-radius: 0.25rem
+  white-space: nowrap
+
+  &.-pass
+    background-color: #c5c6fa
+    color: var(--black)
+
+  &.-fail
+    background-color: #f8c4b4
+    color: var(--black)
+
+  &.-abstain
+    background-color: var(--faint)
+    color: var(--black)
+
+.motion-bar
+  display: none
+  flex-direction: row
+  height: 1.4rem
+  width: 10rem
+  border-radius: 0.25rem
+  overflow: hidden
+  background-color: var(--faint)
+
+  @media screen and (min-width: '800px')
+    display: flex
+
+  .bar-for
+    background-color: #7b7cf7
+
+  .bar-against
+    background-color: #f8a090
+
+  .bar-rest
+    flex: 1
+    background-color: var(--faint)
+
+.motion-date
+  display: none
+  font-size: var(--t6)
+  color: var(--grey)
+  white-space: nowrap
+
+  @media screen and (min-width: '800px')
+    display: block
+
+.home-view-more
+  margin-top: 1.5rem
+
+.view-more-btn
+  display: inline-flex
+  align-items: center
+  padding: 0.6rem 1.2rem
+  border: var(--stroke) solid var(--black)
+  color: var(--black)
+  font-size: var(--t5)
+  text-decoration: none
+
+  &:hover
+    border-color: var(--blue)
+    color: var(--blue)
+
+.home-areas
+  flex: 1
+  min-width: 0
+
+  h2
+    font-size: var(--t2)
+    font-weight: 700
+    margin-bottom: 1rem
+
+  hr
+    border: none
+    border-top: var(--stroke) solid var(--black)
+    margin-bottom: 1.5rem
+
+.areas-grid
+  display: flex
+  flex-direction: row
+  flex-wrap: wrap
+  gap: 0.5rem
+
+.area-tag
+  display: inline-flex
+  align-items: center
+  padding: 0.4rem 1rem
+  border: var(--stroke) solid var(--black)
+  border-radius: 0.25rem
+  color: var(--black)
+  font-size: var(--t5)
+  text-decoration: none
+  background-color: var(--white)
+
+  &:hover
+    border-color: var(--blue)
+    color: var(--blue)

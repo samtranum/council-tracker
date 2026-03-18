@@ -8,19 +8,23 @@
     <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no' />
     = yield :snippets
 
-  %body.dark
+  %body
     .standard{role: 'layout'}
-      - if logged_in?
-        %header.primary-header
-          .content
-            %nav.primary-nav
-              .links
-                = link_to [:admin, :root], class: 'logo' do
-                  Admin
+      %header.primary-header
+        .header-inner
+          = link_to [:admin, :root], class: 'logo' do
+            Admin
 
-                = link_to "Meetings", [:admin, :meetings]
-                = link_to "Councillors", [:admin, :councillors]
-                = link_to "Events", [:admin, :events]
+      .body-wrap
+        - if logged_in?
+          %aside.primary-sidebar
+            %nav.primary-nav
+              = link_to "Meetings", [:admin, :meetings]
+              = link_to "Councillors", [:admin, :councillors]
+              = link_to "Councils", [:admin, :councils]
+              = link_to "Sessions", [:admin, :council_sessions]
+              = link_to "Parties", [:admin, :parties]
+              = link_to "LEAs", [:admin, :local_electoral_areas]
 
             %footer
               .footer-block.p.-t4

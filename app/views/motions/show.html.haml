@@ -1,97 +1,67 @@
 - title ['Motions', @motion.title]
-- description "Motion: #{ @motion.title } proposed by #{ @motion.proposers.map(&:full_name).to_sentence } on #{ @motion.occurred_on.strftime('%-d/%m/%y') }."
-- keywords "city council, motions, #{ @motion.tags.join(',') }"
 
-%header.view-header
-  .wrapper{role: 'layout'}
-    .breadcrumbs
-      .breadcrumb= link_to @motion.meeting.occurred_on_formatted, @motion.meeting.path
-      .breadcrumb= link_to 'Motion', @motion
+.motion-show
+  .motion-show-intro
+    %h1= @motion.title
 
-.view-content.-alpha
-  .wrapper{role: 'layout'}
-    .motion-card
-      .cols{role: 'layout'}
-        .col.-two
-          .meta-data
-            .meta-data_block
-              - if @motion.body.present?
-                %h1.text-block
-                  :markdown
-                    #{ @motion.body }
-              - elsif @motion.title.present?
-                %h1.text-block
-                  :markdown
-                    #{ @motion.title }
-              - else
-                .empty-value None recorded
+    - if @motion.body.present? && @motion.body != @motion.title
+      .motion-body= @motion.body
+    %hr
 
-            .meta-data_block
-              %label Executive recommendation
-              - if @motion.executive_recommendation.present? or @motion.executive_vote.present?
-                .text-block
-                  - if @motion.executive_vote.present?
-                    %strong
-                      - if @motion.executive_recommendation.present?
-                        #{ @motion.executive_vote.capitalize }:
-                      - else
-                        #{ @motion.executive_vote.capitalize }
+    - if @motion.result.present?
+      .motion-result-row
+        .motion-result{class: "-#{@motion.result}"}
+          = @motion.result.to_s == 'pass' ? 'Passed' : 'Failed'
+        - if @motion.rollcall? && @motion.votes.countable.any?
+          - total = @motion.votes.countable.count.to_f
+          - pct_for = ((@motion.votes.in_favour.count * 100) / total).round
+          - pct_against = ((@motion.votes.in_opposition.count * 100) / total).round
+          .motion-bar.-large
+            .bar-for{style: "flex-basis: #{pct_for}%"}
+            .bar-against{style: "flex-basis: #{pct_against}%"}
+            .bar-rest
+          .motion-vote-counts
+            %span.count-for= "#{@motion.votes.in_favour.count} for"
+            %span.count-against= "#{@motion.votes.in_opposition.count} against"
+            - if @motion.votes.in_abstention.any?
+              %span.count-abstain= "#{@motion.votes.in_abstention.count} abstain"
+        .motion-date= @motion.meeting.occurred_on_formatted
+    - else
+      .motion-date= @motion.meeting.occurred_on_formatted
+    %hr
 
-                  - if @motion.executive_recommendation.present?
-                    #{ simple_format @motion.executive_recommendation }
-              - else
-                .empty-value None recorded
+  .motion-show-meta
+    .motion-show-left
+      - if @motion.attachments.any?
+        .motion-section
+          %h2 Attachments
+          %hr
+          - @motion.attachments.each do |attachment|
+            = link_to "Attached PDF", @motion.pdf_url, class: 'attachment-link'
 
-            .meta-data_block
-              %label Vote result
-              .text-block
-                - if @motion.vote_result.present?
-                  %strong
-                    #{ @motion.vote_result.capitalize }ed
+      .motion-section
+        %h2 Proposers
+        %hr
+        - if @motion.proposers.any?
+          .proposers-list
+            - @motion.proposers.each do |councillor|
+              = link_to councillor_path(current_council, councillor), class: 'proposer-item' do
+                - if councillor.party
+                  = render partial: 'icons/party', locals: {party: councillor.party}
+                = councillor.full_name
+        - else
+          %p.empty-value None recorded
 
-                  - if @motion.vote_method.present?
-                    by #{ @motion.vote_method } vote
+    - if @motion.media_mentions.any?
+      .motion-show-right
+        .motion-section
+          %h2 Media Mentions
+          %hr
+          .media-list
+            - @motion.media_mentions.each do |media_mention|
+              = render partial: 'media_mentions/media_mention', locals: {media_mention: media_mention}
 
-        .col.-one
-          .meta-data.-small
-            .meta-data_block
-              %label Proposed by
-              - if @motion.proposers.any?
-                = render partial: 'councillors/inline-list', locals: {councillors: @motion.proposers}
-              - else
-                .empty-value None recorded
-
-            .meta-data_block
-              %label Attachments
-              %ul.list.-emmed
-                - @motion.attachments.each do |attachment|
-                  %li= link_to "Attached PDF", @motion.pdf_url
-      
-            .meta-data_block
-              %label Related areas
-              - if @motion.local_electoral_areas.any?
-                %ul.list.-inline
-                  - @motion.local_electoral_areas.each do |local_electoral_area|
-                    %li= link_to local_electoral_area.name, local_electoral_area
-              - else
-                .empty-value None recorded
-            
-            .meta-data_block
-              %label Related topics
-              - if @motion.tags.any?
-                %ul.tag-list.-inline
-                  - @motion.tags.each do |tag|
-                    %li= link_to tag, topic_path(tag.parameterize)
-              - else
-                .empty-value None recorded
-
-            - if @motion.media_mentions.any?
-              .meta-data_block
-                %label Media
-                %ul.list.-emmed
-                  - @motion.media_mentions.each do |media_mention|
-                    %li= render partial: 'media_mentions/media_mention', locals: {media_mention: media_mention}
-
-= svelte_component('Switcher', {basePath: motion_path(@motion), renderedView: @view.to_s, currentView: @view.to_s, links: [{view: 'votes', label: 'Votes'},{view: 'amendments', label: 'Amendments'}]}, class: 'view-subnav')
-
-#switcherView= render partial: @view.to_s, locals: {motion: @motion}
+  .motion-show-votes
+    %h2 Votes
+    %hr
+    = render partial: "voteables/votes", locals: {voteable: @motion}

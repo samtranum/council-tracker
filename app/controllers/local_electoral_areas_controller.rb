@@ -1,10 +1,12 @@
 class LocalElectoralAreasController < ApplicationController
+  before_action :require_council
+
   def index
     @local_electoral_areas = current_council_session.local_electoral_areas.by_name
   end
 
   def show
-    @local_electoral_area = LocalElectoralArea.find_by(slug: params[:id])
+    @local_electoral_area = current_council.local_electoral_areas.find_by!(slug: params[:id])
     @view = params[:view].try(:to_sym) || :councillors
     @context = params[:context].try(:to_sym) || :full
 

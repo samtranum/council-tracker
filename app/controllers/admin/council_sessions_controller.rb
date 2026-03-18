@@ -43,6 +43,6 @@ class Admin::CouncilSessionsController < Admin::ApplicationController
   private
 
   def council_session_params
-    params.require(:council_session).permit(:commenced_on, :concluded_on, :name)
+    params.require(:council_session).permit(:council_id, :commenced_on, :concluded_on, :name)
   end
 end

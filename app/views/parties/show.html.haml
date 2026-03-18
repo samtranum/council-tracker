@@ -1,24 +1,11 @@
 - title ['Parties', @party.name]
-- description "#{ @party.name } has #{ pluralize @party.active_councillors.count, 'councillor' } on Dublin City Council"
-- keywords "city council, parties, #{ @party.name }"
 
-%header.view-header
-  .wrapper{role: 'layout'}
-    .breadcrumbs
-      .breadcrumb= link_to 'Parties', :parties
-      .breadcrumb= link_to @party.name, @party
+.list-page
+  .list-page-header
+    .party-page-heading
+      = render partial: 'icons/party', locals: {party: @party}
+      %h1= @party.name
+    %p.page-subtitle= pluralize @party.active_councillors.count, 'member'
+    %hr
 
-.view-content.-alpha
-  .wrapper{role: 'layout'}
-    .party-card
-      %figure.-logo{class: "-#{ @party.slug }"} &nbsp;
-      .data
-        .meta-data
-          .meta-data_block
-            %h1= @party.name
-            %p
-              #{ pluralize @party.active_councillors.count, 'member' } currently on the council
-
-= svelte_component('Switcher', {basePath: party_path(@party), renderedView: @view.to_s, currentView: @view.to_s, links: [{view: 'councillors', label: 'Councillors'}]}, class: 'view-subnav')
-
-#switcherView= render partial: @view.to_s, locals: {party: @party}
+  = render partial: @view.to_s, locals: {party: @party}

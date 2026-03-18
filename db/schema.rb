@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_02_141445) do
+ActiveRecord::Schema.define(version: 2025_12_10_143936) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,9 +85,11 @@ ActiveRecord::Schema.define(version: 2023_05_02_141445) do
     t.date "concluded_on"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "council_id", null: false
     t.text "name"
     t.index ["commenced_on"], name: "index_council_sessions_on_commenced_on"
     t.index ["concluded_on"], name: "index_council_sessions_on_concluded_on"
+    t.index ["council_id"], name: "index_council_sessions_on_council_id"
   end
 
   create_table "councillors", force: :cascade do |t|
@@ -102,11 +104,21 @@ ActiveRecord::Schema.define(version: 2023_05_02_141445) do
     t.datetime "updated_at", null: false
     t.text "dcc_id"
     t.text "portrait_file"
+    t.bigint "council_id", null: false
     t.index ["born_on"], name: "index_councillors_on_born_on"
+    t.index ["council_id"], name: "index_councillors_on_council_id"
     t.index ["dcc_id"], name: "index_councillors_on_dcc_id", unique: true
     t.index ["full_name"], name: "index_councillors_on_full_name"
     t.index ["slug"], name: "index_councillors_on_slug", unique: true
     t.index ["sort_name"], name: "index_councillors_on_sort_name"
+  end
+
+  create_table "councils", force: :cascade do |t|
+    t.text "name"
+    t.text "slug"
+    t.boolean "active", default: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "elections", force: :cascade do |t|
@@ -132,6 +144,8 @@ ActiveRecord::Schema.define(version: 2023_05_02_141445) do
     t.text "slug", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "council_id", null: false
+    t.index ["council_id"], name: "index_local_electoral_areas_on_council_id"
     t.index ["name"], name: "index_local_electoral_areas_on_name", unique: true
     t.index ["slug"], name: "index_local_electoral_areas_on_slug", unique: true
   end
@@ -204,6 +218,7 @@ ActiveRecord::Schema.define(version: 2023_05_02_141445) do
     t.text "colour_hex"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "color"
     t.index ["name"], name: "index_parties_on_name", unique: true
     t.index ["slug"], name: "index_parties_on_slug", unique: true
   end
@@ -226,11 +241,14 @@ ActiveRecord::Schema.define(version: 2023_05_02_141445) do
     t.date "concluded_on"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "term_type"
+    t.integer "replaced_seat_id"
     t.index ["commenced_on"], name: "index_seats_on_commenced_on"
     t.index ["concluded_on"], name: "index_seats_on_concluded_on"
     t.index ["council_session_id"], name: "index_seats_on_council_session_id"
     t.index ["councillor_id"], name: "index_seats_on_councillor_id"
     t.index ["local_electoral_area_id"], name: "index_seats_on_local_electoral_area_id"
+    t.index ["replaced_seat_id"], name: "index_seats_on_replaced_seat_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -270,6 +288,9 @@ ActiveRecord::Schema.define(version: 2023_05_02_141445) do
   add_foreign_key "co_options", "councillors", column: "incoming_councillor_id"
   add_foreign_key "co_options", "parties", column: "incoming_party_id"
   add_foreign_key "co_options", "seats", column: "outgoing_seat_id"
+  add_foreign_key "council_sessions", "councils"
+  add_foreign_key "councillors", "councils"
+  add_foreign_key "local_electoral_areas", "councils"
   add_foreign_key "motions", "meetings"
   add_foreign_key "party_affiliations", "parties"
   add_foreign_key "party_affiliations", "seats"

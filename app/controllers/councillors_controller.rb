@@ -1,4 +1,6 @@
 class CouncillorsController < ApplicationController
+  before_action :require_council
+
   def index
     @councillors = current_council_session.active_councillors.by_name.page(params[:p])
 

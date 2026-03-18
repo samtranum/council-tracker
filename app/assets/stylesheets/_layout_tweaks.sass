@@ -1,0 +1,88 @@
+// Layout Tweaks for Admin Area
+
+// Add spacing to form fields
+.admin-form_field
+  margin-bottom: 2rem
+
+// Add spacing to metadata blocks
+.meta-data_block
+  margin-bottom: 2rem
+
+// Add spacing to subheaders
+.subheader
+  margin-bottom: 2rem
+  padding-bottom: 1rem
+  border-bottom: 1px solid var(--faint)
+
+// Add spacing to councillor card
+.councillor-card
+  margin-bottom: 3rem
+  
+  .bio
+    padding-left: 2rem
+
+// Utility for top margin
+.m-t-2
+  margin-top: 2rem
+
+// Fix button spacing in headers
+.view-header
+  .actions
+    margin-top: 1rem
+    display: flex
+    gap: 1rem
+
+// Table spacing
+.table
+  margin-top: 1rem
+  
+  th, td
+    padding: 1rem 0.5rem
+    vertical-align: middle
+    
+  th
+    font-weight: 600
+    border-bottom: 2px solid var(--faint)
+    
+  td
+    border-bottom: 1px solid var(--faint)
+
+// ====================
+// Landing & Council Page Improvements
+// ====================
+
+// Landing page: Constrain text width for better readability
+.view-content[role='layout']
+  .wrapper[role='layout']
+    max-width: 700px
+    
+// Council home page: Improve motion list hierarchy
+.text-block
+  .list
+    li
+      margin-bottom: 1.5rem
+      
+      a
+        font-size: 1.125rem
+        font-weight: 500
+        line-height: 1.4
+        
+      small
+        display: block
+        margin-top: 0.25rem
+        font-size: 0.875rem
+        color: var(--grey, #666)
+        font-weight: 400
+  
+  h3
+    font-size: 1.25rem
+    font-weight: 500
+    margin-top: 3rem
+    margin-bottom: 1.5rem
+    
+    &:first-of-type
+      margin-top: 2rem
+      
+  .list.-enumerable
+    li
+      margin-bottom: 0.75rem

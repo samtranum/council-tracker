@@ -3,5 +3,5 @@
     %ul.list.-enumerable
       - motions.each do |motion|
         %li
-          = link_to motion do
+          = link_to motion_path(current_council, motion) do
             = render partial: 'motions/motion', locals: {motion: motion}

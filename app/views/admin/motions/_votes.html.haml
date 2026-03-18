@@ -1,5 +1,11 @@
 .view-content
   .wrapper{role: 'layout'}
+    - counts = motion.votes.group(:status).count
+    .vote-counts
+      - %w[for against abstain absent not_voted exception].each do |status|
+        .vote-count
+          %span.vote-count_label= status.humanize
+          %span.vote-count_number= counts[status] || 0
     %ul.list.-enumerable
       - motion.votes.by_councillor_name.each do |vote|
         %li

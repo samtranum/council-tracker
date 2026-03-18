@@ -1,4 +1,6 @@
 class PartiesController < ApplicationController
+  before_action :require_council
+
   def index
     @parties = current_council_session.parties.by_name
   end

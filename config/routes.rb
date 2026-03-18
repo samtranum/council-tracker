@@ -1,38 +1,9 @@
 Rails.application.routes.draw do
-  root to: "home#show"
+  root to: "landing#index"
 
-  get "faq" => "pages#faq", :as => :faq
-
-  resources :corrections, only: [:new, :create] do
-    collection { get "thanks" }
-  end
-
-  resources :user_sessions, only: [:create]
-
+  resources :user_sessions, only: [:new, :create, :destroy]
   get "signin" => "user_sessions#new", :as => :signin
   get "logout" => "user_sessions#destroy", :as => :logout
-
-  resources :councillors, only: [:index, :show]
-  get "councillors/:id/:view(/:context)" => "councillors#show"
-
-  resources :local_electoral_areas, path: "areas", only: [:index, :show]
-  get "areas/:id/:view(/:context)" => "local_electoral_areas#show"
-
-  resources :parties, only: [:index, :show]
-  get "parties/:id/:view(/:context)" => "parties#show"
-
-  resources :meetings, only: [:index]
-  get "meetings/:meeting_type/:occurred_on" => "meetings#show", :as => :meeting_path
-  get "meetings/:meeting_type/:occurred_on/:view(/:context)" => "meetings#show"
-
-  resources :motions, only: [:index, :show]
-  get "motions/:id/:view(/:context)" => "motions#show"
-
-  resources :amendments, only: [:show]
-  get "amendments/:id/:view(/:context)" => "amendments#show"
-
-  resources :topics, only: [:index, :show]
-
   namespace :admin do
     root to: "dashboard#show"
 
@@ -87,4 +58,39 @@ Rails.application.routes.draw do
 
   get "/404" => "errors#not_found"
   get "/500" => "errors#internal_server_error"
+
+  scope "/:council_id" do
+    get "/", to: "home#show", as: :council_root
+
+    get "faq" => "pages#faq", :as => :faq
+
+    resources :corrections, only: [:new, :create] do
+      collection { get "thanks" }
+    end
+
+    resources :councillors, only: [:index, :show]
+    get "councillors/:id/:view(/:context)" => "councillors#show"
+
+    resources :local_electoral_areas, path: "areas", only: [:index, :show]
+    get "areas/:id/:view(/:context)" => "local_electoral_areas#show"
+
+    resources :parties, only: [:index, :show]
+    get "parties/:id/:view(/:context)" => "parties#show"
+
+    resources :meetings, only: [:index]
+    get "meetings/:meeting_type/:occurred_on" => "meetings#show", :as => :meeting_path
+    get "meetings/:meeting_type/:occurred_on/:view(/:context)" => "meetings#show"
+
+    resources :motions, only: [:index, :show]
+    get "motions/:id/og-image" => "og_images#motion", as: :motion_og_image
+    get "motions/:id/:view(/:context)" => "motions#show"
+
+    resources :amendments, only: [:show]
+    get "amendments/:id/og-image" => "og_images#amendment", as: :amendment_og_image
+    get "amendments/:id/:view(/:context)" => "amendments#show"
+
+    resources :topics, only: [:index, :show]
+  end
+
+
 end

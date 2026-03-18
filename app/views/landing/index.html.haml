@@ -1,0 +1,24 @@
+.landing-page
+  .landing-intro
+    %h1 Welcome to CouncilVoteTracker.ie
+    %hr
+    %p
+      CouncilVoteTracker.ie tracks and publishes roll-call votes at monthly council meetings,
+      so you can see how your councillors voted on issues you care about.
+    %p
+      Keep in mind that the majority of council votes – at committee, and at the monthly
+      meetings – are taken by voice, and so we're not able to track how each councillor
+      voted and record that here.
+    %hr
+
+  .landing-councils
+    .councils-grid
+      - @councils.each do |council|
+        = link_to "/#{council.slug}", class: 'council-btn' do
+          = council.name
+
+  .landing-contact
+    %p
+      If you'd like to add another council to this website, and maintain that section
+      yourself, adding votes as they happen, please get in touch.
+      = mail_to 'sam@dublininquirer.com', 'sam@dublininquirer.com'

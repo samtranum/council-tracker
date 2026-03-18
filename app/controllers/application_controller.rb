@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   before_action :redirect_to_www, if: -> { Rails.env.production? && ENV["APP_DOMAIN"] }
+  before_action :load_all_councils
   protect_from_forgery with: :exception
 
   def current_account
@@ -7,8 +8,13 @@ class ApplicationController < ActionController::Base
     current_user.account
   end
 
+  def current_council
+    @current_council ||= Council.find_by(slug: params[:council_id])
+  end
+  helper_method :current_council
+
   def current_council_session
-    @council_session ||= CouncilSession.latest
+    @council_session ||= current_council&.council_sessions&.latest
   end
   helper_method :current_council_session
 
@@ -22,5 +28,13 @@ class ApplicationController < ActionController::Base
     if (/^www/ =~ request.host).nil?
       redirect_to("#{request.protocol}#{ENV["APP_DOMAIN"]}#{request.fullpath}", status: 301)
     end
+  end
+
+  def require_council
+    raise ActionController::RoutingError.new('Not Found') unless current_council
+  end
+
+  def load_all_councils
+    @all_councils = Council.order(:name)
   end
 end

@@ -1,4 +1,10 @@
-= link_to media_mention.url do
-  #{ media_mention.body } /
-  #{ media_mention.domain } /
-  #{ media_mention.published_on.strftime('%-d %b \'%y').strip }
+= link_to media_mention.url, class: 'media-card', target: '_blank', rel: 'noopener' do
+  - if media_mention.image_url.present?
+    .media-card-image
+      = image_tag media_mention.image_url, loading: 'lazy', alt: ''
+  .media-card-body
+    %span.media-title= media_mention.body
+    .media-meta
+      %span.media-source= media_mention.domain
+      - if media_mention.published_on.present?
+        %span.media-date= media_mention.published_on.strftime('%-d %b %Y')

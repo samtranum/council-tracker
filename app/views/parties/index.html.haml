@@ -4,14 +4,14 @@
 
 %header.view-header
   .wrapper{role: 'layout'}
-    %h1= link_to "Parties", :parties
+    %h1= link_to "Parties", parties_path(current_council)
 
 %main.view-content{role: 'layout'}
   .wrapper{role: 'layout'}
     %ul.list.-enumerable
       - @parties.each do |party|
         %li
-          = link_to party do
+          = link_to [current_council, party] do
             = render partial: 'party', locals: {party: party}
 
 %footer.view-footer

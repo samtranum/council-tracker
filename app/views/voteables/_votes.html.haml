@@ -1,33 +1,23 @@
 - if voteable.rollcall?
-  .view-content.-tight
-    .wrapper{role: 'layout'}
-      .cols{role: 'layout'}
-        - %w(for against abstain).each do |status|
-          - votes = voteable.votes.includes(:councillor).by_councillor_name.where(status: status)
-          
-          .col
-            %nav.view-subnav.-two
-              .subnav-heading
-                .vote-status-heading
-                  .text
-                    .status= status.capitalize
-                    .count= pluralize votes.count, 'councillor'
-                  = render partial: 'votes/vote-visualiser', locals: {votes: votes}
-
-            %ul.list.-enumerable
-              - votes.each do |vote|
-                %li
-                  = link_to vote.councillor do
-                    .enumerable.-councillor
-                      .indicator.party-indicator{title: vote.councillor.party.name}
-                        = render partial: 'icons/party', locals: {party: vote.councillor.party}
-                      .content
-                        .name= vote.councillor.full_name
+  .vote-groups
+    - %w(for against abstain).each do |status|
+      - votes = voteable.votes.includes(:councillor).by_councillor_name.where(status: status)
+      - next if votes.empty?
+      .vote-group
+        .vote-group-header
+          %h3= status.capitalize
+          %span.vote-group-count= votes.count
+        %hr
+        .vote-councillors
+          - votes.each do |vote|
+            = link_to councillor_path(current_council, vote.councillor), class: 'vote-councillor' do
+              - if vote.councillor.party
+                = render partial: 'icons/party', locals: {party: vote.councillor.party}
+              %span= vote.councillor.full_name
 
 - else
-  .view-content.-omega
-    .wrapper{role: 'layout'}
-      .voice-vote.empty-explanation
-        %div
-          %label Voice vote
-          %p This motion #{ voteable.result }ed by a voice vote, so we don't have a breakdown of how each councillor voted.
+  .voice-vote-notice
+    %p
+      This motion
+      = @motion.result.present? ? "#{@motion.result}ed" : "was decided"
+      by a voice vote – we don't have a breakdown of how each councillor voted.

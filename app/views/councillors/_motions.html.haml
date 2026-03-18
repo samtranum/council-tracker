@@ -1,13 +1,20 @@
-.view-content.-omega
-  - if councillor.proposed_motions.published.any?
-    .wrapper{role: 'layout'}
-      %ul.list.-enumerable
-        - councillor.proposed_motions.published.by_occurred_on.each do |motion|
-          %li
-            = link_to motion do
-              = render partial: 'motions/motion', locals: {motion: motion}
-  - else
-    .wrapper{role: 'layout'}
-      .empty-explanation
-        %div
-          %label None recorded
+- if councillor.proposed_motions.published.any?
+  .motions-list
+    - councillor.proposed_motions.published.by_occurred_on.each do |motion|
+      = link_to motion_path(current_council, motion), class: 'motion-row' do
+        %span.motion-title= motion.title
+        .motion-meta
+          - if motion.result.present?
+            .motion-result{class: "-#{motion.result}"}
+              = motion.result.to_s == 'pass' ? 'Passed' : 'Failed'
+          - if motion.rollcall? && motion.votes.countable.any?
+            - total = motion.votes.countable.count.to_f
+            - pct_for = ((motion.votes.in_favour.count * 100) / total).round
+            - pct_against = ((motion.votes.in_opposition.count * 100) / total).round
+            .motion-bar
+              .bar-for{style: "flex-basis: #{pct_for}%"}
+              .bar-against{style: "flex-basis: #{pct_against}%"}
+              .bar-rest
+          %span.motion-date= motion.occurred_on.strftime('%-d %b %Y')
+- else
+  %p.empty-value No proposed motions recorded.

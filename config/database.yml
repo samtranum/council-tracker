@@ -4,10 +4,12 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   host: localhost
   timeout: 5000
+  username: postgres          # Add your PostgreSQL username here
+  password: Dublin247$
 
 development:
   <<: *default
-  database: counciltracker_development
+  database: counciltracker2024
 
 test:
   <<: *default
@@ -16,5 +18,5 @@ test:
 production:
   <<: *default
   database: counciltracker_production
-  username: counciltracker
-  password: <%= ENV['DATABASE_URL'] %>
+  username: postgres
+  password: Dublin247$

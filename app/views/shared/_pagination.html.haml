@@ -1,13 +1,13 @@
 .pagination
   %nav
     - if !records.first_page?
-      = link_to request.query_parameters.merge(p: (records.current_page - 1)) do
+      = link_to request.params.merge(p: (records.current_page - 1)) do
         = render partial: 'icons/arrow-back'
     - else
       %a.-disabled
         = render partial: 'icons/arrow-back'
     - if !records.last_page?
-      = link_to request.query_parameters.merge(p: (records.current_page + 1)) do
+      = link_to request.params.merge(p: (records.current_page + 1)) do
         = render partial: 'icons/arrow-fwd'
     - else
       %a.-disabled

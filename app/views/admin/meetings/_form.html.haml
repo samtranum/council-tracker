@@ -5,6 +5,10 @@
     .input
       = f.text_field :occurred_on
   .admin-form_field
+    = f.label :council_id
+    .input
+      = f.select :council_id, Council.all.collect { |c| [ c.name, c.id ] }, include_blank: true
+  .admin-form_field
     = f.label :meeting_type
     .input
       = f.select :meeting_type, %w(monthly annual special budget finance)

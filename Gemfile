@@ -1,4 +1,4 @@
-ruby "3.2.2"
+ruby "3.3.6"
 source "https://rubygems.org"
 
 git_source(:github) do |repo_name|
@@ -22,7 +22,7 @@ gem "kramdown"
 gem "httparty"
 gem "nokogiri"
 gem "carrierwave"
-gem "fog-aws"
+gem "cloudinary"
 gem "mini_magick"
 gem "date_validator"
 gem "dalli"
@@ -34,7 +34,7 @@ gem "kaminari"
 gem "oj" # json
 gem "webpacker-svelte"
 gem "autoprefixer-rails"
-gem "appsignal"
+# gem "appsignal"
 
 group :development, :test do
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
@@ -61,6 +61,7 @@ group :development do
   gem "rack-mini-profiler"
   gem "bullet"
   gem "squasher", require: false
+  gem 'wdm', '>= 0.1.0', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 end
 
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]

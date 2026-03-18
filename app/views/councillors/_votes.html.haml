@@ -1,14 +1,22 @@
-.view-content.-omega
-  - motions = Motion.published.by_occurred_on.voted_on_by(councillor).includes(:votes)
-  - if motions.any?
-    .wrapper{role: 'layout'}
-      %ul.list.-enumerable
-        - motions.each do |motion|
-          %li
-            = link_to motion do
-              = render partial: 'councillors/vote', locals: {motion: motion, vote: motion.votes.find_by(councillor: councillor)}
-  - else
-    .wrapper{role: 'layout'}
-      .empty-explanation
-        %div
-          %label None recorded
+- motions = Motion.published.by_occurred_on.voted_on_by(councillor).includes(:votes)
+- if motions.any?
+  .motions-list
+    - motions.each do |motion|
+      - vote = motion.votes.find_by(councillor: councillor)
+      = link_to motion_path(current_council, motion), class: 'motion-row' do
+        %span.motion-title= motion.title
+        .motion-meta
+          - if vote
+            .motion-result{class: vote.status == 'for' ? '-pass' : (vote.status == 'against' ? '-fail' : '-abstain')}
+              = vote.status.capitalize
+          - if motion.rollcall? && motion.votes.countable.any?
+            - total = motion.votes.countable.count.to_f
+            - pct_for = ((motion.votes.in_favour.count * 100) / total).round
+            - pct_against = ((motion.votes.in_opposition.count * 100) / total).round
+            .motion-bar
+              .bar-for{style: "flex-basis: #{pct_for}%"}
+              .bar-against{style: "flex-basis: #{pct_against}%"}
+              .bar-rest
+          %span.motion-date= motion.occurred_on.strftime('%-d %b %Y')
+- else
+  %p.empty-value No votes recorded.

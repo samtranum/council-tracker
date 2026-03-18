@@ -1,0 +1,61 @@
+.landing-page
+  padding: var(--gutter) 2rem
+  max-width: 120rem
+
+.landing-intro
+  margin-bottom: var(--gutter)
+
+  h1
+    font-size: var(--t1)
+    font-weight: 700
+    margin-bottom: 1.5rem
+
+  hr
+    border: none
+    border-top: var(--stroke) solid var(--black)
+    margin: 1.5rem 0
+
+  p
+    max-width: 80rem
+    margin-bottom: 1rem
+    line-height: 1.5
+
+    & + p
+      margin-top: 0
+
+.landing-councils
+  margin-bottom: var(--gutter)
+
+.councils-grid
+  display: flex
+  flex-direction: row
+  flex-wrap: wrap
+  gap: 1rem
+
+.council-btn
+  display: inline-flex
+  align-items: center
+  padding: 0.75rem 1.5rem
+  border: var(--stroke) solid var(--black)
+  color: var(--black)
+  font-size: var(--t4)
+  font-weight: 600
+  text-decoration: none
+  background-color: var(--white)
+
+  &:hover
+    border-color: var(--blue)
+    color: var(--blue)
+
+.landing-contact
+  border-top: var(--stroke) solid var(--black)
+  padding-top: 1.5rem
+
+  p
+    max-width: 80rem
+    line-height: 1.5
+    a
+      color: var(--black)
+
+      &:hover
+        color: var(--blue)

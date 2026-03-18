@@ -57,6 +57,10 @@ class CouncilSession < ApplicationRecord
     @election ||= events.where(eventable_type: "Election").take
   end
 
+  def name
+    "#{council.name} #{commenced_on.year} - #{concluded_on&.year || 'Present'}"
+  end
+
   private
 
   def update_seat_commenced_on

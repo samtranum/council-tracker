@@ -1,0 +1,249 @@
+// Motion show page
+.motion-show
+  padding: var(--gutter) 2rem
+  max-width: 120rem
+
+.motion-show-intro
+  margin-bottom: var(--gutter)
+
+  h1
+    font-size: var(--t1)
+    font-weight: 700
+    margin-bottom: 1rem
+
+  .motion-body
+    font-size: var(--t4)
+    line-height: 1.5
+    color: var(--grey)
+    max-width: 80rem
+    margin-bottom: 1.5rem
+
+  hr
+    border: none
+    border-top: var(--stroke) solid var(--black)
+    margin: 1.5rem 0
+
+  > .motion-date
+    display: block
+    margin-bottom: 1rem
+
+.motion-result-row
+  display: flex
+  flex-direction: row
+  align-items: center
+  gap: 1.5rem
+  margin-bottom: 1rem
+
+  .motion-date
+    display: block
+    margin-left: auto
+
+  .motion-bar.-large
+    flex: 1
+    max-width: 40rem
+    height: 1.6rem
+
+.motion-vote-counts
+  display: flex
+  flex-direction: row
+  gap: 1.5rem
+  font-size: var(--t5)
+
+  .count-for
+    color: #5b5cfe
+
+  .count-against
+    color: var(--black)
+
+  .count-abstain
+    color: var(--grey)
+
+// Two-column meta section
+.motion-show-meta
+  display: flex
+  flex-direction: column
+  gap: var(--gutter)
+  margin-bottom: var(--gutter)
+
+  @media screen and (min-width: '800px')
+    flex-direction: row
+    align-items: flex-start
+
+.motion-show-left
+  flex: 1
+  min-width: 0
+
+.motion-show-right
+  flex: 1
+  min-width: 0
+
+.motion-section
+  margin-bottom: var(--gutter)
+
+  h2
+    font-size: var(--t2)
+    font-weight: 700
+    margin-bottom: 1rem
+
+  hr
+    border: none
+    border-top: var(--stroke) solid var(--black)
+    margin-bottom: 1.5rem
+
+// Attachments
+.attachment-link
+  display: inline-flex
+  align-items: center
+  gap: 0.5rem
+  color: var(--black)
+  text-decoration: none
+  font-size: var(--t5)
+
+  &:before
+    content: '📄'
+    font-size: 1.4rem
+
+  &:hover
+    color: var(--blue)
+
+// Proposers
+.proposers-list
+  display: flex
+  flex-direction: row
+  flex-wrap: wrap
+  gap: 0.75rem 1.5rem
+
+.proposer-item
+  display: inline-flex
+  align-items: center
+  gap: 0.4rem
+  color: var(--black)
+  text-decoration: none
+  font-size: var(--t5)
+
+  &:hover
+    color: var(--blue)
+
+  svg.icon.-party
+    flex-shrink: 0
+
+// Media mention cards
+.media-list
+  display: flex
+  flex-direction: column
+  gap: 0.75rem
+
+.media-card
+  display: flex
+  flex-direction: row
+  gap: 1rem
+  border: var(--stroke) solid var(--faint)
+  padding: 1rem 1.25rem
+  text-decoration: none
+  color: var(--black)
+  border-radius: 0.25rem
+  align-items: flex-start
+
+  &:hover
+    border-color: var(--blue)
+
+    .media-title
+      color: var(--blue)
+
+.media-card-image
+  flex-shrink: 0
+  width: 6rem
+  height: 4.5rem
+  overflow: hidden
+  border-radius: 0.2rem
+  background-color: var(--faint)
+
+  img
+    width: 100%
+    height: 100%
+    object-fit: cover
+    object-position: center
+    display: block
+
+.media-card-body
+  flex: 1
+  display: flex
+  flex-direction: column
+  gap: 0.4rem
+  min-width: 0
+
+.media-title
+  font-size: var(--t5)
+  font-weight: 600
+  line-height: 1.4
+
+.media-meta
+  display: flex
+  flex-direction: row
+  gap: 1rem
+  font-size: var(--t6)
+  color: var(--grey)
+
+// Votes section
+.motion-show-votes
+  h2
+    font-size: var(--t2)
+    font-weight: 700
+    margin-bottom: 1rem
+
+  hr
+    border: none
+    border-top: var(--stroke) solid var(--black)
+    margin-bottom: 1.5rem
+
+.vote-groups
+  display: flex
+  flex-direction: column
+  gap: var(--gutter)
+
+.vote-group-header
+  display: flex
+  flex-direction: row
+  justify-content: space-between
+  align-items: baseline
+  margin-bottom: 0.75rem
+
+  h3
+    font-size: var(--t3)
+    font-weight: 700
+
+  .vote-group-count
+    font-size: var(--t3)
+    font-weight: 700
+
+.vote-group
+  hr
+    border: none
+    border-top: var(--stroke) solid var(--black)
+    margin-bottom: 1.25rem
+
+.vote-councillors
+  display: flex
+  flex-direction: row
+  flex-wrap: wrap
+  gap: 0.5rem 1.5rem
+
+.vote-councillor
+  display: inline-flex
+  align-items: center
+  gap: 0.4rem
+  color: var(--black)
+  text-decoration: none
+  font-size: var(--t5)
+
+  &:hover
+    color: var(--blue)
+
+  svg.icon.-party
+    flex-shrink: 0
+
+.voice-vote-notice
+  p
+    font-size: var(--t5)
+    color: var(--grey)
+    line-height: 1.5

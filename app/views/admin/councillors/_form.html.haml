@@ -1,6 +1,9 @@
 = form_with model: [:admin, councillor], class: 'admin-form' do |f|
   = render partial: 'admin/shared/errors', locals: {errors: councillor.errors}
 
+  = f.label :council_id, 'Council'
+  = f.collection_select :council_id, Council.by_name, :id, :name, {prompt: 'Select council'}
+
   = f.label :full_name
   = f.text_field :full_name
 

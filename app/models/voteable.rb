@@ -13,6 +13,7 @@ class Voteable < ApplicationRecord
   validates :mayors_vote, inclusion: %w[for against], allow_blank: true
 
   after_validation :set_vote_result, if: ->(m) { m.rollcall? }
+  after_create :initialize_votes
   after_save :clean_votes, if: ->(m) { m.rollcall? }
   after_save :destroy_votes, if: ->(m) { !m.rollcall? }
 
@@ -67,7 +68,7 @@ class Voteable < ApplicationRecord
   end
 
   def clean_votes
-    expected_councillor_ids = meeting.councillors.pluck(:id).sort
+    expected_councillor_ids = meeting.expected_attendance.pluck(:id).sort
     voted_councillor_ids = votes.pluck(:councillor_id).sort
 
     # delete votes that shouldn't exist
@@ -89,5 +90,16 @@ class Voteable < ApplicationRecord
   def destroy_votes
     return true if votes.countable.any? # don't destroy countable ones, these take work to enter!
     votes.destroy_all
+  end
+
+  def initialize_votes
+    return unless respond_to?(:meeting) && meeting.present?
+    return unless meeting.expected_attendance.present?
+    
+    meeting.expected_attendance.each do |councillor|
+      votes.find_or_create_by(councillor: councillor) do |vote|
+        vote.status = 'not_voted'
+      end
+    end
   end
 end

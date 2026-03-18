@@ -1,46 +1,44 @@
-- title ['Councillors', @councillor.full_name]
-- description "#{ @councillor.full_name } is #{ indefinitly_article(@councillor.party.name) } councillor for #{ @councillor.local_electoral_area.name }"
-- keywords "#{ @councillor.full_name }, #{ @councillor.local_electoral_area.name }, #{ @councillor.party.name }"
+.councillor-show
+  .councillor-show-intro
+    - if @councillor.portrait.present?
+      .councillor-portrait{class: "-#{@councillor.party&.slug}"}
+        = image_tag @councillor.portrait.url(:medium), loading: 'lazy', alt: "Portrait of #{@councillor.full_name}"
 
-%header.view-header
-  .wrapper{role: 'layout'}
-    .breadcrumbs
-      .breadcrumb= link_to 'Councillors', :councillors
-      .breadcrumb= link_to @councillor.full_name, @councillor
+    .councillor-intro-text
+      %h1= @councillor.full_name
+      .councillor-meta
+        - if @councillor.party
+          = link_to party_path(current_council, @councillor.party), class: 'councillor-party-link' do
+            = render partial: 'icons/party', locals: {party: @councillor.party}
+            %span= @councillor.party.name
+        - if @councillor.local_electoral_area
+          %span.councillor-area-link= link_to @councillor.local_electoral_area_name, local_electoral_area_path(current_council.slug, @councillor.local_electoral_area)
+    %hr
 
-.view-content.-alpha
-  .wrapper{role: 'layout'}
-    .councillor-card
-      %figure.-portrait{class: "-#{ @councillor.party.slug }"}= image_tag @councillor.portrait.url(:medium), loading: 'lazy', alt: "Portrait of #{ @councillor.full_name }"
-      .bio
-        .meta-data
-          .meta-data_block.-label
-            %h1= @councillor.full_name
+  - direct_events = @councillor.events.includes(:eventable)
+  - uncovered_seats = @councillor.seats_without_events.includes(:council_session, replaced_seat: :councillor)
+  - if direct_events.any? || uncovered_seats.any?
+    - tagged_events = direct_events.map { |e| [:event, e.occurred_on, e] }
+    - tagged_seats = uncovered_seats.map { |s| [:seat, s.commenced_on, s] }
+    - history_items = (tagged_events + tagged_seats).sort_by { |_, date, _| date }
+    .councillor-show-history
+      %h2 Electoral history
+      %hr
+      %ol.electoral-history-list
+        - history_items.each do |type, date, item|
+          %li.electoral-history-item
+            %span.event-date= date.strftime('%b %Y')
+            - if type == :event
+              %span.event-description= raw summarize_event_for_councillor(item, @councillor)
+            - elsif item.co_option?
+              - if item.replaced_seat&.councillor
+                %span.event-description= raw "Co-opted to replace #{link_to item.replaced_seat.councillor.full_name, councillor_path(current_council, item.replaced_seat.councillor)}"
+              - else
+                %span.event-description Co-opted to the council
+            - else
+              %span.event-description Elected to the council
 
-          .meta-data_block
-            %p
-              = link_to @councillor.party do
-                = render partial: 'icons/party', locals: {party: @councillor.party}
-                = @councillor.party.name
-            %p= link_to @councillor.local_electoral_area_name, @councillor.local_electoral_area
-
-          - if @councillor.events.any?
-            .meta-data_block
-              %label Electoral history
-              %ol.list
-                - @councillor.events.includes(:eventable).each do |event|
-                  %li
-                    %span.text.-fixed.-info
-                      #{ event.occurred_on.strftime('%b \'%y') } &mdash;
-                    %span= raw summarize_event_for_councillor event, @councillor
-
-          - if @councillor.media_mentions.any?
-            .meta-data_block
-              %label Media
-              %ul.list.-emmed
-                - @councillor.media_mentions.each do |media_mention|
-                  %li= render partial: 'media_mentions/media_mention', locals: {media_mention: media_mention}
-
-= svelte_component('Switcher', {basePath: councillor_path(@councillor), renderedView: @view.to_s, currentView: @view.to_s, links: [{view: 'votes', label: 'Votes'},{view: 'attendances', label: 'Attendance'},{view: 'motions', label: 'Proposed motions'},{view: 'amendments', label: 'Proposed amendments'}]}, class: 'view-subnav')
-
-#switcherView= render partial: @view.to_s, locals: {councillor: @councillor}
+  .councillor-show-votes
+    %h2 Votes
+    %hr
+    = render partial: @view.to_s, locals: {councillor: @councillor}

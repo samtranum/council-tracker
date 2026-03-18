@@ -1,21 +1,8 @@
 - title ['Meetings', @meeting.title]
-- description "Dublin City Council #{ @meeting.meeting_type } meeting on #{ @meeting.occurred_on.strftime('%-d %B \'%y') } at which #{ pluralize @meeting.attendances.presentish.count, 'councillor' } were present."
-- keywords "city council, meetings, #{ @meeting.meeting_type }"
-
-%header.view-header
-  .wrapper{role: 'layout'}
-    .breadcrumbs
-      .breadcrumb= link_to 'Meetings', :meetings
-      .breadcrumb= link_to @meeting.occurred_on_formatted, @meeting.path
-
-.view-content.-alpha
-  .wrapper{role: 'layout'}
-    .meeting-card
-      .meta-data
         .meta-data_block
           %h1= @meeting.meeting_type_in_english
           %p= @meeting.occurred_on.strftime('%-d %B \'%y')
 
-= svelte_component('Switcher', {basePath: @meeting.path, renderedView: @view.to_s, currentView: @view.to_s, links: [{view: 'motions', label: 'Motions'},{view: 'attendances', label: 'Attendance'}]}, class: 'view-subnav')
+= svelte_component('Switcher', {basePath: @meeting.path, renderedView: @view.to_s, currentView: @view.to_s, links: [{view: 'motions', label: 'Motions'}]}, class: 'view-subnav')
 
 #switcherView= render partial: @view.to_s, locals: {meeting: @meeting}
