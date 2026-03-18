@@ -1,12 +1,12 @@
 %header.view-header
   .wrapper{role: 'layout'}
     %h1 Councils
-    .actions
-      - if current_user.is_admin?
-        = link_to "New Council", new_admin_council_path, class: "button"
 
 %main.view-content{role: 'layout'}
   .wrapper{role: 'layout'}
+    - if current_user.is_admin?
+      .list-actions
+        = link_to "New Council", new_admin_council_path, class: "button"
     %ul.list.-enumerable
       - @councils.each do |council|
         %li

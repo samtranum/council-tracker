@@ -1,11 +1,11 @@
 %header.view-header
   .wrapper{role: 'layout'}
     %h1 Local Electoral Areas
-    .actions
-      = link_to 'New Local Electoral Area', new_admin_local_electoral_area_path, class: 'button'
 
 %main.view-content{role: 'layout'}
   .wrapper{role: 'layout'}
+    .list-actions
+      = link_to 'New Local Electoral Area', new_admin_local_electoral_area_path, class: 'button'
     - @councils.each do |council|
       .council-leas
         %h2= council.name

@@ -1,11 +1,11 @@
 %header.view-header
   .wrapper{role: 'layout'}
     %h1 Council Sessions
-    .actions
-      = link_to "New Council Session", new_admin_council_session_path, class: "button"
 
 %main.view-content{role: 'layout'}
   .wrapper{role: 'layout'}
+    .list-actions
+      = link_to "New Council Session", new_admin_council_session_path, class: "button"
     %ul.list.-enumerable
       - @council_sessions.each do |session|
         %li

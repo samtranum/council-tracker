@@ -1,12 +1,12 @@
 %header.view-header
   .wrapper{role: 'layout'}
     %h1 Parties
-    .actions
-      - if policy(Party).new?
-        = link_to "New Party", new_admin_party_path, class: "button"
 
 %main.view-content{role: 'layout'}
   .wrapper{role: 'layout'}
+    - if policy(Party).new?
+      .list-actions
+        = link_to "New Party", new_admin_party_path, class: "button"
     %ul.list.-enumerable
       - @parties.each do |party|
         %li
