@@ -14,8 +14,8 @@
         .header-inner
           = link_to root_path, class: 'logo' do
             CouncilVoteTracker.ie
-          = link_to "https://dublininquirer.com", target: '_blank', rel: 'noopener', class: 'partner-logo' do
-            = image_tag 'https://www.dublininquirer.com/content/images/size/w1600/2026/03/FoxIllustration-running-transparency.png', alt: 'Dublin Inquirer', class: 'fox-logo'
+          - if current_council && current_council.logo.present?
+            = image_tag current_council.logo.url, alt: current_council.name, class: 'council-logo'
         - if current_council && current_council.header_html.present?
           .council-custom-header= raw current_council.header_html
         - elsif !current_council

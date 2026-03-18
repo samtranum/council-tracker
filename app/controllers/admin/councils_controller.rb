@@ -36,7 +36,7 @@ class Admin::CouncilsController < Admin::ApplicationController
   private
 
   def set_council
-    @council = Council.find(params[:id])
+    @council = Council.find_by!(slug: params[:id])
   end
 
   def council_params
@@ -45,9 +45,9 @@ class Admin::CouncilsController < Admin::ApplicationController
 
   def council_update_params
     if current_user.is_admin?
-      params.require(:council).permit(:name, :slug, :active, :header_html, :footer_html)
+      params.require(:council).permit(:name, :slug, :active, :header_html, :footer_html, :logo, :remove_logo)
     else
-      params.require(:council).permit(:header_html, :footer_html)
+      params.require(:council).permit(:header_html, :footer_html, :logo, :remove_logo)
     end
   end
 end

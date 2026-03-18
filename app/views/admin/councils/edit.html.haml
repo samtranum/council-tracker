@@ -7,7 +7,7 @@
 
 %main.view-content{role: 'layout'}
   .wrapper{role: 'layout'}
-    = form_with model: [:admin, @council], local: true, class: 'admin-form' do |f|
+    = form_with model: [:admin, @council], local: true, class: 'admin-form', multipart: true do |f|
       = render partial: 'admin/shared/errors', locals: {errors: @council.errors}
 
       - if current_user.is_admin?
@@ -22,6 +22,18 @@
           = f.label :active, 'Active'
 
         %hr
+
+      %h3 Council logo
+      .hint.p.-t5 Shown in the top-right of the header on this council's public pages (replaces the Dublin Inquirer fox logo). Recommended max width: 400px.
+      - if @council.logo.present?
+        .current-logo
+          = image_tag @council.logo.url, style: 'max-height: 60px; margin-bottom: 8px;'
+          .checkbox-row
+            = f.check_box :remove_logo
+            = f.label :remove_logo, 'Remove logo'
+      = f.file_field :logo
+
+      %hr
 
       %h3 Header content
       .hint.p.-t5 HTML shown at the top of this council's public pages. Leave blank for no custom header.

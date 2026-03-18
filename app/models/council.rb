@@ -1,4 +1,6 @@
 class Council < ApplicationRecord
+  mount_uploader :logo, LogoUploader
+
   has_many :user_councils, dependent: :destroy
   has_many :users, through: :user_councils
 
