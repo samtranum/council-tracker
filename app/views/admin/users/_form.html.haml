@@ -9,13 +9,15 @@
 
   %hr
 
-  - unless user.is_admin?
-    %h3 Assigned councils
+  %h3 Assigned councils
+  - if user.is_admin?
+    .hint.p.-t5 Super admins have access to all councils. Assignments below are saved but not enforced.
+  - else
     .hint.p.-t5 Select which councils this editor can manage.
-    - Council.order(:name).each do |council|
-      .checkbox-row
-        = check_box_tag "user[council_ids][]", council.id, user.councils.include?(council), id: "council_#{council.id}"
-        = label_tag "council_#{council.id}", council.name
+  - Council.order(:name).each do |council|
+    .checkbox-row
+      = check_box_tag "user[council_ids][]", council.id, user.councils.include?(council), id: "council_#{council.id}"
+      = label_tag "council_#{council.id}", council.name
 
   %hr
 
