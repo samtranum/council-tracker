@@ -5,7 +5,9 @@ class CorrectionsController < ApplicationController
 
   def create
     @correction = Correction.new(correction_params)
+    @correction.council = current_council
     if @correction.save
+      CorrectionMailer.notify_editors(@correction).deliver_later
       redirect_to [:thanks, :corrections]
     else
       render :new

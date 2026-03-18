@@ -17,11 +17,11 @@ class CouncilPolicy < ApplicationPolicy
   end
 
   def update?
-    admin?
+    admin? || can_access_council?(record)
   end
 
   def edit?
-    admin?
+    admin? || can_access_council?(record)
   end
 
   def destroy?
@@ -33,7 +33,7 @@ class CouncilPolicy < ApplicationPolicy
       if user.is_admin?
         scope.all
       else
-        scope.none
+        scope.joins(:user_councils).where(user_councils: {user_id: user.id})
       end
     end
   end

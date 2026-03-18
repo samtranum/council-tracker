@@ -27,6 +27,7 @@
               = link_to "LEAs", [:admin, :local_electoral_areas]
               - if current_user&.is_admin?
                 = link_to "Users", admin_users_path
+                = link_to "Site Settings", edit_admin_site_settings_path
 
             %footer
               .footer-block.p.-t4

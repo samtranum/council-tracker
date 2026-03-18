@@ -1,7 +1,8 @@
 %header.view-header
   .wrapper{role: 'layout'}
     %h1 Councils
-    = link_to "New Council", new_admin_council_path, class: "button"
+    - if current_user.is_admin?
+      = link_to "New Council", new_admin_council_path, class: "button"
 
 %main.view-content{role: 'layout'}
   .wrapper{role: 'layout'}
@@ -14,3 +15,5 @@
             %span.tag Active
           - else
             %span.tag Inactive
+          - if policy(council).edit?
+            = link_to "Edit", edit_admin_council_path(council), class: "button -small"
