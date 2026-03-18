@@ -51,7 +51,7 @@ class Admin::CouncillorsController < Admin::ApplicationController
   private
 
   def councillor_params
-    params.require(:councillor).permit(:given_name, :family_name, :full_name, :gender, :born_on, :portrait)
+    params.require(:councillor).permit(:given_name, :family_name, :full_name, :gender, :born_on, :portrait, :council_id)
   end
 
   def membership_params

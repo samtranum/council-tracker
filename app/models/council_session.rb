@@ -1,4 +1,6 @@
 class CouncilSession < ApplicationRecord
+  belongs_to :council
+
   has_many :seats, dependent: :destroy
   has_many :meetings, dependent: :destroy
 

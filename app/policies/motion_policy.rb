@@ -1,16 +1,51 @@
 class MotionPolicy < ApplicationPolicy
-  # All editors can manage motions for now.
-  # Council-scoped enforcement will be added when council_id is added to the data model.
+  def index?
+    user.present?
+  end
+
+  def show?
+    can_access_council?(record.council)
+  end
+
+  def new?
+    user.is_admin? || user.councils.any?
+  end
+
+  def create?
+    can_access_council?(record.council)
+  end
+
+  def edit?
+    can_access_council?(record.council)
+  end
+
+  def update?
+    can_access_council?(record.council)
+  end
+
+  def destroy?
+    can_access_council?(record.council)
+  end
 
   def publish?
-    user.present?
+    can_access_council?(record.council)
   end
 
   def save_vote?
-    user.present?
+    can_access_council?(record.council)
   end
 
   def refresh_votes?
-    user.present?
+    can_access_council?(record.council)
+  end
+
+  class Scope < ApplicationPolicy::Scope
+    def resolve
+      if user.is_admin?
+        scope.all
+      else
+        scope.joins(meeting: :council_session).where(council_sessions: {council: user.councils})
+      end
+    end
   end
 end

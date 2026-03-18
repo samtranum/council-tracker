@@ -54,4 +54,9 @@ class ApplicationPolicy
   def admin?
     user.is_admin?
   end
+
+  def can_access_council?(council)
+    return false unless council
+    user.can_access_council?(council)
+  end
 end

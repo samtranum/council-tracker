@@ -2,21 +2,17 @@ class Council < ApplicationRecord
   has_many :user_councils, dependent: :destroy
   has_many :users, through: :user_councils
 
-  validates :name, presence: true, uniqueness: true
-  validates :slug, presence: true, uniqueness: true
+  has_many :council_sessions
+  has_many :councillors
+  has_many :local_electoral_areas
 
-  before_validation :generate_slug, if: -> { slug.blank? && name.present? }
+  validates :name, presence: true
+  validates :slug, presence: true
 
   scope :active, -> { where(active: true) }
   scope :by_name, -> { order(:name) }
 
   def to_param
     slug
-  end
-
-  private
-
-  def generate_slug
-    self.slug = name.parameterize
   end
 end

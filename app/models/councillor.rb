@@ -1,4 +1,6 @@
 class Councillor < ApplicationRecord
+  belongs_to :council
+
   has_many :seats
   has_many :attendances
   has_many :votes
