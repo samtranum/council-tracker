@@ -10,6 +10,7 @@ class Amendment < Voteable
   after_validation :set_hashed_id, if: ->(m) { m.hashed_id.blank? }
 
   delegate :council_session, to: :motion
+  delegate :council, to: :council_session
   delegate :meeting, to: :motion
   delegate :occurred_on, to: :meeting
 

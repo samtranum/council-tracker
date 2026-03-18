@@ -1,5 +1,6 @@
 class Councillor < ApplicationRecord
   belongs_to :council
+
   has_many :seats, dependent: :destroy
   has_many :attendances, dependent: :destroy
   has_many :votes, dependent: :destroy

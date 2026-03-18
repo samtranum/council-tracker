@@ -1,0 +1,29 @@
+%header.view-header
+  .wrapper{role: 'layout'}
+    %h1 Users
+    .actions
+      = link_to "New user", new_admin_user_path, class: 'button'
+
+%main.view-content{role: 'layout'}
+  .wrapper{role: 'layout'}
+    %table.table
+      %thead
+        %tr
+          %th Email
+          %th Role
+          %th Councils
+          %th
+      %tbody
+        - @users.each do |user|
+          %tr
+            %td= user.email_address
+            %td
+              - if user.is_admin?
+                %span.tag Super Admin
+              - else
+                %span.tag Editor
+            %td= user.councils.map(&:name).join(", ").presence || "—"
+            %td.actions
+              = link_to "Edit", edit_admin_user_path(user), class: 'button -small'
+              - unless user == current_user
+                = link_to "Delete", admin_user_path(user), method: :delete, data: {confirm: "Delete #{user.email_address}?"}, class: 'button -small -destructive'

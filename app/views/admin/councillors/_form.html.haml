@@ -1,41 +1,39 @@
-= form_with model: [:admin, @councillor], local: true do |f|
-  - if @councillor.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@councillor.errors.count, "error")} prohibited this councillor from being saved:"
-      %ul
-        - @councillor.errors.full_messages.each do |message|
-          %li= message
+= form_with model: [:admin, councillor], class: 'admin-form' do |f|
+  = render partial: 'admin/shared/errors', locals: {errors: councillor.errors}
 
-  .field
-    = f.label :council_id
-    = f.collection_select :council_id, Council.all, :id, :name, {}, {class: 'form-control'}
-  .field
-    = f.label :full_name
-    = f.text_field :full_name, class: 'form-control'
-  - if @councillor.new_record?
-    .field
-      = f.label :party_id
-      = f.collection_select :party_id, Party.order(:name), :id, :name, {include_blank: true}, {class: 'form-control'}
-      %small= link_to "Add new party", new_admin_party_path, target: "_blank"
-    .field
-      = f.label :local_electoral_area_id, "Local Electoral Area"
-      = f.collection_select :local_electoral_area_id, LocalElectoralArea.order(:name), :id, :name, {include_blank: true}, {class: 'form-control'}
-      %small= link_to "Add new area", new_admin_local_electoral_area_path, target: "_blank"
-    .field
-      = f.label :commenced_on, "Date Elected/Co-opted"
-      = f.date_field :commenced_on, value: Date.today, class: 'form-control'
-  - else
-    .field
-      %label Party
-      %p= @councillor.party&.name || "None"
-      %p.help-text To change party, add a new term or edit an existing term.
-    .field
-      %label Local Electoral Area
-      %p= @councillor.local_electoral_area&.name || "None"
-      %p.help-text To change area, add a new term or edit an existing term.
-  .field
-    = f.label :portrait
-    = f.file_field :portrait, class: 'form-control'
+  = f.label :council_id, 'Council'
+  = f.collection_select :council_id, Council.by_name, :id, :name, {prompt: 'Select council'}
+
+  = f.label :full_name
+  = f.text_field :full_name
+
+  .hint.p.-t5 If you enter full name, given/family names will be derived.
+
+  = f.label :given_name
+  = f.text_field :given_name
+
+  = f.label :family_name
+  = f.text_field :family_name
+
+  = f.label :born_on
+  = f.date_field :born_on
+
+  = f.label :portrait
+  = f.file_field :portrait
+
+  - if councillor.new_record?
+    %hr
+    %h3 Council membership
+    .hint.p.-t5 New councillors must be assigned to the current council with a party and local area.
+
+    = f.label :local_electoral_area_id, 'Local Electoral Area'
+    = f.collection_select :local_electoral_area_id, LocalElectoralArea.by_name, :id, :name, {prompt: 'Select area'}
+
+    = f.label :party_id, 'Party'
+    = f.collection_select :party_id, Party.by_name, :id, :name, {prompt: 'Select party'}
+
+    = f.label :seat_commenced_on, 'Seat start date'
+    = f.date_field :seat_commenced_on, value: Date.current
 
   .actions
     = f.submit 'Save', class: 'button'

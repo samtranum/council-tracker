@@ -6,11 +6,17 @@ Rails.application.routes.draw do
   get "logout" => "user_sessions#destroy", :as => :logout
   namespace :admin do
     root to: "dashboard#show"
+
+    resources :users
+    get "profile/change_password" => "users#change_password", as: :change_password
+    patch "profile/change_password" => "users#update_password", as: :update_password
+
     resources :councils, only: [:index, :new, :create]
     resources :council_sessions, only: [:index, :new, :create, :edit, :update, :destroy]
+
     resources :councillors do
       resources :media_mentions, only: [:new, :create]
-      resources :seats, as: 'terms', path: 'terms'
+      resources :seats, as: "terms", path: "terms"
     end
 
     resources :events, only: [:index, :show]

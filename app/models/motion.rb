@@ -33,6 +33,10 @@ class Motion < Voteable
     meeting.council_session
   end
 
+  def council
+    council_session.council
+  end
+
   def published?
     published_at.present?
   end

@@ -26,10 +26,15 @@
               = link_to "Parties", [:admin, :parties]
               = link_to "LEAs", [:admin, :local_electoral_areas]
 
-            .footer-block.p.-t4
-              %ul
-                %li= link_to 'Corrections', [:admin, :corrections]
-                %li= link_to 'Back to public site', :root
-                %li= link_to 'Log out', '/logout'
+            %footer
+              .footer-block.p.-t4
+                %ul
+                  %li= link_to 'Corrections', [:admin, :corrections]
+                  - if current_user&.is_admin?
+                    %li= link_to 'Users', admin_users_path
+                  %li= link_to 'Change password', admin_change_password_path
+                  %li= link_to 'Back to public site', :root
+                  %li= link_to 'Log out', '/logout'
 
-        %main.primary-main= yield
+        %nav.menu#menu= svelte_component('AdminMenu')
+      %main.primary-main= yield

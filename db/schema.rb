@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(version: 2025_12_10_143936) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "council_id", null: false
+    t.text "name"
     t.index ["commenced_on"], name: "index_council_sessions_on_commenced_on"
     t.index ["concluded_on"], name: "index_council_sessions_on_concluded_on"
     t.index ["council_id"], name: "index_council_sessions_on_council_id"
