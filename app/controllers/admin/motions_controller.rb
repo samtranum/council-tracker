@@ -3,6 +3,7 @@ class Admin::MotionsController < Admin::ApplicationController
 
   def show
     @motion = Motion.find_by(hashed_id: params[:id])
+    authorize @motion
     @view = params[:view].try(:to_sym) || :details
     @context = params[:context].try(:to_sym) || :full
 
@@ -20,12 +21,14 @@ class Admin::MotionsController < Admin::ApplicationController
   def new
     @meeting = Meeting.find_by(hashed_id: params[:meeting_id])
     @motion = @meeting.motions.new(agenda_item: (((@meeting.motions.maximum(:position) || 0) / 100) + 1))
+    authorize @motion
   end
 
   # nested under meetings
   def create
     @meeting = Meeting.find_by(hashed_id: params[:meeting_id])
     @motion = @meeting.motions.new(motion_params)
+    authorize @motion
     if @motion.save
       redirect_to [:admin, @motion]
     else
@@ -35,13 +38,22 @@ class Admin::MotionsController < Admin::ApplicationController
 
   def publish
     @motion = Motion.find_by(hashed_id: params[:id])
+    authorize @motion, :publish?
     @meeting = @motion.meeting
     @motion.toggle_publication!
     redirect_to [:admin, @motion]
   end
 
+  def refresh_votes
+    @motion = Motion.find_by(hashed_id: params[:id])
+    authorize @motion, :refresh_votes?
+    @motion.send(:initialize_votes)
+    redirect_to admin_motion_path(@motion, view: "votes"), notice: "Votes refreshed successfully."
+  end
+
   def update
     @motion = Motion.find_by(hashed_id: params[:id])
+    authorize @motion
     @meeting = @motion.meeting
     if @motion.update(motion_params)
       redirect_to [:admin, @motion]
@@ -54,6 +66,7 @@ class Admin::MotionsController < Admin::ApplicationController
 
   def save_vote
     @motion = Motion.find_by(id: params[:id])
+    authorize @motion, :save_vote?
     @councillor = Councillor.find_by(id: params["councillorId"])
     @vote = Vote.find_or_initialize_by(voteable: @motion, councillor: @councillor)
     @vote.status = params["status"]
@@ -67,6 +80,7 @@ class Admin::MotionsController < Admin::ApplicationController
 
   def destroy
     @motion = Motion.find_by(hashed_id: params[:id])
+    authorize @motion
     @meeting = @motion.meeting
     @motion.destroy!
     redirect_to [:admin, @meeting]

@@ -1,22 +1,26 @@
 class Admin::CouncillorsController < Admin::ApplicationController
   def index
-    @councillors = Councillor.by_name.page(params[:p])
+    @councillors = policy_scope(Councillor).by_name.page(params[:p])
   end
 
   def show
     @councillor = Councillor.find_by(slug: params[:id])
+    authorize @councillor
   end
 
   def new
     @councillor = Councillor.new
+    authorize @councillor
   end
 
   def edit
     @councillor = Councillor.find_by(slug: params[:id])
+    authorize @councillor
   end
 
   def create
     @councillor = Councillor.new(councillor_params)
+    authorize @councillor
     ActiveRecord::Base.transaction do
       if @councillor.save
         create_membership_if_supplied!(@councillor)
@@ -29,6 +33,7 @@ class Admin::CouncillorsController < Admin::ApplicationController
 
   def update
     @councillor = Councillor.find_by(slug: params[:id])
+    authorize @councillor
     if @councillor.update(councillor_params)
       redirect_to [:admin, @councillor]
     else
@@ -38,6 +43,7 @@ class Admin::CouncillorsController < Admin::ApplicationController
 
   def destroy
     @councillor = Councillor.find_by(slug: params[:id])
+    authorize @councillor
     @councillor.destroy!
     redirect_to [:admin, :councillors]
   end

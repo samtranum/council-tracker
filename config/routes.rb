@@ -35,14 +35,25 @@ Rails.application.routes.draw do
 
   namespace :admin do
     root to: "dashboard#show"
+
+    resources :users
+    get "profile/change_password" => "users#change_password", as: :change_password
+    patch "profile/change_password" => "users#update_password", as: :update_password
+
+    resources :councils, only: [:index, :new, :create]
+    resources :council_sessions, only: [:index, :new, :create, :edit, :update, :destroy]
+
     resources :councillors do
       resources :media_mentions, only: [:new, :create]
+      resources :seats, as: "terms", path: "terms"
     end
 
     resources :events, only: [:index, :show]
     resources :co_options, only: [:new, :create, :edit, :update, :destroy]
     resources :change_of_affiliations, only: [:new, :create, :edit, :update, :destroy]
     resources :elections
+    resources :parties, only: [:index, :new, :create, :edit, :update]
+    resources :local_electoral_areas
 
     resources :meetings do
       collection { patch :scrape }
@@ -55,6 +66,7 @@ Rails.application.routes.draw do
       member do
         post :save_vote
         patch :publish
+        post :refresh_votes
       end
       resources :media_mentions, only: [:new, :create]
       resources :amendments, only: [:new, :create]

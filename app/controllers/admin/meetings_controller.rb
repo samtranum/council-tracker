@@ -2,16 +2,18 @@ class Admin::MeetingsController < Admin::ApplicationController
   skip_before_action :verify_authenticity_token, only: [:save_attendance]
 
   def index
-    @meetings = Meeting.by_occurred_on.page(params[:p])
+    @meetings = policy_scope(Meeting).by_occurred_on.page(params[:p])
   end
 
   def scrape
+    authorize Meeting, :scrape?
     MeetingScraperService.scrape_from_dcc!
     redirect_to [:admin, :meetings]
   end
 
   def show
     @meeting = Meeting.find_by!(hashed_id: params[:id])
+    authorize @meeting
     @view = params[:view].try(:to_sym) || :details
     @context = params[:context].try(:to_sym) || :full
 
@@ -27,10 +29,12 @@ class Admin::MeetingsController < Admin::ApplicationController
 
   def new
     @meeting = Meeting.new(occurred_on: (Date.current - 1))
+    authorize @meeting
   end
 
   def create
     @meeting = Meeting.new(meeting_params)
+    authorize @meeting
     if @meeting.save
       redirect_to [:admin, @meeting]
     else
@@ -40,10 +44,12 @@ class Admin::MeetingsController < Admin::ApplicationController
 
   def edit
     @meeting = Meeting.find_by(hashed_id: params[:id])
+    authorize @meeting
   end
 
   def update
     @meeting = Meeting.find_by(hashed_id: params[:id])
+    authorize @meeting
     if @meeting.update(meeting_params)
       redirect_to [:admin, @meeting]
     else
@@ -55,12 +61,14 @@ class Admin::MeetingsController < Admin::ApplicationController
 
   def destroy
     @meeting = Meeting.find_by(hashed_id: params[:id])
+    authorize @meeting
     @meeting.destroy!
     redirect_to [:admin, :meetings]
   end
 
   def save_attendance
     @meeting = Meeting.find_by(hashed_id: params[:id])
+    authorize @meeting, :save_attendance?
     @councillor = Councillor.find_by(id: params["councillorId"])
     @attendance = Attendance.find_or_initialize_by(attendable: @meeting, councillor: @councillor)
     @attendance.status = params["status"]
