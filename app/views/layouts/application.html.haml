@@ -43,7 +43,7 @@
             .footer-inner.council-custom-footer= raw current_council.footer_html
           .footer-inner.footer-corrections
             Spotted an error?
-            = link_to "Submit a correction", new_corrections_path(current_council)
+            = link_to "Submit a correction", new_correction_path(current_council)
             \.
         - else
           - site_footer = SiteSetting.get('site_footer')
