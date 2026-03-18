@@ -11,7 +11,7 @@ Rails.application.routes.draw do
     get "profile/change_password" => "users#change_password", as: :change_password
     patch "profile/change_password" => "users#update_password", as: :update_password
 
-    resources :councils, only: [:index, :new, :create]
+    resources :councils, only: [:index, :new, :create, :edit, :update]
     resources :council_sessions, only: [:index, :new, :create, :edit, :update, :destroy]
 
     resources :councillors do

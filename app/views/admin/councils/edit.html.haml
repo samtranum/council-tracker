@@ -1,0 +1,40 @@
+%header.view-header
+  .wrapper{role: 'layout'}
+    %h1= @council.name
+
+%main.view-content{role: 'layout'}
+  .wrapper{role: 'layout'}
+    = form_for [:admin, @council], html: { multipart: true } do |f|
+      = render partial: 'shared/errors', locals: { record: @council }
+
+      - if current_user.is_admin?
+        .field
+          = f.label :name
+          = f.text_field :name
+
+        .field
+          = f.label :slug
+          = f.text_field :slug
+
+        .field.field.-checkbox
+          = f.check_box :active
+          = f.label :active
+
+      .field
+        = f.label :logo, "Logo"
+        - if @council.logo.present?
+          .current-logo
+            = image_tag @council.logo.url, alt: "Current logo", style: "max-height: 60px; max-width: 200px;"
+          .field.-checkbox
+            = f.check_box :remove_logo
+            = f.label :remove_logo, "Remove logo"
+        = f.file_field :logo
+
+      .field
+        = f.label :footer_html, "Footer text"
+        = f.text_area :footer_html, rows: 4
+        %p.hint HTML links are supported, e.g. &lt;a href="https://example.com"&gt;link text&lt;/a&gt;
+
+      .actions
+        = f.submit "Save", class: "button"
+        = link_to "Cancel", admin_councils_path, class: "button"
