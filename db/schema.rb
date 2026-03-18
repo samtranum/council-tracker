@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(version: 2023_05_02_141445) do
     t.date "concluded_on"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "name"
     t.index ["commenced_on"], name: "index_council_sessions_on_commenced_on"
     t.index ["concluded_on"], name: "index_council_sessions_on_concluded_on"
   end
