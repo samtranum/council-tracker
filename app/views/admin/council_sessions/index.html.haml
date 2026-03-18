@@ -1,18 +1,23 @@
 %header.view-header
   .wrapper{role: 'layout'}
     %h1 Council Sessions
-    = link_to "New Council Session", new_admin_council_session_path, class: "button"
+    .actions
+      = link_to "New Council Session", new_admin_council_session_path, class: "button"
 
 %main.view-content{role: 'layout'}
   .wrapper{role: 'layout'}
     %ul.list.-enumerable
       - @council_sessions.each do |session|
         %li
-          %strong= session.council.name
-          %span= "#{session.commenced_on.strftime('%Y')}"
-          - if session.concluded_on
-            %span= "- #{session.concluded_on.strftime('%Y')}"
-          - else
-            %span (Current)
-          = link_to "Edit", edit_admin_council_session_path(session), class: "button -small"
-          = link_to "Delete", admin_council_session_path(session), method: :delete, data: { confirm: "Are you sure you want to delete this session?" }, class: "button -small"
+          .enumerable.-session
+            .content
+              .title= session.council.name
+              .year
+                = session.commenced_on.strftime('%Y')
+                - if session.concluded_on
+                  = " – #{session.concluded_on.strftime('%Y')}"
+                - else
+                  %span.tag (Current)
+            .detail
+              = link_to "Edit", edit_admin_council_session_path(session), class: "button -small"
+              = link_to "Delete", admin_council_session_path(session), method: :delete, data: { confirm: "Are you sure you want to delete this session?" }, class: "button -small -danger"
