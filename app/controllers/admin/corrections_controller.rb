@@ -1,7 +1,7 @@
 class Admin::CorrectionsController < Admin::ApplicationController
   def index
     authorize Correction
-    @corrections = Correction.order("created_at desc").page(params[:p])
+    @corrections = policy_scope(Correction).order("created_at desc").page(params[:p])
   end
 
   def show

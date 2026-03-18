@@ -1,0 +1,10 @@
+New correction submitted<%= " for #{@council.name}" if @council %>
+
+Submitted by: <%= @correction.name %> (<%= @correction.email_address %>)
+Submitted at: <%= @correction.created_at.strftime("%d %b %Y at %H:%M") %>
+<% if @council %>
+Council: <%= @council.name %>
+<% end %>
+
+Correction:
+<%= @correction.body %>

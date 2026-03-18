@@ -3,6 +3,7 @@ class Admin::LocalElectoralAreasController < Admin::ApplicationController
 
   def index
     @local_electoral_areas = policy_scope(LocalElectoralArea).by_name
+    @councils = policy_scope(Council).order(:name)
     authorize LocalElectoralArea
   end
 

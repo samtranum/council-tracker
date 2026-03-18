@@ -11,6 +11,10 @@
         .meta-data_block
           %label Submitted by
           %p #{ @correction.name } (#{ @correction.email_address })
+        - if @correction.council
+          .meta-data_block
+            %label Council
+            %p= @correction.council.name
         .meta-data_block
           %label Submitted at
           %p #{ @correction.created_at }

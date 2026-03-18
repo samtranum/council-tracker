@@ -1,0 +1,17 @@
+%header.view-header
+  .wrapper{role: 'layout'}
+    %h1 Site Settings
+
+%main.view-content{role: 'layout'}
+  .wrapper{role: 'layout'}
+    = form_tag admin_site_settings_path, method: :patch, class: 'admin-form' do
+      %h3 Site header content
+      .hint.p.-t5 HTML shown at the top of the site's landing page. Leave blank for the default header.
+      = text_area_tag :site_header, SiteSetting.get('site_header'), rows: 6, class: 'code-input'
+
+      %h3 Site footer content
+      .hint.p.-t5 HTML shown in the footer of the landing page. Leave blank for the default footer.
+      = text_area_tag :site_footer, SiteSetting.get('site_footer'), rows: 6, class: 'code-input'
+
+      .actions
+        = submit_tag 'Save', class: 'button'

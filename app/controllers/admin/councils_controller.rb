@@ -44,8 +44,10 @@ class Admin::CouncilsController < Admin::ApplicationController
   end
 
   def council_update_params
-    permitted = [:footer_html, :logo, :remove_logo]
-    permitted += [:name, :slug, :active] if current_user.is_admin?
-    params.require(:council).permit(*permitted)
+    if current_user.is_admin?
+      params.require(:council).permit(:name, :slug, :active, :header_html, :footer_html, :logo, :remove_logo)
+    else
+      params.require(:council).permit(:header_html, :footer_html, :logo, :remove_logo)
+    end
   end
 end

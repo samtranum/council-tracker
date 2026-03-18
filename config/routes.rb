@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     patch "profile/change_password" => "users#update_password", as: :update_password
 
     resources :councils, only: [:index, :new, :create, :edit, :update]
+    resource :site_settings, only: [:edit, :update]
     resources :council_sessions, only: [:index, :new, :create, :edit, :update, :destroy]
 
     resources :councillors do

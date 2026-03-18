@@ -1,40 +1,43 @@
 %header.view-header
   .wrapper{role: 'layout'}
-    %h1= @council.name
+    .breadcrumbs
+      .breadcrumb= link_to 'Councils', admin_councils_path
+      .breadcrumb= @council.name
+    %h1 Edit #{@council.name}
 
 %main.view-content{role: 'layout'}
   .wrapper{role: 'layout'}
-    = form_for [:admin, @council], html: { multipart: true } do |f|
-      = render partial: 'shared/errors', locals: { record: @council }
+    = form_with model: [:admin, @council], local: true, class: 'admin-form', multipart: true do |f|
+      = render partial: 'admin/shared/errors', locals: {errors: @council.errors}
 
       - if current_user.is_admin?
-        .field
-          = f.label :name
-          = f.text_field :name
+        = f.label :name
+        = f.text_field :name
 
-        .field
-          = f.label :slug
-          = f.text_field :slug
+        = f.label :slug
+        = f.text_field :slug
 
-        .field.field.-checkbox
+        .checkbox-row
           = f.check_box :active
-          = f.label :active
+          = f.label :active, 'Active'
 
-      .field
-        = f.label :logo, "Logo"
-        - if @council.logo.present?
-          .current-logo
-            = image_tag @council.logo.url, alt: "Current logo", style: "max-height: 60px; max-width: 200px;"
-          .field.-checkbox
+        %hr
+
+      %h3 Council logo
+      .hint.p.-t5 Shown in the top-right of the header on this council's public pages (replaces the Dublin Inquirer fox logo). Recommended max width: 400px.
+      - if @council.logo.present?
+        .current-logo
+          = image_tag @council.logo.url, style: 'max-height: 60px; margin-bottom: 8px;'
+          .checkbox-row
             = f.check_box :remove_logo
-            = f.label :remove_logo, "Remove logo"
-        = f.file_field :logo
+            = f.label :remove_logo, 'Remove logo'
+      = f.file_field :logo
 
-      .field
-        = f.label :footer_html, "Footer text"
-        = f.text_area :footer_html, rows: 4
-        %p.hint HTML links are supported, e.g. &lt;a href="https://example.com"&gt;link text&lt;/a&gt;
+      %hr
+
+      %h3 Footer content
+      .hint.p.-t5 Text shown in the footer before "Spotted an error? Submit a correction." HTML links are supported, e.g. &lt;a href="https://example.com"&gt;Example&lt;/a&gt;
+      = f.text_area :footer_html, rows: 6, class: 'code-input'
 
       .actions
-        = f.submit "Save", class: "button"
-        = link_to "Cancel", admin_councils_path, class: "button"
+        = f.submit 'Save', class: 'button'
