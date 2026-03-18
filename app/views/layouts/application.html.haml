@@ -15,7 +15,7 @@
           = link_to root_path, class: 'logo' do
             CouncilVoteTracker.ie
           - if current_council && current_council.logo.present?
-            = image_tag current_council.logo.url, alt: current_council.name, class: 'council-logo'
+            = image_tag current_council.logo.url, alt: current_council.name, class: 'council-logo', style: 'max-height: 48px; max-width: 200px; object-fit: contain;'
         - if current_council && current_council.header_html.present?
           .council-custom-header= raw current_council.header_html
         - elsif !current_council
