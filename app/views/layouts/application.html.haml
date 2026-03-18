@@ -16,9 +16,7 @@
             CouncilVoteTracker.ie
           - if current_council && current_council.logo.present?
             = image_tag current_council.logo.url, alt: current_council.name, class: 'council-logo', style: 'max-height: 48px; max-width: 200px; object-fit: contain;'
-        - if current_council && current_council.header_html.present?
-          .council-custom-header= raw current_council.header_html
-        - elsif !current_council
+        - if !current_council
           - site_header = SiteSetting.get('site_header')
           - if site_header.present?
             .site-custom-header= raw site_header
@@ -39,12 +37,11 @@
 
       %footer.primary-footer
         - if current_council
-          - if current_council.footer_html.present?
-            .footer-inner.council-custom-footer= raw current_council.footer_html
           .footer-inner.footer-corrections
+            = raw(current_council.footer_html.presence || "")
             Spotted an error?
-            = link_to "Submit a correction", new_correction_path(current_council)
-            \.
+            = succeed "." do
+              = link_to "Submit a correction", new_correction_path(current_council)
         - else
           - site_footer = SiteSetting.get('site_footer')
           - if site_footer.present?

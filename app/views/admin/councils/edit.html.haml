@@ -35,12 +35,8 @@
 
       %hr
 
-      %h3 Header content
-      .hint.p.-t5 HTML shown at the top of this council's public pages. Leave blank for no custom header.
-      = f.text_area :header_html, rows: 6, class: 'code-input'
-
       %h3 Footer content
-      .hint.p.-t5 HTML shown in the footer of this council's public pages (above the corrections link).
+      .hint.p.-t5 Text shown in the footer before "Spotted an error? Submit a correction."
       = f.text_area :footer_html, rows: 6, class: 'code-input'
 
       .actions
