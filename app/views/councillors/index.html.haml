@@ -1,22 +1,27 @@
 - title 'Councillors'
 - if @councillors.any?
-  - description "#{ pluralize @councillors.count, 'councillor' } currently serve on the Dublin City Council."
+  - description "#{pluralize @councillors.count, 'councillor'} currently serve on #{current_council.name}."
 - else
-  - description "Councillors currently serve on the Dublin City Council."
-- keywords 'dublin city council, councillors'
+  - description "Councillors currently serve on #{current_council.name}."
+- keywords "#{current_council.name.downcase}, councillors"
 
-%header.view-header
-  .wrapper{role: 'layout'}
-    %h1= link_to "Councillors", councillors_path(current_council)
+.list-page
+  .list-page-header
+    %h1 Councillors
+    %hr
 
-%main.view-content{role: 'layout'}
-  .wrapper{role: 'layout'}
-    %ul.list.-enumerable
-      - @councillors.each do |councillor|
-        %li
-          = link_to councillor_path(current_council, councillor) do
-            = render partial: 'councillors/councillor', locals: {councillor: councillor}
+  .councillors-list
+    - @councillors.each do |councillor|
+      = link_to councillor_path(current_council, councillor), class: 'councillor-row' do
+        .councillor-row-left
+          - if councillor.party
+            = render partial: 'icons/party', locals: {party: councillor.party}
+          %span.councillor-name= councillor.full_name
+        .councillor-row-right
+          - if councillor.party
+            %span.councillor-party= councillor.party.name
+          - if councillor.local_electoral_area
+            %span.councillor-area= councillor.local_electoral_area.name
 
-%footer.view-footer
-  .wrapper{role: 'layout'}
+  .list-page-pagination
     = render partial: 'shared/pagination', locals: {records: @councillors}

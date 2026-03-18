@@ -12,6 +12,10 @@
   .primary-sidebar
     display: none
 
+  .body-wrap > main
+    flex-grow: 1
+    min-width: 0
+
   @media screen and (min-width: '800px')
     .primary-sidebar
       display: block
@@ -20,7 +24,3 @@
       flex-grow: 0
       position: relative
       border-right: var(--stroke) solid var(--black)
-
-    .body-wrap > main
-      flex-grow: 1
-      min-width: 0

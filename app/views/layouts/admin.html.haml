@@ -8,38 +8,33 @@
     <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no' />
     = yield :snippets
 
-  %body.dark
-!!!
-%html
-  %head
-    = csrf_meta_tags
-    = stylesheet_link_tag    'admin', media: 'all'
-    = javascript_pack_tag 'admin'
-    = display_meta_tags site: 'Admin', reverse: true
-    <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no' />
-    = yield :snippets
-
-  %body.dark
+  %body
     .standard{role: 'layout'}
-      - if logged_in?
-        %header.primary-header
-          .content
-            %nav.primary-nav
-              .links
-                = link_to [:admin, :root], class: 'logo' do
-                  Admin
+      %header.primary-header
+        .header-inner
+          = link_to [:admin, :root], class: 'logo' do
+            Admin
 
-                = link_to "Meetings", [:admin, :meetings]
-                = link_to "Councillors", [:admin, :councillors]
-                = link_to "Councils", [:admin, :councils]
-                = link_to "Sessions", [:admin, :council_sessions]
-                = link_to "Parties", [:admin, :parties]
-                = link_to "LEAs", [:admin, :local_electoral_areas]
+      .body-wrap
+        - if logged_in?
+          %aside.primary-sidebar
+            %nav.primary-nav
+              = link_to "Meetings", [:admin, :meetings]
+              = link_to "Councillors", [:admin, :councillors]
+              = link_to "Councils", [:admin, :councils]
+              = link_to "Sessions", [:admin, :council_sessions]
+              = link_to "Parties", [:admin, :parties]
+              = link_to "LEAs", [:admin, :local_electoral_areas]
+              - if current_user&.is_admin?
+                = link_to "Users", admin_users_path
 
             %footer
               .footer-block.p.-t4
                 %ul
                   %li= link_to 'Corrections', [:admin, :corrections]
+                  - if current_user&.is_admin?
+                    %li= link_to 'Users', admin_users_path
+                  %li= link_to 'Change password', admin_change_password_path
                   %li= link_to 'Back to public site', :root
                   %li= link_to 'Log out', '/logout'
 

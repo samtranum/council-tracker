@@ -1,5 +1,6 @@
 class PortraitUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
+  include Cloudinary::CarrierWave if Rails.env.production?
   process convert: "png"
 
   def filename

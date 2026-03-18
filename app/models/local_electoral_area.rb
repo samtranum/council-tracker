@@ -1,5 +1,6 @@
 class LocalElectoralArea < ApplicationRecord
   belongs_to :council
+
   has_many :seats
   has_many :active_seats, -> { active }, class_name: "Seat"
 

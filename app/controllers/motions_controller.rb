@@ -48,6 +48,7 @@ class MotionsController < ApplicationController
       motion.body.presence || motion.title
     end
 
+    image_url = motion_og_image_url(current_council, motion, v: motion.updated_at.to_i)
     set_meta_tags(
       title: motion.title,
       description: description,
@@ -56,13 +57,18 @@ class MotionsController < ApplicationController
         description: description,
         type: 'article',
         url: motion_url(current_council, motion),
-        image: motion_og_image_url(current_council, motion, v: motion.updated_at.to_i)
+        image: {
+          _: image_url,
+          width: 1200,
+          height: 630,
+          type: 'image/png'
+        }
       },
       twitter: {
         card: 'summary_large_image',
         title: motion.title,
         description: description,
-        image: motion_og_image_url(current_council, motion, v: motion.updated_at.to_i)
+        image: image_url
       }
     )
   end

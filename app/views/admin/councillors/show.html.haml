@@ -2,6 +2,8 @@
   .wrapper{role: 'layout'}
     .breadcrumbs
       .breadcrumb= link_to @councillor.full_name, [:admin, @councillor]
+      .record-actions
+        = link_to 'Edit', [:edit, :admin, @councillor], class: 'button'
 
 .view-content.-alpha
   .wrapper{role: 'layout'}
@@ -24,7 +26,7 @@
                 %h1= @councillor.full_name
                 .actions.m-t-2
                   = link_to "Edit", edit_admin_councillor_path(@councillor), class: "button"
-                  = link_to "Delete", admin_councillor_path(@councillor), method: :delete, data: { confirm: "Are you sure?" }, class: "button -danger"
+                  = link_to "Delete", admin_councillor_path(@councillor), method: :delete, data: { confirm: "Are you sure you want to do this!? This will change the count on all motions this councillor has voted on." }, class: "button -danger"
 
               .meta-data_block
                 - if @councillor.party.present?

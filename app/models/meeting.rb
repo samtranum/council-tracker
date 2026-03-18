@@ -1,6 +1,8 @@
 class Meeting < ApplicationRecord
   belongs_to :council_session, touch: true
 
+  delegate :council, to: :council_session
+
   has_many :motions, dependent: :destroy
   has_many :attendances, dependent: :destroy, as: :attendable
   has_many :councillors, through: :attendances

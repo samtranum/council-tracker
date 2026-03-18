@@ -5,24 +5,18 @@ if Rails.env.development? || Rails.env.test?
 end
 
 if Rails.env.production?
-  if ENV["AWS_ACCESS_KEY_ID"].present?
-    CarrierWave.configure do |config|
-      config.fog_credentials = {
-        provider: "AWS",
-        aws_access_key_id: ENV["AWS_ACCESS_KEY_ID"],
-        aws_secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"],
-        region: "eu-west-1"
-      }
+  require "cloudinary"
+  require "cloudinary/carrier_wave"
 
-      config.cache_dir = "#{Rails.root}/tmp/uploads"
-      # config.asset_host = ENV["AWS_HOST"]
-      config.fog_directory = ENV["AWS_BUCKET"]
-      config.fog_attributes = {"Cache-Control" => "max-age=315576000"}
-      config.storage = :fog
-    end
-  else
-    CarrierWave.configure do |config|
-      config.storage = :file
-    end
+  Cloudinary.config do |config|
+    config.cloud_name = ENV["CLOUDINARY_CLOUD_NAME"]
+    config.api_key    = ENV["CLOUDINARY_API_KEY"]
+    config.api_secret = ENV["CLOUDINARY_API_SECRET"]
+    config.secure     = true
+  end
+
+  CarrierWave.configure do |config|
+    config.storage        = Cloudinary::CarrierWave::Storage
+    config.cache_storage  = :file
   end
 end

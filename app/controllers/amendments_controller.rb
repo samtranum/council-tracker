@@ -39,6 +39,7 @@ class AmendmentsController < ApplicationController
 
     council = amendment.motion.meeting.council_session.council
     
+    image_url = amendment_og_image_url(council, amendment, v: amendment.updated_at.to_i)
     set_meta_tags(
       title: title,
       description: description,
@@ -47,13 +48,18 @@ class AmendmentsController < ApplicationController
         description: description,
         type: 'article',
         url: amendment_url(council, amendment),
-        image: amendment_og_image_url(council, amendment, v: amendment.updated_at.to_i)
+        image: {
+          _: image_url,
+          width: 1200,
+          height: 630,
+          type: 'image/png'
+        }
       },
       twitter: {
         card: 'summary_large_image',
         title: title,
         description: description,
-        image: amendment_og_image_url(council, amendment, v: amendment.updated_at.to_i)
+        image: image_url
       }
     )
   end

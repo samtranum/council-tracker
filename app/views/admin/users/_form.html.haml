@@ -1,0 +1,38 @@
+= form_with model: [:admin, user], class: 'admin-form' do |f|
+  = render partial: 'admin/shared/errors', locals: {errors: user.errors}
+
+  = f.label :email_address, 'Email address'
+  = f.email_field :email_address
+
+  = f.label :admin, 'Role'
+  = f.select :admin, [['Editor', false], ['Super Admin', true]], {}, class: 'select'
+
+  %hr
+
+  %h3 Assigned councils
+  - if user.is_admin?
+    .hint.p.-t5 Super admins have access to all councils. Assignments below are saved but not enforced.
+  - else
+    .hint.p.-t5 Select which councils this editor can manage.
+  - Council.order(:name).each do |council|
+    .checkbox-row
+      = check_box_tag "user[council_ids][]", council.id, user.councils.include?(council), id: "council_#{council.id}"
+      = label_tag "council_#{council.id}", council.name
+
+  %hr
+
+  %h3
+    - if user.new_record?
+      Password
+    - else
+      Change password
+      %span.hint (leave blank to keep current password)
+
+  = f.label :password
+  = f.password_field :password, autocomplete: 'new-password'
+
+  = f.label :password_confirmation, 'Confirm password'
+  = f.password_field :password_confirmation, autocomplete: 'new-password'
+
+  .actions
+    = f.submit 'Save', class: 'button'

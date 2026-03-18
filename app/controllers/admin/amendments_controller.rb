@@ -6,6 +6,7 @@ class Admin::AmendmentsController < Admin::ApplicationController
     @motion = Motion.find_by(hashed_id: params[:motion_id])
     @meeting = @motion.meeting
     @amendment = @motion.amendments.new
+    authorize @amendment
   end
 
   # nested under motions
@@ -13,6 +14,7 @@ class Admin::AmendmentsController < Admin::ApplicationController
     @motion = Motion.find_by(hashed_id: params[:motion_id])
     @meeting = @motion.meeting
     @amendment = @motion.amendments.new(amendment_params)
+    authorize @amendment
     if @amendment.save
       redirect_to [:admin, @amendment]
     else
@@ -22,6 +24,7 @@ class Admin::AmendmentsController < Admin::ApplicationController
 
   def show
     @amendment = Amendment.find_by(hashed_id: params[:id])
+    authorize @amendment
     @view = params[:view].try(:to_sym) || :details
     @context = params[:context].try(:to_sym) || :full
 
@@ -37,12 +40,14 @@ class Admin::AmendmentsController < Admin::ApplicationController
 
   def edit
     @amendment = Amendment.find_by(hashed_id: params[:id])
+    authorize @amendment
     @motion = @amendment.motion
     @meeting = @motion.meeting
   end
 
   def update
     @amendment = Amendment.find_by(hashed_id: params[:id])
+    authorize @amendment
     @motion = @amendment.motion
     @meeting = @motion.meeting
 
@@ -55,6 +60,7 @@ class Admin::AmendmentsController < Admin::ApplicationController
 
   def destroy
     @amendment = Amendment.find_by(hashed_id: params[:id])
+    authorize @amendment
     @motion = @amendment.motion
     @amendment.destroy!
     redirect_to [:admin, @motion]
@@ -62,6 +68,7 @@ class Admin::AmendmentsController < Admin::ApplicationController
 
   def save_vote
     @amendment = Amendment.find_by(id: params[:id])
+    authorize @amendment, :save_vote?
     @councillor = Councillor.find_by(id: params["councillorId"])
     @vote = Vote.find_or_initialize_by(voteable: @amendment, councillor: @councillor)
     @vote.status = params["status"]

@@ -4,15 +4,17 @@ class Admin::MeetingsController < Admin::ApplicationController
   before_action :set_meeting, only: [:show, :edit, :update, :destroy, :save_attendance]
 
   def index
-    @meetings = Meeting.by_occurred_on.page(params[:p])
+    @meetings = policy_scope(Meeting).by_occurred_on.page(params[:p])
   end
 
   def scrape
+    authorize Meeting, :scrape?
     MeetingScraperService.scrape_from_dcc!
     redirect_to [:admin, :meetings]
   end
 
   def show
+    authorize @meeting
     @view = params[:view].try(:to_sym) || :details
     @context = params[:context].try(:to_sym) || :full
 
@@ -28,10 +30,12 @@ class Admin::MeetingsController < Admin::ApplicationController
 
   def new
     @meeting = Meeting.new(occurred_on: (Date.current - 1))
+    authorize @meeting
   end
 
   def create
     @meeting = Meeting.new(meeting_params)
+    authorize @meeting
     if @meeting.save
       redirect_to [:admin, @meeting]
     else
@@ -40,9 +44,11 @@ class Admin::MeetingsController < Admin::ApplicationController
   end
 
   def edit
+    authorize @meeting
   end
 
   def update
+    authorize @meeting
     if @meeting.update(meeting_params)
       redirect_to [:admin, @meeting]
     else
@@ -53,11 +59,13 @@ class Admin::MeetingsController < Admin::ApplicationController
   end
 
   def destroy
+    authorize @meeting
     @meeting.destroy!
     redirect_to [:admin, :meetings]
   end
 
   def save_attendance
+    authorize @meeting, :save_attendance?
     @councillor = Councillor.find_by(id: params["councillorId"])
     @attendance = Attendance.find_or_initialize_by(attendable: @meeting, councillor: @councillor)
     @attendance.status = params["status"]
@@ -76,7 +84,6 @@ class Admin::MeetingsController < Admin::ApplicationController
 
   def meeting_params
     params.require(:meeting).permit(
-      :meeting_type,
       :meeting_type,
       :occurred_on,
       :council_id

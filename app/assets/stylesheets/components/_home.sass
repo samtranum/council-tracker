@@ -1,6 +1,9 @@
 .home-page
-  padding: var(--gutter) 2rem
+  padding: var(--gutter) 1rem
   max-width: 120rem
+
+  @media screen and (min-width: '800px')
+    padding: var(--gutter) 2rem
 
 .home-intro
   margin-bottom: var(--gutter)
@@ -94,14 +97,21 @@
     background-color: #f8c4b4
     color: var(--black)
 
+  &.-abstain
+    background-color: var(--faint)
+    color: var(--black)
+
 .motion-bar
-  display: flex
+  display: none
   flex-direction: row
   height: 1.4rem
   width: 10rem
   border-radius: 0.25rem
   overflow: hidden
   background-color: var(--faint)
+
+  @media screen and (min-width: '800px')
+    display: flex
 
   .bar-for
     background-color: #7b7cf7
@@ -114,9 +124,13 @@
     background-color: var(--faint)
 
 .motion-date
+  display: none
   font-size: var(--t6)
   color: var(--grey)
   white-space: nowrap
+
+  @media screen and (min-width: '800px')
+    display: block
 
 .home-view-more
   margin-top: 1.5rem

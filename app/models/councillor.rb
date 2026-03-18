@@ -1,5 +1,6 @@
 class Councillor < ApplicationRecord
   belongs_to :council
+
   has_many :seats, dependent: :destroy
   has_many :attendances, dependent: :destroy
   has_many :votes, dependent: :destroy
@@ -83,8 +84,49 @@ class Councillor < ApplicationRecord
     Amendment.proposed_by(self)
   end
 
+  def seats_without_events
+    all_seats = seats.includes(:council_session)
+    return Seat.none if all_seats.empty?
+
+    seat_ids = all_seats.map(&:id)
+
+    # Seats directly referenced in any event's related_seat_ids
+    directly_covered_ids = Event.where("related_seat_ids && ARRAY[?]::bigint[]", seat_ids)
+                                .flat_map(&:related_seat_ids).uniq
+
+    # Election seats also covered if a session-level election event exists
+    # (matches the fallback logic in #events, to avoid duplicates)
+    election_seat_session_dates = all_seats.reject(&:co_option?)
+                                           .map { |s| s.council_session&.commenced_on }
+                                           .compact.uniq
+    session_covered_ids = if election_seat_session_dates.any?
+      matched_dates = Event.election.where(occurred_on: election_seat_session_dates).pluck(:occurred_on)
+      all_seats.reject(&:co_option?)
+               .select { |s| matched_dates.include?(s.council_session&.commenced_on) }
+               .map(&:id)
+    else
+      []
+    end
+
+    covered_ids = (directly_covered_ids + session_covered_ids).uniq
+    seats.where.not(id: covered_ids).order(commenced_on: :desc)
+  end
+
   def events
-    Event.related_to_seats(seats.map(&:id).compact).order("occurred_on desc")
+    seat_ids = seats.map(&:id).compact
+    direct = Event.related_to_seats(seat_ids)
+
+    # Also find election events for sessions this councillor was elected into,
+    # in case their seat was added after the election was committed
+    elected_session_ids = seats.where.not(term_type: :co_option)
+                               .map(&:council_session_id).compact.uniq
+    if elected_session_ids.any?
+      commenced_ons = CouncilSession.where(id: elected_session_ids).pluck(:commenced_on)
+      election_ids = Event.election.where(occurred_on: commenced_ons).ids
+      return Event.where(id: direct.ids | election_ids).order("occurred_on desc")
+    end
+
+    direct
   end
 
   private
@@ -93,13 +135,13 @@ class Councillor < ApplicationRecord
     self.full_name = "#{given_name} #{family_name}".strip
   end
 
-  PREFIXES = %w(De Du Di Le La Van Von O Mc Mac Ni Ua Ui Ó Ní).freeze
+  PREFIXES = %w(de du di le la van von o mc mac ni ua ui ó ní).freeze
 
   def set_given_and_family_names
     pcs = full_name.strip.split(" ")
     self.family_name = pcs.pop
-    
-    while pcs.any? && PREFIXES.include?(pcs.last)
+
+    while pcs.any? && PREFIXES.include?(pcs.last.downcase)
       self.family_name = "#{pcs.pop} #{self.family_name}"
     end
 

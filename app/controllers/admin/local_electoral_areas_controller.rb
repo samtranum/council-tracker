@@ -2,15 +2,18 @@ class Admin::LocalElectoralAreasController < Admin::ApplicationController
   before_action :set_local_electoral_area, only: [:edit, :update, :destroy]
 
   def index
-    @councils = Council.all.includes(:local_electoral_areas)
+    @local_electoral_areas = policy_scope(LocalElectoralArea).by_name
+    authorize LocalElectoralArea
   end
 
   def new
     @local_electoral_area = LocalElectoralArea.new
+    authorize @local_electoral_area
   end
 
   def create
     @local_electoral_area = LocalElectoralArea.new(local_electoral_area_params)
+    authorize @local_electoral_area
 
     if @local_electoral_area.save
       redirect_to admin_local_electoral_areas_path, notice: "#{@local_electoral_area.name} created successfully."
@@ -20,9 +23,11 @@ class Admin::LocalElectoralAreasController < Admin::ApplicationController
   end
 
   def edit
+    authorize @local_electoral_area
   end
 
   def update
+    authorize @local_electoral_area
     if @local_electoral_area.update(local_electoral_area_params)
       redirect_to admin_local_electoral_areas_path, notice: "#{@local_electoral_area.name} updated successfully."
     else
@@ -31,6 +36,7 @@ class Admin::LocalElectoralAreasController < Admin::ApplicationController
   end
 
   def destroy
+    authorize @local_electoral_area
     @local_electoral_area.destroy
     redirect_to admin_local_electoral_areas_path, notice: "Local Electoral Area deleted."
   end

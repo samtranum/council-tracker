@@ -3,18 +3,21 @@ class Admin::SeatsController < Admin::ApplicationController
   before_action :set_seat, only: [:edit, :update, :destroy]
 
   def index
-    @seats = @councillor.seats.includes(:council_session, { party_affiliations: :party }, :local_electoral_area).order(commenced_on: :desc)
+    authorize @councillor, :show?
+    @seats = @councillor.seats.includes(:council_session, {party_affiliations: :party}, :local_electoral_area).order(commenced_on: :desc)
   end
 
   def new
     @seat = @councillor.seats.new
+    authorize @seat
     load_ended_seats
   end
 
   def create
     @seat = @councillor.seats.new(seat_params)
+    authorize @seat
     if @seat.save
-      redirect_to [:admin, @councillor, :terms], notice: 'Term was successfully created.'
+      redirect_to [:admin, @councillor, :terms], notice: "Term was successfully created."
     else
       load_ended_seats
       render :new
@@ -22,12 +25,14 @@ class Admin::SeatsController < Admin::ApplicationController
   end
 
   def edit
+    authorize @seat
     load_ended_seats
   end
 
   def update
+    authorize @seat
     if @seat.update(seat_params)
-      redirect_to [:admin, @councillor, :terms], notice: 'Term was successfully updated.'
+      redirect_to [:admin, @councillor, :terms], notice: "Term was successfully updated."
     else
       load_ended_seats
       render :edit
@@ -35,8 +40,9 @@ class Admin::SeatsController < Admin::ApplicationController
   end
 
   def destroy
+    authorize @seat
     @seat.destroy
-    redirect_to [:admin, @councillor, :terms], notice: 'Term was successfully deleted.'
+    redirect_to [:admin, @councillor, :terms], notice: "Term was successfully deleted."
   end
 
   private
@@ -54,13 +60,11 @@ class Admin::SeatsController < Admin::ApplicationController
   end
 
   def load_ended_seats
-    # Get all seats that have ended, grouped by councillor
-    # This allows selecting any councillor who has resigned
     @ended_seats = Seat.joins(:councillor)
                        .where.not(concluded_on: nil)
-                       .where('seats.council_session_id = ?', (@seat.council_session_id || CouncilSession.current_on(Date.current).where(council_id: @councillor.council_id).first&.id))
-                       .select('seats.id, seats.councillor_id, councillors.full_name as councillor_name, seats.concluded_on')
-                       .order('concluded_on DESC')
-                       .map { |s| ["#{s.councillor_name} (resigned #{s.concluded_on.strftime('%d %b %Y')})", s.id] }
+                       .where("seats.council_session_id = ?", (@seat.council_session_id || CouncilSession.current_on(Date.current).where(council_id: @councillor.council_id).first&.id))
+                       .select("seats.id, seats.councillor_id, councillors.full_name as councillor_name, seats.concluded_on")
+                       .order("concluded_on DESC")
+                       .map { |s| ["#{s.councillor_name} (resigned #{s.concluded_on.strftime("%d %b %Y")})", s.id] }
   end
 end
