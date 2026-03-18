@@ -21,12 +21,13 @@
             %nav.primary-nav
               = link_to "Meetings", [:admin, :meetings]
               = link_to "Councillors", [:admin, :councillors]
-              = link_to "Councils", [:admin, :councils]
               = link_to "Sessions", [:admin, :council_sessions]
-              = link_to "Parties", [:admin, :parties]
               = link_to "LEAs", [:admin, :local_electoral_areas]
               - if current_user&.is_admin?
+                = link_to "Councils", [:admin, :councils]
+                = link_to "Parties", [:admin, :parties]
                 = link_to "Users", admin_users_path
+                = link_to "Site Settings", edit_admin_site_settings_path
 
             %footer
               .footer-block.p.-t4
