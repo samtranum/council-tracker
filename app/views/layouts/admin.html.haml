@@ -28,16 +28,10 @@
               - if current_user&.is_admin?
                 = link_to "Users", admin_users_path
                 = link_to "Site Settings", edit_admin_site_settings_path
+              %hr.nav-divider
+              = link_to "Corrections", [:admin, :corrections]
+              = link_to "Change password", admin_change_password_path
+              = link_to "Back to public site", root_path
+              = link_to "Log out", logout_path
 
-            %footer
-              .footer-block.p.-t4
-                %ul
-                  %li= link_to 'Corrections', [:admin, :corrections]
-                  - if current_user&.is_admin?
-                    %li= link_to 'Users', admin_users_path
-                  %li= link_to 'Change password', admin_change_password_path
-                  %li= link_to 'Back to public site', :root
-                  %li= link_to 'Log out', '/logout'
-
-        %nav.menu#menu= svelte_component('AdminMenu')
-      %main.primary-main= yield
+        %main.primary-main= yield
