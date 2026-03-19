@@ -31,6 +31,7 @@ gem "meta-tags"
 gem "bootsnap", ">= 1.1.0", require: false
 gem "redis"
 gem "kaminari"
+gem "rack-attack"
 gem "oj" # json
 gem "webpacker-svelte"
 gem "autoprefixer-rails"
