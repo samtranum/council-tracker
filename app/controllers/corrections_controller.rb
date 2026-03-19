@@ -23,6 +23,7 @@ class CorrectionsController < ApplicationController
     params.require(:correction).permit(
       :name,
       :email_address,
+      :subject,
       :body
     )
   end

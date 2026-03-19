@@ -12,7 +12,8 @@ class CorrectionMailer < ApplicationMailer
 
     return if recipients.empty?
 
-    subject = @council ? "New correction for #{@council.name}" : "New correction submitted"
-    mail(to: recipients, subject: subject)
+    council_label = @council ? " for #{@council.name}" : ""
+    correction_subject = @correction.subject.presence || "New correction"
+    mail(to: recipients, subject: "#{correction_subject}#{council_label}")
   end
 end

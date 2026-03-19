@@ -8,7 +8,7 @@ class CorrectionPolicy < ApplicationPolicy
   end
 
   def destroy?
-    admin?
+    admin? || (record.council && can_access_council?(record.council))
   end
 
   class Scope < Scope

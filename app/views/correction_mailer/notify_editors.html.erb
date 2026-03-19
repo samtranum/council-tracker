@@ -1,5 +1,6 @@
 <h2>New correction submitted<%= " for #{@council.name}" if @council %></h2>
 
+<p><strong>Subject:</strong> <%= @correction.subject %></p>
 <p><strong>Submitted by:</strong> <%= @correction.name %> (<%= @correction.email_address %>)</p>
 <p><strong>Submitted at:</strong> <%= @correction.created_at.strftime("%d %b %Y at %H:%M") %></p>
 <% if @council %>
