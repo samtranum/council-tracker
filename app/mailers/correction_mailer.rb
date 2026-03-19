@@ -3,11 +3,12 @@ class CorrectionMailer < ApplicationMailer
     @correction = correction
     @council = correction.council
 
+    admins = User.where(admin: true).pluck(:email_address)
     recipients = if @council
       editors = @council.users.where(admin: false).pluck(:email_address)
-      editors.any? ? editors : User.where(admin: true).pluck(:email_address)
+      (editors + admins).uniq
     else
-      User.where(admin: true).pluck(:email_address)
+      admins
     end
 
     return if recipients.empty?
