@@ -12,7 +12,8 @@ class MeetingPolicy < ApplicationPolicy
   end
 
   def create?
-    can_access_council?(record.council)
+    council = record.council_session&.council || Council.find_by(id: record.council_id)
+    can_access_council?(council)
   end
 
   def edit?
