@@ -1,5 +1,6 @@
 !!!
 %html
+
   %head
     = csrf_meta_tags
     = stylesheet_link_tag 'application', media: 'all'
@@ -7,6 +8,14 @@
     = display_meta_tags site: 'CouncilVoteTracker.ie', reverse: true
     <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no' />
     = yield :snippets
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2DMPHDQHYC"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-2DMPHDQHYC');
+    </script>
 
   %body
     .standard{role: 'layout'}
