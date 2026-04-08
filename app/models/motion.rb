@@ -15,7 +15,7 @@ class Motion < Voteable
   after_validation :set_hashed_id, if: ->(m) { m.hashed_id.blank? }
 
   scope :by_position, -> { order("position asc") }
-  scope :by_occurred_on, -> { includes(:meeting).order("meetings.occurred_on desc") }
+  scope :by_occurred_on, -> { includes(:meeting).order("meetings.occurred_on desc, motions.position asc") }
   scope :proposed_by, ->(c) { where("proposers_ids @> ?", "{#{c.id}}") }
   scope :in_category, ->(c) { where("tags @> ?", "{#{c.downcase}}") }
   scope :related_to_area, ->(a) { where("local_electoral_area_ids @> ?", "{#{a.id}}") }
