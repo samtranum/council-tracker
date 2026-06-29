@@ -4,8 +4,8 @@
   display: flex
   flex-direction: row
   justify-content: flex-start
-  align-items: flex-start
-  height: 1.8rem
+  align-items: center
+  min-height: 1.8rem
 
   & > div + div
     padding-left: var(--gutter)
@@ -120,3 +120,27 @@
   @media screen and (min-width: '800px')
     figure
       right: calc(50% + var(--unit))
+    .detail
+      .party
+        flex: 0 0 40%
+      .area
+        flex: 0 0 60%
+
+.enumerable.-correction
+  height: auto
+  min-height: 2.5rem
+  align-items: flex-start
+
+  .content
+    & > div
+      white-space: normal
+      height: auto
+      overflow: visible
+      text-overflow: clip
+
+  @media screen and (min-width: '800px')
+    .detail
+      flex-direction: column
+      gap: 0.3rem
+      & > div
+        flex: none

@@ -1,11 +1,11 @@
 %header.view-header
   .wrapper{role: 'layout'}
     %h1 Users
-    .actions
-      = link_to "New user", new_admin_user_path, class: 'button'
 
 %main.view-content{role: 'layout'}
   .wrapper{role: 'layout'}
+    .list-actions
+      = link_to "New user", new_admin_user_path, class: 'button'
     %table.table
       %thead
         %tr

@@ -3,4 +3,4 @@
     .title= meeting.meeting_type_in_english
   .detail
     .date #{ raw meeting.occurred_on.strftime('%-d %b \'%y') }
-    .council= meeting.council_session&.name
+    .council= meeting.council_session&.council&.name

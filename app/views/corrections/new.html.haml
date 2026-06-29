@@ -19,6 +19,10 @@
         .input
           = f.text_field :email_address
       .basic-form_field
+        = f.label :subject, 'Subject'
+        .input
+          = f.text_field :subject
+      .basic-form_field
         = f.label :body, "What did we get wrong? Please be specific and include the source of your correct information."
         .input
           = f.text_area :body

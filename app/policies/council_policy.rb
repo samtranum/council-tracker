@@ -1,5 +1,4 @@
 class CouncilPolicy < ApplicationPolicy
-  # Only admins can manage councils
   def index?
     admin?
   end
@@ -16,12 +15,12 @@ class CouncilPolicy < ApplicationPolicy
     admin?
   end
 
-  def update?
-    admin?
+  def edit?
+    admin? || can_access_council?(record)
   end
 
-  def edit?
-    admin?
+  def update?
+    admin? || can_access_council?(record)
   end
 
   def destroy?
@@ -33,7 +32,7 @@ class CouncilPolicy < ApplicationPolicy
       if user.is_admin?
         scope.all
       else
-        scope.none
+        scope.joins(:user_councils).where(user_councils: { user_id: user.id })
       end
     end
   end

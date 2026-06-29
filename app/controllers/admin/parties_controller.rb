@@ -2,6 +2,7 @@ class Admin::PartiesController < Admin::ApplicationController
   before_action :set_party, only: [:edit, :update]
 
   def index
+    authorize Party
     @parties = policy_scope(Party).by_name
   end
 

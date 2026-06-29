@@ -65,7 +65,8 @@ class Admin::CouncillorsController < Admin::ApplicationController
 
     return unless lea_id.present?
 
-    council_session = CouncilSession.current || CouncilSession.latest
+    council_session = CouncilSession.where(council_id: councillor.council_id).current_on(Date.current).take ||
+                      CouncilSession.where(council_id: councillor.council_id).order(commenced_on: :desc).take
     return unless council_session
 
     commenced_on = if commenced_on_param.present?

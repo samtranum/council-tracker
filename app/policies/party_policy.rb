@@ -1,11 +1,11 @@
 class PartyPolicy < ApplicationPolicy
-  # Parties are global (not council-specific), only admins can create/edit
+  # Parties are global (not council-specific), only super admins can manage them
   def index?
-    user.present?
+    admin?
   end
 
   def show?
-    user.present?
+    admin?
   end
 
   def new?

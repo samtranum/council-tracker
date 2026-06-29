@@ -21,22 +21,18 @@
             %nav.primary-nav
               = link_to "Meetings", [:admin, :meetings]
               = link_to "Councillors", [:admin, :councillors]
-              = link_to "Councils", [:admin, :councils]
               = link_to "Sessions", [:admin, :council_sessions]
-              = link_to "Parties", [:admin, :parties]
               = link_to "LEAs", [:admin, :local_electoral_areas]
               - if current_user&.is_admin?
+                = link_to "Councils", [:admin, :councils]
+                = link_to "Parties", [:admin, :parties]
                 = link_to "Users", admin_users_path
-
-            %footer
-              .footer-block.p.-t4
-                %ul
-                  %li= link_to 'Corrections', [:admin, :corrections]
-                  - if current_user&.is_admin?
-                    %li= link_to 'Users', admin_users_path
-                  %li= link_to 'Change password', admin_change_password_path
-                  %li= link_to 'Back to public site', :root
-                  %li= link_to 'Log out', '/logout'
-
-        %nav.menu#menu= svelte_component('AdminMenu')
-      %main.primary-main= yield
+                = link_to "Site Settings", edit_admin_site_settings_path
+              - elsif current_user&.councils&.any?
+                = link_to "My Council", edit_admin_council_path(current_user.councils.first)
+              %hr.nav-divider
+              = link_to "Corrections", [:admin, :corrections]
+              = link_to "Change password", admin_change_password_path
+              = link_to "Back to public site", root_path
+              = link_to "Log out", logout_path
+        %main.primary-main= yield

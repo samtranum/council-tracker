@@ -4,4 +4,6 @@
 
   .detail
     .submitter= correction.name
+    - if correction.council
+      .council= correction.council.name
     .date= correction.created_at

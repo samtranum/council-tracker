@@ -74,6 +74,18 @@
       color: var(--black)
 
   .wrapper[role='layout']
+    display: flex
+    flex-direction: row
+    align-items: flex-end
+
+    h1
+      flex-grow: 1
+
+    .actions
+      flex-shrink: 0
+      padding-bottom: 0.5rem
+      display: flex
+      gap: 0.5rem
 
   @media screen and (min-width: '800px')
     position: fixed

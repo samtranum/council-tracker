@@ -4,11 +4,21 @@
 
 %main.view-content{role: 'layout'}
   .wrapper{role: 'layout'}
-    %ul.list.-enumerable
-      - @corrections.each do |correction|
-        %li
-          = link_to [:admin, correction] do
-            = render partial: 'admin/corrections/correction', locals: {correction: correction}
+    %table.table
+      %thead
+        %tr
+          %th Date
+          %th Subject
+          %th Name
+          %th
+      %tbody
+        - @corrections.each do |correction|
+          %tr
+            %td= correction.created_at.strftime("%d/%m/%Y")
+            %td= link_to correction.subject.presence || "(no subject)", [:admin, correction]
+            %td= correction.name
+            %td.actions
+              = link_to "Delete", [:admin, correction], method: :delete, data: { confirm: "Delete this correction?" }, class: "button -small -destructive"
 
 %footer.view-footer
   .wrapper{role: 'layout'}

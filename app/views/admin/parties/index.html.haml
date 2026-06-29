@@ -1,30 +1,21 @@
-.admin-parties
-  %h1 Manage Party Colors
+%header.view-header
+  .wrapper{role: 'layout'}
+    %h1 Parties
 
-  %table.data-table
-    %thead
-      %tr
-        %th Party
-        %th Color
-        %th Actions
-    %tbody
+%main.view-content{role: 'layout'}
+  .wrapper{role: 'layout'}
+    - if policy(Party).new?
+      .list-actions
+        = link_to "New Party", new_admin_party_path, class: "button"
+    %ul.list.-enumerable
       - @parties.each do |party|
-        %tr
-          %td
-            = render partial: 'icons/party', locals: { party: party }
-            = party.name
-          %td
-            %span.color-preview{style: "background: #{party.color};"}
-            %code= party.color
-          %td
-            = link_to 'Edit', edit_admin_party_path(party), class: 'button -small'
-
-%style
-  .color-preview
-    display: inline-block
-    width: 30px
-    height: 30px
-    border: 1px solid #ccc
-    border-radius: 4px
-    vertical-align: middle
-    margin-right: 10px
+        %li
+          .enumerable.-party
+            .content
+              .title
+                = render partial: 'icons/party', locals: { party: party }
+                = party.name
+            .detail
+              %span.color-swatch{style: "background: #{party.color};"}
+              %code= party.color
+              = link_to 'Edit', edit_admin_party_path(party), class: 'button -small'
