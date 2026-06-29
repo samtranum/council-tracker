@@ -35,6 +35,6 @@ class ApplicationController < ActionController::Base
   end
 
   def load_all_councils
-    @all_councils = Council.order(:name)
+    @all_councils = Council.active.order(:name)
   end
 end
